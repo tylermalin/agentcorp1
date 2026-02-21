@@ -1,5 +1,6 @@
 import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
+import { notifyOwner } from "./_core/notification";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
@@ -86,6 +87,19 @@ export const appRouter = router({
       .mutation(async ({ input }) => {
         const tags = ["agentcorp-waitlist", input.entityType.toLowerCase().replace(/\s+/g, "-")];
         const result = await subscribeToMailchimp(input.email, input.entityType, tags);
+
+        // Fire owner notification for new signups (not duplicates)
+        if (!result.alreadySubscribed) {
+          const sourceLabel = input.source === "hero" ? "Hero Form" : "Entity Table";
+          await notifyOwner({
+            title: `New AgentCorp Waitlist Signup`,
+            content: `Email: ${input.email}\nEntity Interest: ${input.entityType}\nSource: ${sourceLabel}\nMailchimp Tags: ${tags.join(", ")}`,
+          }).catch((err) => {
+            // Non-fatal — log but don't fail the subscription
+            console.warn("[Waitlist] Owner notification failed:", err);
+          });
+        }
+
         return result;
       }),
   }),
