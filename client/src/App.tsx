@@ -8,6 +8,7 @@ import Home from "./pages/Home";
 import Whitepaper from "./pages/Whitepaper";
 import Docs from "./pages/Docs";
 import Mint from "./pages/Mint";
+import Agent from "./pages/Agent";
 
 function Router() {
   return (
@@ -16,6 +17,7 @@ function Router() {
       <Route path="/whitepaper" component={Whitepaper} />
       <Route path="/docs" component={Docs} />
       <Route path="/mint" component={Mint} />
+      <Route path="/agent" component={Agent} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>

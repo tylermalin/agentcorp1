@@ -1234,6 +1234,129 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── AGENT MINTING BANNER ── */}
+      <section
+        style={{
+          padding: "80px 48px",
+          background: "rgba(201,168,76,0.04)",
+          borderTop: "1px solid rgba(201,168,76,0.15)",
+          borderBottom: "1px solid rgba(201,168,76,0.15)",
+          position: "relative",
+          zIndex: 1,
+          overflow: "hidden",
+        }}
+      >
+        {/* Decorative background text */}
+        <div
+          style={{
+            position: "absolute",
+            right: "-20px",
+            top: "50%",
+            transform: "translateY(-50%)",
+            fontFamily: "'Syne', sans-serif",
+            fontWeight: 800,
+            fontSize: "180px",
+            color: "rgba(201,168,76,0.04)",
+            letterSpacing: "-0.05em",
+            lineHeight: 1,
+            pointerEvents: "none",
+            userSelect: "none" as const,
+            whiteSpace: "nowrap",
+          }}
+        >
+          AGENT
+        </div>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr auto",
+            gap: "60px",
+            alignItems: "center",
+            maxWidth: "1100px",
+          }}
+        >
+          <div>
+            <div className="eyebrow" style={{ marginBottom: "20px" }}>Agent-Native Protocol</div>
+            <h2
+              style={{
+                fontFamily: "'Syne', sans-serif",
+                fontWeight: 800,
+                fontSize: "clamp(28px, 4vw, 52px)",
+                lineHeight: 1,
+                letterSpacing: "-0.02em",
+                marginBottom: "20px",
+              }}
+            >
+              Let your{" "}
+              <em style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic", fontWeight: 400, color: "var(--brass)" }}>
+                agent
+              </em>
+              {" "}mint an entity directly.
+            </h2>
+            <p
+              style={{
+                color: "rgba(242,239,232,0.5)",
+                fontSize: "14px",
+                lineHeight: 1.7,
+                fontFamily: "'DM Mono', monospace",
+                maxWidth: "620px",
+                marginBottom: "0",
+              }}
+            >
+              AGENTCORP is designed to be called by machines. Point your AI agent at the{" "}
+              <code style={{ color: "var(--brass)", background: "rgba(201,168,76,0.1)", padding: "2px 6px" }}>
+                AGENTCORP-SKILL.md
+              </code>
+              {" "}and it will understand how to incorporate a Delaware Series LLC, mint a Series, or form a DAO — autonomously, on Base. Works with Manus, Claude, GPT-4, Eliza, LangChain, CrewAI, and any agent that reads Markdown.
+            </p>
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: "14px", alignItems: "flex-start", flexShrink: 0 }}>
+            <Link href="/agent">
+              <span className="btn-brass">Agent Integration →</span>
+            </Link>
+            <Link href="/docs">
+              <span className="btn-outline-brass">Developer Docs</span>
+            </Link>
+          </div>
+        </div>
+
+        {/* Feature pills */}
+        <div
+          style={{
+            display: "flex",
+            gap: "12px",
+            marginTop: "40px",
+            flexWrap: "wrap",
+          }}
+        >
+          {[
+            "1 file to integrate",
+            "~30s mint time",
+            "Any LLM framework",
+            "TypeScript + Python SDKs",
+            "MIT License",
+            "Manus · Claude · GPT-4 · Eliza · LangChain",
+          ].map((pill) => (
+            <span
+              key={pill}
+              style={{
+                fontSize: "10px",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase" as const,
+                color: "rgba(242,239,232,0.35)",
+                border: "1px solid rgba(201,168,76,0.12)",
+                padding: "5px 12px",
+                fontFamily: "'DM Mono', monospace",
+              }}
+            >
+              {pill}
+            </span>
+          ))}
+        </div>
+      </section>
+
       {/* ── KYC PARTNERS ── */}
       <section
         style={{

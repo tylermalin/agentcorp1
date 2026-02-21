@@ -19,7 +19,7 @@ export default function Nav() {
   const navLinks = [
     { href: "/#how", label: "How It Works" },
     { href: "/#entities", label: "Entities" },
-    { href: "/#use-cases", label: "Use Cases" },
+    { href: "/agent", label: "For Agents" },
     { href: "/whitepaper", label: "Whitepaper" },
     { href: "/docs", label: "Dev Docs" },
   ];
