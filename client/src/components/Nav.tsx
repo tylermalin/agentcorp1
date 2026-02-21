@@ -1,198 +1,263 @@
-/* ============================================================
-   AGENTCORP NAV — Industrial Legal Modernism
-   Fixed top nav with brass/gold accents, monospace type
-   ============================================================ */
-import { useState, useEffect } from "react";
+/**
+ * AGENTCORP SHARED NAV — Persistent across all pages
+ * Design: Industrial Legal Modernism
+ * - Near-black (#080808) with brass (#c9a84c) accent
+ * - DM Mono for nav links, Syne 800 for logo
+ * - Fixed top, backdrop blur, active-page highlighting
+ */
+
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "wouter";
 
+const BRASS = "#c9a84c";
+const WHITE = "#f2efe8";
+const MUTED = "rgba(242,239,232,0.45)";
+const BLACK = "#080808";
+
+const NAV_LINKS = [
+  { label: "Protocol", href: "/#protocol" },
+  { label: "Integration", href: "/#integration" },
+  { label: "Use Cases", href: "/#usecases" },
+  { label: "Entities", href: "/#entities" },
+  { label: "For Agents", href: "/agent" },
+  { label: "Whitepaper", href: "/whitepaper" },
+  { label: "Dev Docs", href: "/docs" },
+];
+
 export default function Nav() {
+  const [location] = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [location] = useLocation();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const navLinks = [
-    { href: "/#how", label: "How It Works" },
-    { href: "/#entities", label: "Entities" },
-    { href: "/agent", label: "For Agents" },
-    { href: "/whitepaper", label: "Whitepaper" },
-    { href: "/docs", label: "Dev Docs" },
-  ];
+  const isActive = (href: string) => {
+    if (href.startsWith("/#")) return location === "/";
+    return location === href || location.startsWith(href + "/");
+  };
 
   return (
-    <nav
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 100,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        padding: "20px 48px",
-        borderBottom: "1px solid rgba(201,168,76,0.15)",
-        background: scrolled ? "rgba(8,8,8,0.95)" : "rgba(8,8,8,0.85)",
-        backdropFilter: "blur(12px)",
-        transition: "background 0.3s",
-      }}
-    >
-      {/* Logo */}
-      <Link href="/">
-        <span
+    <>
+      <nav
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 200,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "0 48px",
+          height: "64px",
+          borderBottom: "1px solid rgba(201,168,76,0.12)",
+          background: scrolled
+            ? "rgba(8,8,8,0.97)"
+            : "rgba(8,8,8,0.88)",
+          backdropFilter: "blur(16px)",
+          WebkitBackdropFilter: "blur(16px)",
+          transition: "background 0.3s",
+        }}
+      >
+        {/* Logo */}
+        <Link href="/">
+          <span
+            style={{
+              fontFamily: "'Syne', sans-serif",
+              fontWeight: 800,
+              fontSize: "16px",
+              letterSpacing: "0.06em",
+              color: WHITE,
+              cursor: "pointer",
+              textDecoration: "none",
+              flexShrink: 0,
+            }}
+          >
+            AGENT<span style={{ color: BRASS }}>CORP</span>
+          </span>
+        </Link>
+
+        {/* Desktop links */}
+        <div
+          className="nav-desktop"
           style={{
-            fontFamily: "'Syne', sans-serif",
-            fontWeight: 800,
-            fontSize: "20px",
-            letterSpacing: "0.15em",
-            color: "var(--brass)",
-            textDecoration: "none",
-            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            gap: "24px",
           }}
         >
-          AGENT
-          <span style={{ color: "var(--white)", opacity: 0.4, fontWeight: 400 }}>
-            CORP
-          </span>
-        </span>
-      </Link>
+          {NAV_LINKS.map((link) => {
+            const active = isActive(link.href);
+            const isAnchor = link.href.startsWith("/#");
+            const linkStyle: React.CSSProperties = {
+              fontSize: "10px",
+              letterSpacing: "0.12em",
+              color: active ? BRASS : MUTED,
+              textDecoration: "none",
+              textTransform: "uppercase",
+              transition: "color 0.2s",
+              fontFamily: "'DM Mono', monospace",
+              whiteSpace: "nowrap",
+              paddingBottom: "2px",
+              borderBottom: active ? `1px solid ${BRASS}` : "1px solid transparent",
+              cursor: "pointer",
+            };
 
-      {/* Desktop Links */}
-      <ul
-        style={{
-          display: "flex",
-          gap: "36px",
-          listStyle: "none",
-          alignItems: "center",
-          margin: 0,
-          padding: 0,
-        }}
-        className="hidden-mobile"
-      >
-        {navLinks.map((link) => (
-          <li key={link.href}>
-            <a
-              href={link.href}
-              style={{
-                color: "var(--white)",
-                opacity: 0.5,
-                textDecoration: "none",
-                fontSize: "11px",
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
-                transition: "opacity 0.2s",
-                fontFamily: "'DM Mono', monospace",
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.opacity = "1")}
-              onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.5")}
-            >
-              {link.label}
-            </a>
-          </li>
-        ))}
-        <li>
+            if (isAnchor) {
+              return (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  style={linkStyle}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLElement).style.color = WHITE;
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLElement).style.color = active ? BRASS : MUTED;
+                  }}
+                >
+                  {link.label}
+                </a>
+              );
+            }
+            return (
+              <Link key={link.label} href={link.href}>
+                <span
+                  style={linkStyle}
+                  onMouseEnter={(e) => {
+                    (e.target as HTMLElement).style.color = active ? BRASS : WHITE;
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.target as HTMLElement).style.color = active ? BRASS : MUTED;
+                  }}
+                >
+                  {link.label}
+                </span>
+              </Link>
+            );
+          })}
+        </div>
+
+        {/* Right: Mint CTA + hamburger */}
+        <div style={{ display: "flex", alignItems: "center", gap: "14px", flexShrink: 0 }}>
           <Link href="/mint">
             <span
               style={{
-                background: "var(--brass)",
-                color: "var(--black)",
-                padding: "8px 20px",
+                display: "inline-block",
+                background: BRASS,
+                color: BLACK,
+                fontFamily: "'Syne', sans-serif",
+                fontWeight: 700,
                 fontSize: "11px",
                 letterSpacing: "0.12em",
                 textTransform: "uppercase",
-                fontFamily: "'DM Mono', monospace",
+                padding: "10px 20px",
                 cursor: "pointer",
-                transition: "background 0.2s",
-                textDecoration: "none",
-                display: "inline-block",
+                transition: "opacity 0.2s",
+                whiteSpace: "nowrap",
               }}
-              onMouseEnter={(e) =>
-                ((e.currentTarget as HTMLElement).style.background = "var(--cream)")
-              }
-              onMouseLeave={(e) =>
-                ((e.currentTarget as HTMLElement).style.background = "var(--brass)")
-              }
+              onMouseEnter={(e) => ((e.target as HTMLElement).style.opacity = "0.82")}
+              onMouseLeave={(e) => ((e.target as HTMLElement).style.opacity = "1")}
             >
               Mint Entity
             </span>
           </Link>
-        </li>
-      </ul>
 
-      {/* Mobile Hamburger */}
-      <button
-        onClick={() => setMenuOpen(!menuOpen)}
-        style={{
-          display: "none",
-          background: "none",
-          border: "1px solid rgba(201,168,76,0.3)",
-          color: "var(--brass)",
-          padding: "8px 12px",
-          cursor: "pointer",
-          fontSize: "12px",
-          letterSpacing: "0.1em",
-          fontFamily: "'DM Mono', monospace",
-        }}
-        className="show-mobile"
-      >
-        {menuOpen ? "CLOSE" : "MENU"}
-      </button>
+          {/* Hamburger — shown only on mobile via CSS */}
+          <button
+            className="nav-hamburger"
+            onClick={() => setMenuOpen(!menuOpen)}
+            style={{
+              display: "none",
+              background: "none",
+              border: `1px solid rgba(201,168,76,0.3)`,
+              color: BRASS,
+              padding: "7px 12px",
+              cursor: "pointer",
+              fontSize: "10px",
+              letterSpacing: "0.12em",
+              fontFamily: "'DM Mono', monospace",
+              textTransform: "uppercase",
+            }}
+            aria-label="Toggle menu"
+          >
+            {menuOpen ? "CLOSE" : "MENU"}
+          </button>
+        </div>
+      </nav>
 
-      {/* Mobile Menu */}
+      {/* Mobile dropdown */}
       {menuOpen && (
         <div
           style={{
             position: "fixed",
-            top: "65px",
+            top: "64px",
             left: 0,
             right: 0,
-            background: "rgba(8,8,8,0.98)",
-            borderBottom: "1px solid rgba(201,168,76,0.15)",
-            padding: "24px",
-            zIndex: 99,
+            zIndex: 199,
+            background: "rgba(8,8,8,0.99)",
+            borderBottom: "1px solid rgba(201,168,76,0.12)",
+            padding: "16px 32px 24px",
           }}
         >
-          {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              onClick={() => setMenuOpen(false)}
-              style={{
-                display: "block",
-                color: "var(--white)",
-                opacity: 0.6,
-                textDecoration: "none",
-                fontSize: "12px",
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
-                fontFamily: "'DM Mono', monospace",
-                padding: "12px 0",
-                borderBottom: "1px solid rgba(201,168,76,0.08)",
-              }}
-            >
-              {link.label}
-            </a>
-          ))}
+          {NAV_LINKS.map((link) => {
+            const isAnchor = link.href.startsWith("/#");
+            const active = isActive(link.href);
+            const mobileStyle: React.CSSProperties = {
+              display: "block",
+              fontSize: "12px",
+              letterSpacing: "0.12em",
+              color: active ? BRASS : MUTED,
+              textDecoration: "none",
+              textTransform: "uppercase",
+              fontFamily: "'DM Mono', monospace",
+              padding: "13px 0",
+              borderBottom: "1px solid rgba(201,168,76,0.07)",
+              cursor: "pointer",
+            };
+            if (isAnchor) {
+              return (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  style={mobileStyle}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {link.label}
+                </a>
+              );
+            }
+            return (
+              <Link key={link.label} href={link.href}>
+                <span
+                  style={mobileStyle}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {link.label}
+                </span>
+              </Link>
+            );
+          })}
           <Link href="/mint">
             <span
               onClick={() => setMenuOpen(false)}
               style={{
                 display: "block",
-                background: "var(--brass)",
-                color: "var(--black)",
-                padding: "14px",
-                fontSize: "11px",
+                background: BRASS,
+                color: BLACK,
+                fontFamily: "'Syne', sans-serif",
+                fontWeight: 700,
+                fontSize: "12px",
                 letterSpacing: "0.12em",
                 textTransform: "uppercase",
-                fontFamily: "'DM Mono', monospace",
+                padding: "14px",
                 cursor: "pointer",
                 textAlign: "center",
-                marginTop: "16px",
+                marginTop: "12px",
               }}
             >
               Mint Entity →
@@ -201,15 +266,15 @@ export default function Nav() {
         </div>
       )}
 
+      {/* Spacer so content starts below the fixed nav */}
+      <div style={{ height: "64px" }} />
+
       <style>{`
-        @media (max-width: 900px) {
-          .hidden-mobile { display: none !important; }
-          .show-mobile { display: block !important; }
-        }
-        @media (min-width: 901px) {
-          .show-mobile { display: none !important; }
+        @media (max-width: 1100px) {
+          .nav-desktop { display: none !important; }
+          .nav-hamburger { display: block !important; }
         }
       `}</style>
-    </nav>
+    </>
   );
 }

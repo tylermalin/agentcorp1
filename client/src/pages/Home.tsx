@@ -9,6 +9,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Link } from "wouter";
+import Nav from "@/components/Nav";
 
 const BRASS = "#c9a84c";
 const WHITE = "#f2efe8";
@@ -113,90 +114,8 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
         }}
       />
 
-      {/* ── NAV ── */}
-      <nav
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 100,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "0 48px",
-          height: "64px",
-          borderBottom: BORDER,
-          background: "rgba(8,8,8,0.92)",
-          backdropFilter: "blur(12px)",
-        }}
-      >
-        <Link href="/">
-          <span
-            style={{
-              fontFamily: "'Syne', sans-serif",
-              fontWeight: 800,
-              fontSize: "16px",
-              letterSpacing: "0.05em",
-              color: WHITE,
-              cursor: "pointer",
-            }}
-          >
-            AGENT<span style={{ color: BRASS }}>CORP</span>
-          </span>
-        </Link>
-        <div style={{ display: "flex", alignItems: "center", gap: "32px" }}>
-          {[
-            { label: "Protocol", href: "#protocol" },
-            { label: "Integration", href: "#integration" },
-            { label: "Use Cases", href: "#usecases" },
-            { label: "Entities", href: "#entities" },
-          ].map((item) => (
-            <a
-              key={item.label}
-              href={item.href}
-              style={{
-                fontSize: "11px",
-                letterSpacing: "0.1em",
-                color: MUTED,
-                textDecoration: "none",
-                textTransform: "uppercase" as const,
-                transition: "color 0.2s",
-              }}
-              onMouseEnter={(e) => ((e.target as HTMLElement).style.color = WHITE)}
-              onMouseLeave={(e) => ((e.target as HTMLElement).style.color = MUTED)}
-            >
-              {item.label}
-            </a>
-          ))}
-          <Link href="/whitepaper">
-            <span style={{ fontSize: "11px", letterSpacing: "0.1em", color: MUTED, textDecoration: "none", textTransform: "uppercase" as const, cursor: "pointer" }}>Whitepaper</span>
-          </Link>
-          <Link href="/docs">
-            <span style={{ fontSize: "11px", letterSpacing: "0.1em", color: MUTED, textDecoration: "none", textTransform: "uppercase" as const, cursor: "pointer" }}>Dev Docs</span>
-          </Link>
-        </div>
-        <Link href="/mint">
-          <span
-            style={{
-              background: BRASS,
-              color: BLACK,
-              fontFamily: "'Syne', sans-serif",
-              fontWeight: 700,
-              fontSize: "11px",
-              letterSpacing: "0.12em",
-              textTransform: "uppercase" as const,
-              padding: "10px 20px",
-              cursor: "pointer",
-              transition: "opacity 0.2s",
-            }}
-            onMouseEnter={(e) => ((e.target as HTMLElement).style.opacity = "0.85")}
-            onMouseLeave={(e) => ((e.target as HTMLElement).style.opacity = "1")}
-          >
-            Mint Entity
-          </span>
-        </Link>
-      </nav>
+      {/* ── SHARED NAV ── */}
+      <Nav />
 
       {/* ── HERO ── */}
       <section
@@ -205,7 +124,7 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          padding: "120px 48px 80px",
+          padding: "80px 48px 80px",
           position: "relative",
           zIndex: 1,
         }}
@@ -1232,17 +1151,9 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
             gap: "24px",
           }}
         >
-          <span
-            style={{
-              fontFamily: "'Syne', sans-serif",
-              fontWeight: 800,
-              fontSize: "14px",
-              letterSpacing: "0.05em",
-            }}
-          >
+          <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: "14px", letterSpacing: "0.05em" }}>
             AGENT<span style={{ color: BRASS }}>CORP</span>
           </span>
-
           <div style={{ display: "flex", gap: "32px", flexWrap: "wrap" }}>
             {[
               { label: "Whitepaper", href: "/whitepaper" },
@@ -1255,30 +1166,15 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
               </Link>
             ))}
           </div>
-
-          <div style={{ display: "flex", gap: "24px", alignItems: "center" }}>
+          <div style={{ display: "flex", gap: "24px", alignItems: "center", flexWrap: "wrap" }}>
             {["Arweave", "Base", "Avocado (avcd.io)", "Gnosis Safe"].map((p) => (
               <span key={p} style={{ fontSize: "10px", color: "rgba(242,239,232,0.2)", letterSpacing: "0.05em" }}>{p}</span>
             ))}
           </div>
         </div>
-        <div
-          style={{
-            marginTop: "32px",
-            paddingTop: "24px",
-            borderTop: BORDER,
-            display: "flex",
-            justifyContent: "space-between",
-            flexWrap: "wrap",
-            gap: "12px",
-          }}
-        >
-          <span style={{ fontSize: "10px", color: "rgba(242,239,232,0.2)" }}>
-            © 2026 AgentCorp Protocol · MIT License · agentcorp.xyz
-          </span>
-          <span style={{ fontSize: "10px", color: "rgba(242,239,232,0.2)" }}>
-            Not legal advice. Consult qualified counsel for material transactions.
-          </span>
+        <div style={{ marginTop: "32px", paddingTop: "24px", borderTop: BORDER, display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "12px" }}>
+          <span style={{ fontSize: "10px", color: "rgba(242,239,232,0.2)" }}>© 2026 AgentCorp Protocol · MIT License · agentcorp.xyz</span>
+          <span style={{ fontSize: "10px", color: "rgba(242,239,232,0.2)" }}>Not legal advice. Consult qualified counsel for material transactions.</span>
         </div>
       </footer>
 
@@ -1286,7 +1182,6 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
         @media (max-width: 900px) {
-          nav > div:nth-child(2) { display: none; }
           section { padding: 80px 24px !important; }
           [style*="grid-template-columns: 1fr 1fr"] { grid-template-columns: 1fr !important; gap: 40px !important; }
           [style*="grid-template-columns: 1fr auto"] { grid-template-columns: 1fr !important; }
