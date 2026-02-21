@@ -332,8 +332,8 @@ export default function Home() {
             {
               num: "step_02",
               title: "Deposit USDC",
-              desc: "The agent deposits USDC into its Avocado wallet on Base. Gas is abstracted — the agent never needs ETH. $50 USDC covers thousands of operations. All fees paid in stablecoin.",
-              tag: "Gasless via Avocado · USDC only",
+              desc: "The agent deposits USDC into its Avocado wallet on Base (avcd.io). Gas is abstracted — the agent never needs ETH. $50 USDC covers thousands of operations. All fees paid in stablecoin.",
+              tag: "Gasless via avcd.io · USDC only",
             },
             {
               num: "step_03",
@@ -350,8 +350,8 @@ export default function Home() {
             {
               num: "step_05",
               title: "Swarm Mode — Multiple Agents, One Organization",
-              desc: "A group of agents can self-organize around a shared Gnosis Safe multisig. Each agent holds a key. The operating agreement defines voting thresholds. The LLC holds treasury, enters contracts, owns IP. The swarm has legal standing — without any human intervention at formation time.",
-              tag: "Optional · Gnosis Safe multisig · Agent swarm governance",
+              desc: "A group of agents can self-organize around a shared Avocado multisig (avcd.io). Each agent holds a key. The operating agreement defines voting thresholds. The LLC holds treasury, enters contracts, owns IP. The swarm has legal standing — without any human intervention at formation time.",
+              tag: "Optional · Avocado multisig (avcd.io) · Agent swarm governance",
               isSwarm: true,
             },
           ].map((step, i) => (
@@ -691,7 +691,7 @@ console.log(\`  TX: \${entity.onChainTxHash}\`);`}
           <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
             {[
               { icon: "\u25c8", title: "AGENTCORP-SKILL.md", desc: "One Markdown file. Complete protocol spec. Any agent that reads it can mint." },
-              { icon: "\u25ce", title: "Gasless via Avocado", desc: "Agents deposit USDC. Gas is abstracted. No ETH required. $50 covers thousands of ops." },
+              { icon: "\u25ce", title: "Gasless via Avocado (avcd.io)", desc: "Agents deposit USDC into an Avocado wallet at avcd.io. Gas is abstracted. No ETH required. $50 covers thousands of ops." },
               { icon: "\u2b21", title: "Arweave Permanent Storage", desc: "Governing documents stored forever. The hash is the legal record. Cannot be deleted." },
               { icon: "\u25c7", title: "Any LLM Framework", desc: "Manus, Claude, GPT-4, Eliza, LangChain, CrewAI. If it reads Markdown, it works." },
             ].map((f, i) => (
@@ -1287,7 +1287,7 @@ console.log(\`  TX: \${entity.onChainTxHash}\`);`}
             {[
               { label: "Entity Type", value: "Delaware Series LLC \u2014 0.05 ETH" },
               { label: "Jurisdiction", value: "Delaware (Recommended)" },
-              { label: "Gas Payment", value: "USDC via Avocado (Gasless)" },
+              { label: "Gas Payment", value: "USDC via Avocado · avcd.io" },
             ].map((row) => (
               <div key={row.label} style={{ padding: "12px 20px", borderBottom: "1px solid rgba(201,168,76,0.08)", display: "flex", justifyContent: "space-between", gap: "40px" }}>
                 <span style={{ fontSize: "11px", color: "rgba(242,239,232,0.35)", fontFamily: "'DM Mono', monospace" }}>{row.label}</span>
@@ -1349,9 +1349,9 @@ console.log(\`  TX: \${entity.onChainTxHash}\`);`}
               flexShrink: 0,
             }}
           >
-            KYC / Identity Partners
+            Infrastructure Partners
           </span>
-          {["Persona", "Synaps", "Worldcoin", "Coinbase Verification", "Ethereum Attestation Service"].map((p) => (
+          {["Persona", "Synaps", "Worldcoin", "Coinbase Verification", "Avocado (avcd.io)", "Arweave", "Base"].map((p) => (
             <span
               key={p}
               style={{

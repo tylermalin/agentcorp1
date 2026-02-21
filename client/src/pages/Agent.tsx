@@ -15,46 +15,263 @@ const SKILL_CONTENT = `# AGENTCORP SKILL.md
 > **Chain:** Base (Chain ID 8453)
 > **License:** MIT
 > **Docs:** docs.agentcorp.xyz
+> **GitHub:** github.com/agentcorp
+
+---
 
 ## Overview
 
-AGENTCORP is an NFT-native legal entity formation protocol deployed on Base.
-It enables any wallet to mint legally-recognized entities — Delaware Series LLCs,
-DAO Charters, Non-Profits, and IP License NFTs — as ERC-721 tokens with governing
-documents stored permanently on Arweave and IPFS.
+AGENTCORP is an NFT-native legal entity formation protocol deployed on Base. It enables any wallet to mint legally-recognized entities — Delaware Series LLCs, DAO Charters, Non-Profits, and IP License NFTs — as ERC-721 tokens with governing documents stored permanently on Arweave and IPFS.
 
 **Core Principle:** The NFT IS the legal entity.
 
-| Action         | Legal Meaning              |
-|----------------|---------------------------|
-| mintEntity()   | Incorporate               |
-| transfer()     | Assign / sell entity      |
-| burn()         | Dissolve                  |
-| amendEntity()  | Amend operating agreement |
-| NFT metadata   | Living legal record       |
+| Action | Legal Meaning |
+|--------|---------------|
+| mintEntity() | Incorporate |
+| transfer() | Assign / sell entity |
+| burn() | Dissolve |
+| amendEntity() | Amend operating agreement |
+| NFT metadata | Living legal record |
+
+---
+
+## Entity Types
+
+### Currently Live
+
+#### DELAWARE_SERIES_LLC — Parent Entity
+A Delaware LLC under 6 Del. C. § 18-215 with unlimited legally-segregated Series.
+- Mint price: 0.05 ETH
+- Documents: Certificate of Formation, LLC Operating Agreement, Member Register
+- Governance: Token-weighted, multisig, or single-member
+- Use case: Master holding company, DAO entity wrapper, RWA portfolio parent
+
+#### SERIES_DESIGNATION — Child Series
+A legally-isolated Series under a parent Delaware Series LLC.
+- Mint price: 0.02 ETH (requires parent LLC token ownership)
+- Documents: Series Designation Certificate, Series Operating Addendum
+- Per-series: independent treasury, members, assets, liability
+- Use case: Project-level entity, carbon credit batch, RWA holding, IP isolation
+
+#### DAO_CHARTER — Blockchain-Governed LLC
+A Delaware LLC with full blockchain governance provisions.
+- Mint price: 0.05 ETH
+- Documents: DAO Operating Agreement, Vote Delegate Disclosure, Subscription Agreement
+- Governance: Compound Governor compatible, Gnosis Safe compatible
+- Use case: Protocol DAOs, investment clubs, onchain organizations
+
+### Coming Q2 2026
+- IP_LICENSE — Software license NFT with royalty hooks
+- IP_ASSIGNMENT — IP transfer with chain of title
+
+### Coming Q3 2026
+- NONPROFIT — Delaware non-profit with 501(c) pathway
+- RWA_HOLDING — Real-world asset holding agreement
+
+---
 
 ## Smart Contract Interface
 
 Network: Base Mainnet (Chain ID: 8453)
-Factory Address: 0x[DEPLOYED_ADDRESS]
+Factory Address: 0x[DEPLOYED_ADDRESS] (see docs.agentcorp.xyz)
 
+\`\`\`solidity
+// Mint a new legal entity
 function mintEntity(
     EntityType entityType,
     string calldata name,
-    bytes32 docHash,
-    address treasury,
+    bytes32 docHash,           // Arweave TX ID of governing documents
+    address treasury,          // Safe multisig or EOA
     bytes calldata kycAttestation
 ) external payable returns (uint256 tokenId);
 
+// Mint a Series under an existing parent LLC
+function mintSeries(
+    uint256 parentTokenId,
+    string calldata seriesName,
+    bytes32 seriesDocHash,
+    address seriesTreasury
+) external returns (uint256 seriesTokenId);
+
+// Amend entity documents (token holder only)
+function amendEntity(
+    uint256 tokenId,
+    bytes32 newDocHash,
+    string calldata amendmentDescription
+) external;
+
+// Dissolve an entity (token holder only)
+function dissolveEntity(
+    uint256 tokenId,
+    bytes32 dissolutionDocHash
+) external;
+\`\`\`
+
+### EntityType Enum
+\`\`\`solidity
+enum EntityType {
+    DELAWARE_LLC,           // 0
+    DELAWARE_SERIES_LLC,    // 1 — parent
+    SERIES_DESIGNATION,     // 2 — child series
+    DAO_CHARTER,            // 3
+    NONPROFIT,              // 4 (Q3 2026)
+    IP_LICENSE,             // 5 (Q2 2026)
+    IP_ASSIGNMENT           // 6 (Q2 2026)
+}
+\`\`\`
+
+---
+
 ## Fee Schedule
 
-| Action                  | ETH       |
-|-------------------------|-----------|
-| Mint Delaware LLC       | 0.05 ETH  |
-| Mint Series Designation | 0.02 ETH  |
-| Mint DAO Charter        | 0.05 ETH  |
-| Document Amendment      | 0.01 ETH  |
-| Entity Dissolution      | 0.005 ETH |`;
+| Action | ETH | Notes |
+|--------|-----|-------|
+| Mint Delaware LLC | 0.05 ETH | ~$150 at $3k/ETH |
+| Mint Series Designation | 0.02 ETH | Per series under parent |
+| Mint DAO Charter | 0.05 ETH | Governance adapter included |
+| Mint Non-Profit | 0.05 ETH | Q3 2026 |
+| Document Amendment | 0.01 ETH | Per amendment event |
+| Entity Transfer | Gas only | Standard ERC-721 |
+| Entity Dissolution | 0.005 ETH | Burns token, creates record |
+
+20% of all fees flow to protocol treasury for legal template maintenance.
+
+---
+
+## Gas Abstraction — Avocado Agentic Wallet
+
+Agents use Avocado (https://avcd.io) for gasless transactions on Base.
+Agents never need to hold ETH — gas is paid in USDC.
+
+**Integration:**
+1. Agent deposits USDC to Avocado wallet address on Base
+2. POST /v1/deposit to credit USD balance (api.avcd.io)
+3. Sign EIP-712 Cast message and POST /v1/broadcast
+4. Avocado sponsors gas, deducts fee from USD balance
+5. Poll GET /v1/transaction/:hash for confirmation
+
+**Key properties:**
+- avoNonce must always be -1 (non-sequential)
+- salt must be unique per transaction (random 32 bytes)
+- EIP-712 chainId is 634 (Avocado), NOT 8453 (Base)
+- Batch up to 20 actions per transaction
+- Gas sponsorship available for third-party gas payment
+
+**Avocado Contracts (Base 8453):**
+- AvocadoBroadcaster: 0x0A6E5E7ae08896B0286441367843f4cA59D04dEf
+- AvoFactory: 0xe981E50c7c47F0Df8826B5ce3F533f5E4440e687
+- USDC: 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913
+
+Skill file: https://avcd.io/skill.md
+Explorer: https://agent.avcd.io
+
+---
+
+## Document Storage
+
+All legal documents use dual-storage:
+1. Arweave — Permanent, pay-once. Cannot be deleted. 200-year guarantee.
+2. IPFS — Distributed content-addressed retrieval.
+
+Authenticity: retrieve document → hash it → compare to on-chain record.
+
+### Document Manifest Schema
+\`\`\`json
+{
+  "agentcorp_version": "1.0",
+  "entity_type": "DELAWARE_SERIES_LLC",
+  "entity_name": "[[ENTITY_NAME]]",
+  "formation_date": "[[FORMATION_DATE]]",
+  "jurisdiction": "Delaware, United States",
+  "chain_id": 8453,
+  "designated_smart_contract": "[[CONTRACT_ADDRESS]]",
+  "treasury": "[[TREASURY_ADDRESS]]",
+  "documents": [
+    {
+      "type": "CERTIFICATE_OF_FORMATION",
+      "arweave_tx": "[[ARWEAVE_TX_ID]]",
+      "ipfs_cid": "[[IPFS_CID]]",
+      "sha256": "[[DOC_HASH]]",
+      "status": "ACTIVE"
+    },
+    {
+      "type": "OPERATING_AGREEMENT",
+      "arweave_tx": "[[ARWEAVE_TX_ID]]",
+      "ipfs_cid": "[[IPFS_CID]]",
+      "sha256": "[[DOC_HASH]]",
+      "amendments": []
+    }
+  ],
+  "members": [
+    {
+      "address": "[[MEMBER_ADDRESS]]",
+      "units": "[[MEMBER_UNITS]]",
+      "joined_timestamp": "[[TIMESTAMP]]"
+    }
+  ]
+}
+\`\`\`
+
+---
+
+## Template Variables
+
+| Variable | Source | Description |
+|----------|--------|-------------|
+| [[ENTITY_NAME]] | User input | Legal name of entity |
+| [[FORMATION_DATE]] | Block timestamp | Auto-set at mint |
+| [[CHAIN_ID]] | Network | Base: 8453 |
+| [[DESIGNATED_CONTRACT]] | User input | Governance smart contract |
+| [[MEMBER_ADDRESSES]] | User input | Initial member wallets |
+| [[TREASURY_ADDRESS]] | User input | Safe or EOA |
+| [[GOVERNANCE_TOKEN]] | User input | Voting token (optional) |
+| [[SERIES_PARENT]] | Token ID | Parent LLC (Series only) |
+| [[MAJORITY_THRESHOLD]] | User input | Default: 51% |
+| [[SUPERMAJORITY_THRESHOLD]] | User input | Default: 67% |
+
+---
+
+## Governance Adapters
+
+### Gnosis Safe (Multisig)
+Adapter: GnosisSafeAdapter.sol
+Threshold: Configurable (e.g., 2-of-3, 3-of-5)
+Setup: Pass Safe address as treasury + designated contract
+
+### Compound Governor
+Adapter: CompoundGovernorAdapter.sol
+Voting: Token-weighted with configurable quorum
+Timelock: Configurable delay (default: 48 hours)
+
+---
+
+## Security Best Practices
+
+1. Use a Gnosis Safe — Never hold entity NFTs in a hot wallet. Use multisig 2-of-3 minimum.
+2. Verify document hashes — Retrieve and hash governing docs, compare to on-chain record.
+3. Back up documents — Store copies independently of Arweave/IPFS.
+4. Test on Base Sepolia first — testnet.agentcorp.xyz
+5. Review templates with counsel — Templates are starting points for material transactions.
+
+---
+
+## Endpoints & Resources
+
+| Resource | URL |
+|----------|-----|
+| Protocol dApp | agentcorp.xyz |
+| Developer Docs | docs.agentcorp.xyz |
+| GitHub (contracts) | github.com/agentcorp/contracts |
+| GitHub (templates) | github.com/agentcorp/templates |
+| Base Sepolia Testnet | testnet.agentcorp.xyz |
+| Avocado Wallet | avcd.io |
+| Avocado Skill | avcd.io/skill.md |
+| Discord | discord.gg/agentcorp |
+
+---
+
+*AGENTCORP is infrastructure, not legal advice. Always consult qualified legal counsel for material transactions.*
+*MIT License. Build on it.*`;
 
 function CodeBlock({ children, lang = "typescript", label }: { children: string; lang?: string; label?: string }) {
   const [copied, setCopied] = useState(false);
@@ -1035,6 +1252,217 @@ Entity Dissolution      → 0.005 ETH
 ...`}
             </pre>
           </div>
+        </div>
+      </section>
+
+      {/* ── AVOCADO INTEGRATION ── */}
+      <section
+        id="avocado"
+        style={{
+          padding: "100px 48px",
+          background: "rgba(201,168,76,0.02)",
+          borderTop: "1px solid rgba(201,168,76,0.1)",
+          borderBottom: "1px solid rgba(201,168,76,0.1)",
+          position: "relative",
+          zIndex: 1,
+        }}
+      >
+        <div className="section-header">
+          <span className="section-num">04</span>
+          <div>
+            <h2
+              style={{
+                fontFamily: "'Syne', sans-serif",
+                fontWeight: 800,
+                fontSize: "clamp(28px, 3.5vw, 44px)",
+                letterSpacing: "-0.02em",
+              }}
+            >
+              Gasless via{" "}
+              <em style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic", fontWeight: 400, color: "var(--brass)" }}>
+                Avocado.
+              </em>
+            </h2>
+            <p style={{ marginTop: "12px", fontSize: "13px", color: "rgba(242,239,232,0.4)", fontFamily: "'DM Mono', monospace", maxWidth: "560px", lineHeight: 1.7 }}>
+              Agents deposit USDC into an{" "}
+              <a href="https://avcd.io" target="_blank" rel="noopener noreferrer" style={{ color: "var(--brass)", textDecoration: "none" }}>Avocado Agentic Wallet</a>
+              {" "}at avcd.io. Gas is abstracted. Agents never need ETH. $0.25 USDC covers ~50 protocol interactions.
+            </p>
+          </div>
+        </div>
+
+        {/* Overview cards */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "2px", marginBottom: "2px" }}>
+          {[
+            { icon: "\u25c8", title: "Deposit USDC", desc: "Send USDC to your Avocado wallet on Base. POST /v1/deposit to credit USD balance." },
+            { icon: "\u25ce", title: "Sign & Broadcast", desc: "Sign EIP-712 Cast message. POST /v1/broadcast. Backend sponsors gas, deducts from balance." },
+            { icon: "\u2b21", title: "Non-Sequential Nonces", desc: "avoNonce = -1 always. Parallel execution supported. Batch up to 20 actions per tx." },
+            { icon: "\u25c7", title: "Auto Gas Bumping", desc: "Stuck transactions are automatically resubmitted up to 3 times with higher gas." },
+          ].map((c, i) => (
+            <div key={i} style={{ border: "1px solid rgba(201,168,76,0.1)", padding: "28px 24px", background: "rgba(201,168,76,0.02)" }}>
+              <span style={{ color: "var(--brass)", fontSize: "18px", display: "block", marginBottom: "14px" }}>{c.icon}</span>
+              <h3 style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: "13px", marginBottom: "8px" }}>{c.title}</h3>
+              <p style={{ color: "rgba(242,239,232,0.4)", fontSize: "11px", lineHeight: 1.6, fontFamily: "'DM Mono', monospace" }}>{c.desc}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Code + API table */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2px" }}>
+          {/* TypeScript integration code */}
+          <div style={{ border: "1px solid rgba(201,168,76,0.15)", background: "#0a0a0a", overflow: "hidden" }}>
+            <div style={{ background: "rgba(201,168,76,0.06)", borderBottom: "1px solid rgba(201,168,76,0.12)", padding: "8px 16px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <span style={{ fontSize: "9px", letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "var(--brass)", fontFamily: "'DM Mono', monospace" }}>avocado_mint.ts · Gasless AgentCorp Mint</span>
+              <a href="https://avcd.io/skill.md" target="_blank" rel="noopener noreferrer" style={{ fontSize: "9px", color: "rgba(201,168,76,0.5)", fontFamily: "'DM Mono', monospace", textDecoration: "none" }}>avcd.io/skill.md ↗</a>
+            </div>
+            <pre style={{ padding: "28px", fontFamily: "'DM Mono', monospace", fontSize: "11px", lineHeight: 1.75, color: "rgba(242,239,232,0.7)", margin: 0, overflowX: "auto", borderLeft: "3px solid var(--brass)" }}>
+{`import { privateKeyToAccount } from "viem/accounts";
+import { encodeFunctionData, parseEther, keccak256,
+         encodePacked, parseUnits } from "viem";
+
+const AVOCADO_API = "https://api.avcd.io";
+const USDC = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913";
+const DEPOSITOR = "0xFb653a4061cE35b66e2Ba090Cf1Fabe32f294079";
+
+// 1. Auth header (EIP-712, fresh per request)
+async function authHeader(account) {
+  const ts = Math.floor(Date.now() / 1000);
+  const sig = await account.signTypedData({
+    domain: { name: "Avocado-Agentic-Wallet", version: "1.0.0" },
+    types: { Authenticate: [
+      { name: "agent", type: "address" },
+      { name: "timestamp", type: "uint256" },
+      { name: "environment", type: "string" },
+    ]},
+    primaryType: "Authenticate",
+    message: { agent: account.address,
+               timestamp: BigInt(ts),
+               environment: "production" },
+  });
+  return \`Signature \${account.address}:\${ts}:\${sig}\`;
+}
+
+// 2. Deposit USDC to fund gas balance
+async function depositUsdc(account, amountUsdc = "1.00") {
+  const data = encodeFunctionData({
+    abi: [{ name: "transfer", type: "function",
+      inputs: [{ name: "to", type: "address" },
+               { name: "amount", type: "uint256" }],
+      outputs: [{ name: "", type: "bool" }],
+      stateMutability: "nonpayable" }],
+    functionName: "transfer",
+    args: [DEPOSITOR, parseUnits(amountUsdc, 6)],
+  });
+  const body = buildCastBody(USDC, data);
+  const res = await fetch(\`\${AVOCADO_API}/v1/deposit\`, {
+    method: "POST",
+    headers: { "Authorization": await authHeader(account),
+               "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  return (await res.json()).data;
+}
+
+// 3. Broadcast mintEntity() via Avocado (gasless)
+async function mintEntityGasless(account, mintCalldata) {
+  const body = buildCastBody(AGENTCORP_FACTORY, mintCalldata,
+                              parseEther("0.05").toString());
+  const res = await fetch(\`\${AVOCADO_API}/v1/broadcast\`, {
+    method: "POST",
+    headers: { "Authorization": await authHeader(account),
+               "Content-Type": "application/json" },
+    body: JSON.stringify({ ...body, target_chain_id: 8453 }),
+  });
+  return (await res.json()).data; // { avocado_tx_hash, status }
+}
+
+// 4. Poll for confirmation
+async function waitForConfirmation(account, avocadoTxHash) {
+  while (true) {
+    const res = await fetch(
+      \`\${AVOCADO_API}/v1/transaction/\${avocadoTxHash}\`,
+      { headers: { "Authorization": await authHeader(account) } }
+    );
+    const { data } = await res.json();
+    if (data.status === "success") return data.on_chain_tx_hash;
+    if (data.status === "failed") throw new Error("TX failed");
+    await new Promise(r => setTimeout(r, 5000)); // poll 5s
+  }
+}`}
+            </pre>
+          </div>
+
+          {/* API reference + fee model */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+            {/* API endpoints table */}
+            <div style={{ border: "1px solid rgba(201,168,76,0.1)", padding: "28px 32px", background: "rgba(201,168,76,0.02)" }}>
+              <div style={{ fontSize: "9px", letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "var(--brass)", fontFamily: "'DM Mono', monospace", marginBottom: "16px" }}>API Reference · api.avcd.io</div>
+              {[
+                { method: "GET", path: "/v1/agent", desc: "Agent profile + balance" },
+                { method: "GET", path: "/v1/balance", desc: "USD balance (total/locked/available)" },
+                { method: "POST", path: "/v1/deposit", desc: "Deposit USDC to gas balance" },
+                { method: "POST", path: "/v1/broadcast", desc: "Broadcast signed transaction" },
+                { method: "GET", path: "/v1/transaction/:hash", desc: "Transaction status" },
+                { method: "POST", path: "/v1/sponsor/deposit", desc: "Deposit to sponsor balance" },
+              ].map((ep, i) => (
+                <div key={i} style={{ display: "flex", gap: "12px", alignItems: "flex-start", padding: "8px 0", borderBottom: "1px solid rgba(201,168,76,0.06)" }}>
+                  <span style={{ fontSize: "9px", color: ep.method === "POST" ? "var(--brass)" : "rgba(242,239,232,0.4)", fontFamily: "'DM Mono', monospace", flexShrink: 0, width: "32px", marginTop: "1px" }}>{ep.method}</span>
+                  <span style={{ fontSize: "10px", color: "rgba(242,239,232,0.6)", fontFamily: "'DM Mono', monospace", flexShrink: 0, width: "180px" }}>{ep.path}</span>
+                  <span style={{ fontSize: "10px", color: "rgba(242,239,232,0.3)", fontFamily: "'DM Mono', monospace" }}>{ep.desc}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Fee model */}
+            <div style={{ border: "1px solid rgba(201,168,76,0.1)", padding: "28px 32px", background: "rgba(201,168,76,0.02)" }}>
+              <div style={{ fontSize: "9px", letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "var(--brass)", fontFamily: "'DM Mono', monospace", marginBottom: "16px" }}>Fee Model · Real Transaction</div>
+              <pre style={{ fontFamily: "'DM Mono', monospace", fontSize: "11px", lineHeight: 1.9, color: "rgba(242,239,232,0.6)", margin: 0 }}>
+{`credit:     +$0.250000   USDC deposit confirmed
+fee_lock:   -$0.005225   Locked at broadcast
+fee_settle: -$0.004204   $0.003503 gas + 20% markup
+fee_refund: +$0.001021   Overestimate returned
+────────────────────────────────────
+final:       $0.245796   (~50 txs per $0.25)`}
+              </pre>
+            </div>
+
+            {/* Contracts */}
+            <div style={{ border: "1px solid rgba(201,168,76,0.1)", padding: "28px 32px", background: "rgba(201,168,76,0.02)" }}>
+              <div style={{ fontSize: "9px", letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "var(--brass)", fontFamily: "'DM Mono', monospace", marginBottom: "16px" }}>Contracts · Base 8453</div>
+              {[
+                { label: "AvocadoBroadcaster", addr: "0x0A6E5E7ae...04dEf" },
+                { label: "AvoFactory", addr: "0xe981E50c7...e687" },
+                { label: "USDC", addr: "0x833589fCD...2913" },
+              ].map((c, i) => (
+                <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", borderBottom: "1px solid rgba(201,168,76,0.06)" }}>
+                  <span style={{ fontSize: "11px", color: "rgba(242,239,232,0.5)", fontFamily: "'DM Mono', monospace" }}>{c.label}</span>
+                  <span style={{ fontSize: "10px", color: "var(--brass)", fontFamily: "'DM Mono', monospace", opacity: 0.7 }}>{c.addr}</span>
+                </div>
+              ))}
+              <div style={{ marginTop: "16px", display: "flex", gap: "12px" }}>
+                <a href="https://avcd.io" target="_blank" rel="noopener noreferrer" className="btn-brass" style={{ fontSize: "10px", padding: "8px 16px" }}>avcd.io ↗</a>
+                <a href="https://avcd.io/skill.md" target="_blank" rel="noopener noreferrer" className="btn-outline-brass" style={{ fontSize: "10px", padding: "8px 16px" }}>Skill File</a>
+                <a href="https://agent.avcd.io" target="_blank" rel="noopener noreferrer" className="btn-outline-brass" style={{ fontSize: "10px", padding: "8px 16px" }}>Explorer</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Important notes */}
+        <div style={{ marginTop: "2px", border: "1px solid rgba(201,168,76,0.1)", padding: "24px 32px", background: "rgba(201,168,76,0.02)", display: "flex", gap: "40px", flexWrap: "wrap" }}>
+          {[
+            { label: "avoNonce", value: "Always -1 (non-sequential)" },
+            { label: "EIP-712 chainId", value: "634 (Avocado), NOT 8453 (Base)" },
+            { label: "salt", value: "Random 32 bytes per tx" },
+            { label: "Batch limit", value: "20 actions per transaction" },
+            { label: "Auth expiry", value: "\u00b15 minutes from server time" },
+            { label: "Gas sponsorship", value: "Third-party can pay gas via EIP-712 SponsorGas" },
+          ].map((n, i) => (
+            <div key={i}>
+              <div style={{ fontSize: "9px", color: "var(--brass)", fontFamily: "'DM Mono', monospace", letterSpacing: "0.1em", textTransform: "uppercase" as const, marginBottom: "4px" }}>{n.label}</div>
+              <div style={{ fontSize: "11px", color: "rgba(242,239,232,0.5)", fontFamily: "'DM Mono', monospace" }}>{n.value}</div>
+            </div>
+          ))}
         </div>
       </section>
 

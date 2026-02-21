@@ -318,7 +318,7 @@ export default function Mint() {
                 </label>
                 <input
                   type="text"
-                  placeholder="0x... (Gnosis Safe or EOA)"
+                  placeholder="0x... (Gnosis Safe, Avocado multisig, or EOA)"
                   value={form.treasury}
                   onChange={(e) => setForm({ ...form, treasury: e.target.value })}
                   style={{
@@ -335,6 +335,45 @@ export default function Mint() {
                 />
                 <div style={{ fontSize: "10px", color: "rgba(242,239,232,0.25)", fontFamily: "'DM Mono', monospace", marginTop: "6px" }}>
                   Leave blank to use your connected wallet address
+                </div>
+                {/* Avocado callout */}
+                <div
+                  style={{
+                    marginTop: "12px",
+                    background: "rgba(201,168,76,0.04)",
+                    border: "1px solid rgba(201,168,76,0.15)",
+                    borderLeft: "3px solid var(--brass)",
+                    padding: "14px 18px",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    gap: "16px",
+                    flexWrap: "wrap" as const,
+                  }}
+                >
+                  <div>
+                    <div style={{ fontSize: "9px", letterSpacing: "0.15em", textTransform: "uppercase" as const, color: "var(--brass)", fontFamily: "'DM Mono', monospace", marginBottom: "4px" }}>Agent Treasury — Gasless via Avocado</div>
+                    <div style={{ fontSize: "11px", color: "rgba(242,239,232,0.45)", fontFamily: "'DM Mono', monospace", lineHeight: 1.5 }}>
+                      Use an Avocado multisig wallet as your entity treasury. Agents deposit USDC, never need ETH. Gas is abstracted via <a href="https://avcd.io" target="_blank" rel="noopener noreferrer" style={{ color: "var(--brass)", textDecoration: "none" }}>avcd.io</a>.
+                    </div>
+                  </div>
+                  <a
+                    href="https://avcd.io"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      fontSize: "10px",
+                      color: "var(--brass)",
+                      fontFamily: "'DM Mono', monospace",
+                      textDecoration: "none",
+                      border: "1px solid rgba(201,168,76,0.3)",
+                      padding: "6px 14px",
+                      flexShrink: 0,
+                      whiteSpace: "nowrap" as const,
+                    }}
+                  >
+                    Setup Avocado ↗
+                  </a>
                 </div>
               </div>
 
