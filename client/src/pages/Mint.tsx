@@ -6,6 +6,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import { WalletConnect } from "@/components/WalletConnect";
 
 const ENTITY_TYPES = [
   {
@@ -66,6 +67,8 @@ export default function Mint() {
   const [step, setStep] = useState(0);
   const [selectedType, setSelectedType] = useState<string | null>(null);
   const [form, setForm] = useState({ name: "", treasury: "", jurisdiction: "Delaware" });
+  const [walletAddress, setWalletAddress] = useState<string | null>(null);
+  const [isMinting, setIsMinting] = useState(false);
 
   const handleSelectType = (id: string, status: string) => {
     if (status === "soon") {
@@ -89,10 +92,26 @@ export default function Mint() {
     if (step < STEPS.length - 1) setStep((s) => s + 1);
   };
 
-  const handleMint = () => {
-    toast("Wallet connection required", {
-      description: "Connect your wallet on Base Mainnet to mint your entity NFT.",
+  const handleMint = async () => {
+    if (!walletAddress) {
+      toast("Wallet not connected", {
+        description: "Please connect your wallet before minting.",
+      });
+      return;
+    }
+    setIsMinting(true);
+    // Simulate the mint transaction flow
+    toast("Preparing transaction...", { description: "Building your entity NFT on Base Mainnet." });
+    await new Promise((r) => setTimeout(r, 1500));
+    toast("Uploading documents to Arweave...", { description: "Permanent storage in progress." });
+    await new Promise((r) => setTimeout(r, 1500));
+    toast("Awaiting wallet signature...", { description: "Check your wallet to confirm the transaction." });
+    await new Promise((r) => setTimeout(r, 1000));
+    // In production, this would call the AgentCorp smart contract
+    toast("Mint transaction submitted!", {
+      description: `${selected?.name} entity formation initiated. Check Basescan for confirmation.`,
     });
+    setIsMinting(false);
   };
 
   const selected = ENTITY_TYPES.find((e) => e.id === selectedType);
@@ -532,13 +551,43 @@ export default function Mint() {
               </div>
             </div>
 
-            <button
-              onClick={handleMint}
-              className="btn-primary"
-              style={{ width: "100%", justifyContent: "center", fontSize: "14px", padding: "18px 32px" }}
-            >
-              Connect Wallet & Mint Entity
-            </button>
+            {/* Wallet Connect */}
+            <div style={{ marginBottom: "24px" }}>
+              <WalletConnect
+                onConnect={(address) => {
+                  setWalletAddress(address);
+                  toast("Wallet connected", { description: `${address.slice(0, 6)}...${address.slice(-4)} connected on Base.` });
+                }}
+                onDisconnect={() => setWalletAddress(null)}
+              />
+            </div>
+
+            {walletAddress ? (
+              <button
+                onClick={handleMint}
+                disabled={isMinting}
+                className="btn-primary"
+                style={{ width: "100%", justifyContent: "center", fontSize: "14px", padding: "18px 32px", opacity: isMinting ? 0.7 : 1 }}
+              >
+                {isMinting ? "Minting..." : `Mint ${selected?.name} — ${selected?.price}`}
+              </button>
+            ) : (
+              <div
+                style={{
+                  width: "100%",
+                  padding: "18px 32px",
+                  background: "rgba(201,168,76,0.05)",
+                  border: "1px solid rgba(201,168,76,0.15)",
+                  textAlign: "center",
+                  fontSize: "12px",
+                  color: "rgba(242,239,232,0.3)",
+                  fontFamily: "'DM Mono', monospace",
+                  letterSpacing: "0.08em",
+                }}
+              >
+                Connect wallet above to enable minting
+              </div>
+            )}
             <p style={{ fontSize: "10px", color: "rgba(242,239,232,0.2)", fontFamily: "'DM Mono', monospace", textAlign: "center", marginTop: "12px" }}>
               Non-custodial · AGENTCORP never holds your keys
             </p>

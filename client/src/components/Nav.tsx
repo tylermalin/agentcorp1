@@ -52,7 +52,7 @@ export default function Nav() {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: "0 48px",
+          padding: "0 clamp(16px, 4vw, 48px)",
           height: "64px",
           borderBottom: "1px solid rgba(201,168,76,0.12)",
           background: scrolled
@@ -146,6 +146,7 @@ export default function Nav() {
         <div style={{ display: "flex", alignItems: "center", gap: "14px", flexShrink: 0 }}>
           <Link href="/mint">
             <span
+              className="nav-mint-cta"
               style={{
                 display: "inline-block",
                 background: BRASS,
@@ -273,6 +274,9 @@ export default function Nav() {
         @media (max-width: 1100px) {
           .nav-desktop { display: none !important; }
           .nav-hamburger { display: block !important; }
+        }
+        @media (max-width: 600px) {
+          .nav-mint-cta { display: none !important; }
         }
       `}</style>
     </>

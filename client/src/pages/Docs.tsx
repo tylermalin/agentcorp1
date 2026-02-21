@@ -821,8 +821,15 @@ interface IAgentCorpGovernance {
       <style>{`
         @media (max-width: 900px) {
           [style*="grid-template-columns: 240px 1fr"] { grid-template-columns: 1fr !important; }
-          [style*="padding: 48px 60px"] { padding: 24px !important; }
-          [style*="position: sticky"] { position: relative !important; height: auto !important; border-right: none !important; border-bottom: 1px solid rgba(201,168,76,0.12) !important; }
+          [style*="padding: 48px 60px"] { padding: 24px 20px !important; }
+          [style*="padding: 48px 48px 32px"] { padding: 24px 20px 16px !important; }
+          [style*="position: sticky"] { position: relative !important; height: auto !important; border-right: none !important; border-bottom: 1px solid rgba(201,168,76,0.12) !important; overflow-y: visible !important; }
+          pre { font-size: 10px !important; }
+        }
+        @media (max-width: 600px) {
+          [style*="padding: 48px 60px"] { padding: 16px !important; }
+          [style*="padding: 48px 48px 32px"] { padding: 16px !important; }
+          pre { font-size: 9px !important; overflow-x: auto; }
         }
       `}</style>
     </div>

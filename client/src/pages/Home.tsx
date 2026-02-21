@@ -118,17 +118,7 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
       <Nav />
 
       {/* ── HERO ── */}
-      <section
-        style={{
-          minHeight: "100vh",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          padding: "80px 48px 80px",
-          position: "relative",
-          zIndex: 1,
-        }}
-      >
+      <section className="page-hero">
         <div ref={hero.ref} style={hero.style}>
           {/* CLI prompt */}
           <div
@@ -243,6 +233,7 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
 
         {/* Stats bar */}
         <div
+          className="stats-bar"
           style={{
             position: "absolute",
             bottom: "0",
@@ -312,22 +303,14 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
       {/* ── PROTOCOL: THREE STEPS ── */}
       <section
         id="protocol"
-        style={{
-          padding: "120px 48px",
-          position: "relative",
-          zIndex: 1,
-          borderTop: BORDER,
-        }}
+        className="page-section"
+        style={{ position: "relative", zIndex: 1, borderTop: BORDER }}
       >
         <div ref={protocol.ref} style={protocol.style}>
           <SectionEyebrow num="01" label="Protocol" />
           <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: "80px",
-              alignItems: "start",
-            }}
+            className="grid-2"
+            style={{ alignItems: "start" }}
           >
             <div>
               <h2
@@ -420,23 +403,12 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
       {/* ── INTEGRATION ── */}
       <section
         id="integration"
-        style={{
-          padding: "120px 48px",
-          position: "relative",
-          zIndex: 1,
-          borderTop: BORDER,
-        }}
+        className="page-section"
+        style={{ position: "relative", zIndex: 1, borderTop: BORDER }}
       >
         <div ref={integration.ref} style={integration.style}>
           <SectionEyebrow num="02" label="Integration" />
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: "80px",
-              alignItems: "start",
-            }}
-          >
+          <div className="grid-2" style={{ alignItems: "start" }}>
             {/* Left: headline + features */}
             <div>
               <h2
@@ -647,12 +619,8 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
       {/* ── USE CASES ── */}
       <section
         id="usecases"
-        style={{
-          padding: "120px 48px",
-          position: "relative",
-          zIndex: 1,
-          borderTop: BORDER,
-        }}
+        className="page-section"
+        style={{ position: "relative", zIndex: 1, borderTop: BORDER }}
       >
         <div ref={usecases.ref} style={usecases.style}>
           <SectionEyebrow num="03" label="Use Cases" />
@@ -683,7 +651,7 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
             AgentCorp is infrastructure for any actor that needs legal standing on-chain — whether that's a founder, a DAO, an autonomous agent, or a swarm of agents coordinating without a human in the loop.
           </p>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2px" }}>
+          <div className="grid-2" style={{ gap: "2px" }}>
             {/* Humans & DAOs column */}
             <div>
               <div
@@ -788,12 +756,8 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
       {/* ── ENTITIES TABLE ── */}
       <section
         id="entities"
-        style={{
-          padding: "120px 48px",
-          position: "relative",
-          zIndex: 1,
-          borderTop: BORDER,
-        }}
+        className="page-section"
+        style={{ position: "relative", zIndex: 1, borderTop: BORDER }}
       >
         <div ref={entities.ref} style={entities.style}>
           <SectionEyebrow num="04" label="Entities" />
@@ -961,14 +925,8 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
 
       {/* ── GET STARTED CTA ── */}
       <section
-        style={{
-          padding: "120px 48px",
-          position: "relative",
-          zIndex: 1,
-          borderTop: BORDER,
-          background: "rgba(201,168,76,0.03)",
-          overflow: "hidden",
-        }}
+        className="page-section"
+        style={{ position: "relative", zIndex: 1, borderTop: BORDER, background: "rgba(201,168,76,0.03)", overflow: "hidden" }}
       >
         {/* Large background text */}
         <div
@@ -994,14 +952,7 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
 
         <div ref={cta.ref} style={{ ...cta.style, position: "relative", zIndex: 1 }}>
           <SectionEyebrow num="05" label="Get Started" />
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr auto",
-              gap: "80px",
-              alignItems: "start",
-            }}
-          >
+          <div className="grid-2" style={{ alignItems: "start" }}>
             <div>
               <h2
                 style={{
@@ -1182,10 +1133,14 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
         @media (max-width: 900px) {
-          section { padding: 80px 24px !important; }
-          [style*="grid-template-columns: 1fr 1fr"] { grid-template-columns: 1fr !important; gap: 40px !important; }
-          [style*="grid-template-columns: 1fr auto"] { grid-template-columns: 1fr !important; }
           footer { padding: 40px 24px !important; }
+          .stats-bar { flex-wrap: wrap; }
+          .stats-bar > div { flex: 1 1 40%; min-width: 120px; }
+          .cli-prompt span:last-of-type { display: none; }
+        }
+        @media (max-width: 600px) {
+          footer { padding: 32px 16px !important; }
+          .hero-headline { font-size: clamp(40px, 12vw, 80px) !important; }
         }
       `}</style>
     </div>

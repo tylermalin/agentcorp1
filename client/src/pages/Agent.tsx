@@ -414,9 +414,7 @@ export default function Agent() {
       {/* ── HERO ── */}
       <section
         style={{
-          paddingTop: "140px",
-          paddingBottom: "80px",
-          padding: "140px 48px 80px",
+          padding: "80px 48px 80px",
           borderBottom: "1px solid rgba(201,168,76,0.12)",
           position: "relative",
           zIndex: 1,
@@ -566,7 +564,7 @@ export default function Agent() {
       </section>
 
       {/* ── HOW IT WORKS ── */}
-      <section style={{ padding: "100px 48px", position: "relative", zIndex: 1 }}>
+      <section className="page-section" style={{ position: "relative", zIndex: 1 }}>
         <div className="section-header">
           <span className="section-num">01</span>
           <h2
@@ -681,7 +679,7 @@ export default function Agent() {
       {/* ── FRAMEWORK INTEGRATION ── */}
       <section
         style={{
-          padding: "80px 48px 100px",
+          padding: "80px 24px 100px",  /* responsive via page-section */
           background: "rgba(201,168,76,0.02)",
           borderTop: "1px solid rgba(201,168,76,0.1)",
           borderBottom: "1px solid rgba(201,168,76,0.1)",
@@ -842,7 +840,7 @@ export default function Agent() {
       </section>
 
       {/* ── CODE EXAMPLES ── */}
-      <section style={{ padding: "100px 48px", position: "relative", zIndex: 1 }}>
+      <section className="page-section" style={{ position: "relative", zIndex: 1 }}>
         <div className="section-header">
           <span className="section-num">03</span>
           <h2
@@ -1063,7 +1061,7 @@ print(f"Entity minted: tx {tx_hash.hex()}")`}
       {/* ── SKILL.MD PREVIEW ── */}
       <section
         style={{
-          padding: "80px 48px 100px",
+          padding: "80px 24px 100px",  /* responsive via page-section */
           background: "rgba(201,168,76,0.02)",
           borderTop: "1px solid rgba(201,168,76,0.1)",
           borderBottom: "1px solid rgba(201,168,76,0.1)",
@@ -1259,7 +1257,7 @@ Entity Dissolution      → 0.005 ETH
       <section
         id="avocado"
         style={{
-          padding: "100px 48px",
+          padding: "80px 24px",  /* responsive via page-section */
           background: "rgba(201,168,76,0.02)",
           borderTop: "1px solid rgba(201,168,76,0.1)",
           borderBottom: "1px solid rgba(201,168,76,0.1)",
@@ -1469,7 +1467,7 @@ final:       $0.245796   (~50 txs per $0.25)`}
       {/* ── SWARM MODE ── */}
       <section
         style={{
-          padding: "100px 48px",
+          padding: "80px 24px",  /* responsive via page-section */
           background: "rgba(201,168,76,0.02)",
           borderTop: "1px solid rgba(201,168,76,0.1)",
           borderBottom: "1px solid rgba(201,168,76,0.1)",
@@ -1560,7 +1558,7 @@ final:       $0.245796   (~50 txs per $0.25)`}
       {/* ── CTA ── */}
       <section
         style={{
-          padding: "100px 48px",
+          padding: "80px 24px",  /* responsive via page-section */
           position: "relative",
           zIndex: 1,
           display: "grid",
@@ -1668,6 +1666,16 @@ final:       $0.245796   (~50 txs per $0.25)`}
           [style*="grid-template-columns: 260px 1fr"] { grid-template-columns: 1fr !important; }
           [style*="grid-template-columns: 1fr 1fr"] { grid-template-columns: 1fr !important; }
           [style*="gap: 80px"] { gap: 40px !important; }
+          [style*="gap: 48px"] { gap: 24px !important; }
+          .section-header { flex-direction: column; gap: 12px; }
+          .section-header h2 { font-size: clamp(24px, 6vw, 36px) !important; }
+        }
+        @media (max-width: 600px) {
+          section { padding-left: 16px !important; padding-right: 16px !important; }
+          [style*="grid-template-columns: repeat(4"] { grid-template-columns: 1fr !important; }
+          [style*="grid-template-columns: repeat(2"] { grid-template-columns: 1fr !important; }
+          [style*="grid-template-columns: 1fr 1fr"] { grid-template-columns: 1fr !important; }
+          [style*="font-size: clamp"] { font-size: clamp(22px, 8vw, 36px) !important; }
         }
       `}</style>
     </div>

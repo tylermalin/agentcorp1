@@ -433,6 +433,70 @@
     color: #8b1a1a;
   }
 
+  /* ── Responsive Page Padding ── */
+  .page-section {
+    padding: 120px 48px;
+  }
+
+  .page-hero {
+    padding: 80px 48px 80px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── Responsive Grid ── */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+  }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+
+  .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+
+  .grid-auto {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2px;
+  }
+
+  /* ── Mobile breakpoints ── */
+  @media (max-width: 1100px) {
+    .grid-4 { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 900px) {
+    .page-section { padding: 80px 24px; }
+    .page-hero { padding: 60px 24px 60px; min-height: auto; }
+    .grid-2 { grid-template-columns: 1fr; gap: 32px; }
+    .grid-3 { grid-template-columns: 1fr; gap: 24px; }
+    .grid-4 { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .grid-auto { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 600px) {
+    .page-section { padding: 60px 16px; }
+    .page-hero { padding: 40px 16px 40px; }
+    .grid-4 { grid-template-columns: 1fr; }
+    .btn-brass, .btn-primary, .btn-outline-brass {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
   /* ── Scrollbar ── */
   ::-webkit-scrollbar {
     width: 4px;

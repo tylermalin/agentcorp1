@@ -1,17 +1,92 @@
 <!doctype html>
 <html lang="en">
+
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <title>AGENTCORP — On-Chain Legal Infrastructure</title>
-    <meta name="description" content="AGENTCORP is the open legal infrastructure layer for the onchain economy. Incorporate a Delaware Series LLC, hold IP, assign rights, and govern your organization — all minted as an NFT on Base." />
-    <meta property="og:title" content="AGENTCORP — On-Chain Legal Infrastructure" />
-    <meta property="og:description" content="Mint your legal entity. Own it forever. Delaware Series LLCs, DAO Charters, and IP License NFTs on Base." />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5" />
+
+    <!-- Primary Meta Tags -->
+    <title>AgentCorp — On-Chain Legal Infrastructure for the Autonomous Economy</title>
+    <meta name="title" content="AgentCorp — On-Chain Legal Infrastructure for the Autonomous Economy" />
+    <meta name="description" content="Mint a Delaware Series LLC, DAO Charter, or Series Designation as an NFT on Base. Legal infrastructure for agents, founders, and DAOs. No lawyer required. Permanent Arweave storage." />
+    <meta name="keywords" content="AgentCorp, on-chain legal, Delaware LLC, NFT incorporation, Base blockchain, autonomous agents, DAO legal wrapper, smart contract entity, Arweave, legal infrastructure" />
+    <meta name="author" content="AgentCorp" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://agentcorp.xyz" />
+
+    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://agentcorp.xyz" />
+    <meta property="og:title" content="AgentCorp — On-Chain Legal Infrastructure" />
+    <meta property="og:description" content="Mint a Delaware Series LLC as an NFT on Base. Legal infrastructure for autonomous agents, founders, and DAOs. No lawyer. No waiting. The NFT IS the entity." />
+    <meta property="og:image" content="https://agentcorp.xyz/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="AgentCorp" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://agentcorp.xyz" />
+    <meta property="twitter:title" content="AgentCorp — On-Chain Legal Infrastructure" />
+    <meta property="twitter:description" content="Mint a Delaware Series LLC as an NFT on Base. Legal infrastructure for autonomous agents, founders, and DAOs. No lawyer. No waiting." />
+    <meta property="twitter:image" content="https://agentcorp.xyz/og-image.png" />
+    <meta property="twitter:site" content="@agentcorpxyz" />
+    <meta property="twitter:creator" content="@agentcorpxyz" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#080808" />
+    <meta name="msapplication-TileColor" content="#080808" />
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Instrument+Serif:ital@0;1&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=Instrument+Serif:ital@0;1&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet" />
+
+    <!-- Structured Data: Organization -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "AgentCorp",
+      "url": "https://agentcorp.xyz",
+      "description": "On-chain legal infrastructure for the autonomous economy. Mint Delaware Series LLCs, DAO Charters, and Series Designations as NFTs on Base.",
+      "foundingDate": "2025",
+      "sameAs": [
+        "https://twitter.com/agentcorpxyz",
+        "https://github.com/agentcorp"
+      ],
+      "offers": {
+        "@type": "Offer",
+        "name": "Delaware Series LLC NFT",
+        "description": "Mint a legally-recognized Delaware Series LLC as an NFT on Base blockchain",
+        "price": "0.05",
+        "priceCurrency": "ETH"
+      }
+    }
+    </script>
+
+    <!-- Structured Data: SoftwareApplication -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "AgentCorp Protocol",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Web3",
+      "description": "Smart contract protocol for minting legal entities as NFTs on Base blockchain",
+      "url": "https://agentcorp.xyz",
+      "offers": {
+        "@type": "Offer",
+        "price": "0.05",
+        "priceCurrency": "ETH"
+      }
+    }
+    </script>
   </head>
+
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
@@ -20,4 +95,5 @@
       src="%VITE_ANALYTICS_ENDPOINT%/umami"
       data-website-id="%VITE_ANALYTICS_WEBSITE_ID%"></script>
   </body>
+
 </html>

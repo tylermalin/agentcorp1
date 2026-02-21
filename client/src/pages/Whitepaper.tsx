@@ -684,8 +684,17 @@ enum EntityType {
       <style>{`
         @media (max-width: 900px) {
           .wp-layout { grid-template-columns: 1fr !important; }
-          aside { position: static !important; height: auto !important; border-right: none !important; border-bottom: 1px solid #c8b99a; padding: 32px 24px !important; }
+          aside { position: static !important; height: auto !important; border-right: none !important; border-bottom: 1px solid #c8b99a; padding: 32px 24px !important; overflow-y: visible !important; }
           main { padding: 40px 24px 80px !important; }
+          header > div { padding: 40px 24px 32px !important; }
+        }
+        @media (max-width: 600px) {
+          .wp-layout { grid-template-columns: 1fr !important; }
+          aside { padding: 24px 16px !important; }
+          main { padding: 32px 16px 60px !important; }
+          header > div { padding: 32px 16px 24px !important; }
+          table { font-size: 11px !important; }
+          td, th { padding: 8px 8px !important; }
         }
       `}</style>
     </div>
