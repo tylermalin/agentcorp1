@@ -3,6 +3,14 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ============================================================
+   AGENTCORP DESIGN SYSTEM
+   Philosophy: Industrial Legal Modernism
+   - Near-black canvas with brass/gold as the sole accent
+   - Monospace + serif type pairing
+   - Grid overlay as structural metaphor
+   ============================================================ */
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -27,132 +35,99 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
+  --color-brass: var(--brass);
+  --color-brass-dim: var(--brass-dim);
+  --color-cream: var(--cream);
+  --color-steel: var(--steel);
 }
 
 :root {
-  --primary: var(--color-blue-700);
-  --primary-foreground: var(--color-blue-50);
-  --sidebar-primary: var(--color-blue-600);
-  --sidebar-primary-foreground: var(--color-blue-50);
-  --chart-1: var(--color-blue-300);
-  --chart-2: var(--color-blue-500);
-  --chart-3: var(--color-blue-600);
-  --chart-4: var(--color-blue-700);
-  --chart-5: var(--color-blue-800);
-  --radius: 0.65rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.235 0.015 65);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.235 0.015 65);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.235 0.015 65);
-  --secondary: oklch(0.98 0.001 286.375);
-  --secondary-foreground: oklch(0.4 0.015 65);
-  --muted: oklch(0.967 0.001 286.375);
-  --muted-foreground: oklch(0.552 0.016 285.938);
-  --accent: oklch(0.967 0.001 286.375);
-  --accent-foreground: oklch(0.141 0.005 285.823);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.92 0.004 286.32);
-  --input: oklch(0.92 0.004 286.32);
-  --ring: oklch(0.623 0.214 259.815);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.235 0.015 65);
-  --sidebar-accent: oklch(0.967 0.001 286.375);
-  --sidebar-accent-foreground: oklch(0.141 0.005 285.823);
-  --sidebar-border: oklch(0.92 0.004 286.32);
-  --sidebar-ring: oklch(0.623 0.214 259.815);
-}
+  /* AgentCorp Brand Tokens */
+  --black: #080808;
+  --white: #f2efe8;
+  --cream: #e8e3d5;
+  --brass: #c9a84c;
+  --brass-dim: #8a6f2e;
+  --steel: #3a3a3a;
+  --steel-light: #5a5a5a;
+  --red: #c23b22;
+  --grid: rgba(201, 168, 76, 0.07);
+  --base-blue: #0052ff;
 
-.dark {
-  --primary: var(--color-blue-700);
-  --primary-foreground: var(--color-blue-50);
-  --sidebar-primary: var(--color-blue-500);
-  --sidebar-primary-foreground: var(--color-blue-50);
-  --background: oklch(0.141 0.005 285.823);
-  --foreground: oklch(0.85 0.005 65);
-  --card: oklch(0.21 0.006 285.885);
-  --card-foreground: oklch(0.85 0.005 65);
-  --popover: oklch(0.21 0.006 285.885);
-  --popover-foreground: oklch(0.85 0.005 65);
-  --secondary: oklch(0.24 0.006 286.033);
-  --secondary-foreground: oklch(0.7 0.005 65);
-  --muted: oklch(0.274 0.006 286.033);
-  --muted-foreground: oklch(0.705 0.015 286.067);
-  --accent: oklch(0.274 0.006 286.033);
-  --accent-foreground:  oklch(0.92 0.005 65);
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.488 0.243 264.376);
-  --chart-1: var(--color-blue-300);
-  --chart-2: var(--color-blue-500);
-  --chart-3: var(--color-blue-600);
-  --chart-4: var(--color-blue-700);
-  --chart-5: var(--color-blue-800);
-  --sidebar: oklch(0.21 0.006 285.885);
-  --sidebar-foreground: oklch(0.85 0.005 65);
-  --sidebar-accent: oklch(0.274 0.006 286.033);
-  --sidebar-accent-foreground:  oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.488 0.243 264.376);
+  /* Shadcn tokens mapped to AgentCorp palette */
+  --radius: 0px;
+  --background: oklch(0.05 0 0);
+  --foreground: oklch(0.95 0.01 80);
+  --card: oklch(0.08 0 0);
+  --card-foreground: oklch(0.95 0.01 80);
+  --popover: oklch(0.08 0 0);
+  --popover-foreground: oklch(0.95 0.01 80);
+  --primary: oklch(0.72 0.09 75);
+  --primary-foreground: oklch(0.05 0 0);
+  --secondary: oklch(0.12 0 0);
+  --secondary-foreground: oklch(0.72 0.09 75);
+  --muted: oklch(0.15 0 0);
+  --muted-foreground: oklch(0.55 0.01 80);
+  --accent: oklch(0.12 0 0);
+  --accent-foreground: oklch(0.72 0.09 75);
+  --destructive: oklch(0.55 0.22 25);
+  --destructive-foreground: oklch(0.98 0 0);
+  --border: oklch(0.72 0.09 75 / 15%);
+  --input: oklch(0.72 0.09 75 / 20%);
+  --ring: oklch(0.72 0.09 75 / 50%);
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    box-sizing: border-box;
   }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-background text-foreground;
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    overflow-x: hidden;
+    background: var(--black);
+    color: var(--white);
   }
+
+  /* GRID OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
   button:not(:disabled),
   [role="button"]:not([aria-disabled="true"]),
   [type="button"]:not(:disabled),
   [type="submit"]:not(:disabled),
   [type="reset"]:not(:disabled),
   a[href],
-  select:not(:disabled),
-  input[type="checkbox"]:not(:disabled),
-  input[type="radio"]:not(:disabled) {
+  select:not(:disabled) {
     @apply cursor-pointer;
   }
 }
 
 @layer components {
-  /**
-   * Custom container utility that centers content and adds responsive padding.
-   *
-   * This overrides Tailwind's default container behavior to:
-   * - Auto-center content (mx-auto)
-   * - Add responsive horizontal padding
-   * - Set max-width for large screens
-   *
-   * Usage: <div className="container">...</div>
-   *
-   * For custom widths, use max-w-* utilities directly:
-   * <div className="max-w-6xl mx-auto px-4">...</div>
-   */
   .container {
     width: 100%;
     margin-left: auto;
     margin-right: auto;
-    padding-left: 1rem; /* 16px - mobile padding */
-    padding-right: 1rem;
+    padding-left: 3rem;
+    padding-right: 3rem;
   }
 
   .flex {
@@ -160,18 +135,318 @@
     min-width: 0;
   }
 
-  @media (min-width: 640px) {
+  @media (max-width: 900px) {
     .container {
-      padding-left: 1.5rem; /* 24px - tablet padding */
+      padding-left: 1.5rem;
       padding-right: 1.5rem;
     }
   }
 
-  @media (min-width: 1024px) {
-    .container {
-      padding-left: 2rem; /* 32px - desktop padding */
-      padding-right: 2rem;
-      max-width: 1280px; /* Standard content width */
-    }
+  /* ── AgentCorp Typography ── */
+  .font-display {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .font-serif-italic {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--brass);
+  }
+
+  .font-mono-ui {
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ── Section Headers ── */
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+    margin-bottom: 80px;
+    border-bottom: 1px solid rgba(201, 168, 76, 0.12);
+    padding-bottom: 24px;
+  }
+
+  .section-num {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--brass);
+    opacity: 0.6;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ── Buttons ── */
+  .btn-brass {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--brass);
+    color: var(--black);
+    padding: 14px 28px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.2s;
+    border: none;
+    cursor: pointer;
+    border-radius: 0;
+  }
+
+  .btn-brass:hover {
+    background: var(--cream);
+    transform: translateX(4px);
+  }
+
+  .btn-outline-brass {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid rgba(201, 168, 76, 0.3);
+    color: var(--brass);
+    padding: 14px 28px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.2s;
+    cursor: pointer;
+    background: transparent;
+    border-radius: 0;
+  }
+
+  .btn-outline-brass:hover {
+    border-color: var(--brass);
+    background: rgba(201, 168, 76, 0.05);
+  }
+
+  /* ── Eyebrow ── */
+  .eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--brass);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .eyebrow::before {
+    content: '';
+    width: 32px;
+    height: 1px;
+    background: var(--brass);
+    flex-shrink: 0;
+  }
+
+  /* ── Cards ── */
+  .entity-card {
+    border: 1px solid rgba(201, 168, 76, 0.1);
+    padding: 48px;
+    background: rgba(201, 168, 76, 0.02);
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .entity-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 0;
+    background: var(--brass);
+    transition: height 0.3s;
+  }
+
+  .entity-card:hover::before {
+    height: 100%;
+  }
+
+  .entity-card:hover {
+    background: rgba(201, 168, 76, 0.05);
+  }
+
+  /* ── Badges ── */
+  .badge-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #4caf50;
+    border: 1px solid rgba(76, 175, 80, 0.3);
+    padding: 4px 10px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .badge-live::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #4caf50;
+  }
+
+  .badge-soon {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(242, 239, 232, 0.3);
+    border: 1px solid rgba(242, 239, 232, 0.1);
+    padding: 4px 10px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .badge-brass {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--brass);
+    border: 1px solid rgba(201, 168, 76, 0.3);
+    padding: 4px 10px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ── Chain Bar ── */
+  .chain-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--brass);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+    flex-shrink: 0;
+  }
+
+  /* ── Animations ── */
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  @keyframes rotate {
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes scroll-left {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate-fade-up {
+    animation: fadeUp 0.7s ease forwards;
+  }
+
+  .animate-scroll-left {
+    animation: scroll-left 25s linear infinite;
+  }
+
+  .animate-rotate {
+    animation: rotate 30s linear infinite;
+  }
+
+  /* ── btn-primary alias ── */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--brass);
+    color: var(--black);
+    padding: 14px 28px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.2s;
+    border: none;
+    cursor: pointer;
+    border-radius: 0;
+  }
+
+  .btn-primary:hover {
+    background: var(--cream);
+    transform: translateX(4px);
+  }
+
+  /* ── Divider ── */
+  .rule {
+    border: none;
+    border-top: 1px solid rgba(201, 168, 76, 0.12);
+    margin: 0;
+  }
+
+  /* ── Base Badge ── */
+  .base-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(242, 239, 232, 0.4);
+    border: 1px solid rgba(242, 239, 232, 0.1);
+    padding: 6px 14px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .base-dot {
+    width: 8px;
+    height: 8px;
+    background: #0052ff;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── Whitepaper styles ── */
+  .wp-body {
+    font-family: 'EB Garamond', serif;
+    font-size: 17px;
+    line-height: 1.75;
+    color: #1a1612;
+  }
+
+  .wp-code {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    background: #ede8de;
+    padding: 2px 6px;
+    color: #8b1a1a;
+  }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--black);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(201, 168, 76, 0.3);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--brass);
   }
 }
