@@ -10,6 +10,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "wouter";
 import Nav from "@/components/Nav";
+import WaitlistForm from "@/components/WaitlistForm";
 
 const BRASS = "#c9a84c";
 const WHITE = "#f2efe8";
@@ -231,74 +232,67 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
           </div>
         </div>
 
-        {/* Stats bar */}
-        <div
-          className="stats-bar"
-          style={{
-            position: "absolute",
-            bottom: "0",
-            left: "0",
-            right: "0",
-            borderTop: BORDER,
-            display: "flex",
-            alignItems: "stretch",
-          }}
-        >
-          {[
-            { value: "$0", label: "Lawyer Required" },
-            { value: "<5min", label: "To Incorporate" },
-            { value: "∞", label: "Series per LLC" },
-            { value: "100%", label: "On-Chain Records" },
-            { value: "Base", label: "Chain ID 8453" },
-          ].map((stat, i) => (
+      </section>
+
+      {/* Stats bar — outside hero so it flows naturally on mobile */}
+      <div
+        className="stats-bar"
+        style={{
+          borderTop: `1px solid rgba(201,168,76,0.12)`,
+          borderBottom: `1px solid rgba(201,168,76,0.12)`,
+          display: "flex",
+          alignItems: "stretch",
+          flexWrap: "wrap",
+          background: "rgba(8,8,8,0.95)",
+          position: "relative",
+          zIndex: 1,
+        }}
+      >
+        {[
+          { value: "$0", label: "Lawyer Required" },
+          { value: "<5min", label: "To Incorporate" },
+          { value: "∞", label: "Series per LLC" },
+          { value: "100%", label: "On-Chain Records" },
+          { value: "Base", label: "Chain ID 8453" },
+        ].map((stat, i) => (
+          <div
+            key={stat.label}
+            style={{
+              flex: "1 1 auto",
+              minWidth: "140px",
+              padding: "24px 28px",
+              borderRight: i < 4 ? `1px solid rgba(201,168,76,0.12)` : "none",
+              display: "flex",
+              flexDirection: "column",
+              gap: "6px",
+            }}
+          >
             <div
-              key={stat.label}
               style={{
-                flex: 1,
-                padding: "28px 32px",
-                borderRight: i < 4 ? BORDER : "none",
-                display: "flex",
-                flexDirection: "column",
-                gap: "6px",
+                fontFamily: "'Syne', sans-serif",
+                fontWeight: 800,
+                fontSize: "clamp(18px, 2.5vw, 28px)",
+                letterSpacing: "-0.02em",
+                color: i === 0 ? BRASS : WHITE,
+                lineHeight: 1,
               }}
             >
-              <div
-                style={{
-                  fontFamily: "'Syne', sans-serif",
-                  fontWeight: 800,
-                  fontSize: "clamp(20px, 2.5vw, 32px)",
-                  letterSpacing: "-0.02em",
-                  color: i === 0 ? BRASS : WHITE,
-                  lineHeight: 1,
-                }}
-              >
-                {stat.value}
-              </div>
-              <div
-                style={{
-                  fontSize: "9px",
-                  letterSpacing: "0.15em",
-                  textTransform: "uppercase" as const,
-                  color: MUTED,
-                }}
-              >
-                {stat.label}
-              </div>
-              {i < 4 && (
-                <span
-                  style={{
-                    marginTop: "4px",
-                    fontSize: "8px",
-                    color: "rgba(201,168,76,0.3)",
-                  }}
-                >
-                  ◆
-                </span>
-              )}
+              {stat.value}
             </div>
-          ))}
-        </div>
-      </section>
+            <div
+              style={{
+                fontSize: "9px",
+                letterSpacing: "0.15em",
+                textTransform: "uppercase" as const,
+                color: MUTED,
+                whiteSpace: "nowrap",
+              }}
+            >
+              {stat.label}
+            </div>
+          </div>
+        ))}
+      </div>
 
       {/* ── PROTOCOL: THREE STEPS ── */}
       <section
@@ -887,7 +881,7 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
                         {row.fee}
                       </span>
                     </td>
-                    <td style={{ padding: "20px 20px", verticalAlign: "top" }}>
+                    <td style={{ padding: "20px 20px", verticalAlign: "top", minWidth: "200px" }}>
                       <span
                         style={{
                           display: "inline-flex",
@@ -914,6 +908,9 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
                         )}
                         {row.status}
                       </span>
+                      {row.status !== "Live" && (
+                        <WaitlistForm entityType={row.name} source="entity-table" />
+                      )}
                     </td>
                   </tr>
                 ))}
@@ -1134,9 +1131,7 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
         @media (max-width: 900px) {
           footer { padding: 40px 24px !important; }
-          .stats-bar { flex-wrap: wrap; }
-          .stats-bar > div { flex: 1 1 40%; min-width: 120px; }
-          .cli-prompt span:last-of-type { display: none; }
+          .stats-bar > div { border-right: none !important; border-bottom: 1px solid rgba(201,168,76,0.12); }
         }
         @media (max-width: 600px) {
           footer { padding: 32px 16px !important; }
