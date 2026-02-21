@@ -230,6 +230,41 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
               </span>
             </Link>
           </div>
+
+          {/* Hero Waitlist */}
+          <div
+            style={{
+              marginTop: "48px",
+              paddingTop: "40px",
+              borderTop: `1px solid ${BORDER}`,
+              maxWidth: "520px",
+            }}
+          >
+            <div
+              style={{
+                fontFamily: "'DM Mono', monospace",
+                fontSize: "9px",
+                color: BRASS,
+                letterSpacing: "0.2em",
+                textTransform: "uppercase" as const,
+                marginBottom: "12px",
+                opacity: 0.7,
+              }}
+            >
+              Early Access — Get notified when new entity types launch
+            </div>
+            <WaitlistForm entityType="Early Access" source="hero" variant="hero" />
+            <p
+              style={{
+                marginTop: "12px",
+                fontSize: "10px",
+                color: "rgba(242,239,232,0.2)",
+                lineHeight: 1.5,
+              }}
+            >
+              IP License NFT launching Q2 2026 · Wyoming LLC launching Q3 2026 · No spam. Unsubscribe anytime.
+            </p>
+          </div>
         </div>
 
       </section>
