@@ -89,11 +89,21 @@ export default function Home() {
 
         {/* Content */}
         <div style={{ position: "relative", zIndex: 1 }}>
+          {/* CLI prompt line */}
           <div
-            className="animate-fade-up eyebrow"
-            style={{ marginBottom: "28px", animationDelay: "0.1s", opacity: 0 }}
+            className="animate-fade-up"
+            style={{
+              fontFamily: "'DM Mono', monospace",
+              fontSize: "12px",
+              color: "rgba(201,168,76,0.5)",
+              marginBottom: "32px",
+              letterSpacing: "0.05em",
+              animationDelay: "0.05s",
+              opacity: 0,
+            }}
           >
-            On-Chain Legal Infrastructure
+            <span style={{ color: "rgba(242,239,232,0.2)" }}>$ </span>
+            agentcorp init --type=delaware-series-llc --agent=0x4a9f...
           </div>
 
           <h1
@@ -106,11 +116,11 @@ export default function Home() {
               letterSpacing: "-0.02em",
               maxWidth: "900px",
               marginBottom: "40px",
-              animationDelay: "0.25s",
+              animationDelay: "0.2s",
               opacity: 0,
             }}
           >
-            Mint your<br />
+            Agents that<br />
             <em
               style={{
                 fontFamily: "'Instrument Serif', serif",
@@ -119,10 +129,10 @@ export default function Home() {
                 color: "var(--brass)",
               }}
             >
-              legal entity.
+              incorporate
             </em>
             <br />
-            Own it forever.
+            themselves.
           </h1>
 
           <div
@@ -133,7 +143,7 @@ export default function Home() {
               gap: "80px",
               alignItems: "end",
               maxWidth: "1100px",
-              animationDelay: "0.4s",
+              animationDelay: "0.35s",
               opacity: 0,
             }}
           >
@@ -142,26 +152,27 @@ export default function Home() {
                 fontSize: "15px",
                 lineHeight: 1.7,
                 color: "rgba(242,239,232,0.6)",
-                maxWidth: "420px",
+                maxWidth: "480px",
                 fontFamily: "'DM Mono', monospace",
               }}
             >
-              AGENTCORP is the open legal infrastructure layer for the onchain economy.
-              Incorporate a <strong style={{ color: "var(--white)", fontWeight: 400 }}>Delaware Series LLC</strong>,
-              hold IP, assign rights, and govern your organization — all minted as an NFT on{" "}
+              AgentCorp is on-chain legal infrastructure for autonomous agents.
+              An agent reads the skill file, deposits USDC, and mints a{" "}
+              <strong style={{ color: "var(--white)", fontWeight: 400 }}>Delaware Series LLC</strong>{" "}
+              — with governing documents stored on Arweave, a multisig treasury on{" "}
               <strong style={{ color: "var(--white)", fontWeight: 400 }}>Base</strong>,
-              stored permanently on IPFS and Arweave.
+              and full legal liability protection. No lawyers. No humans required.
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: "16px", alignItems: "flex-start" }}>
               <Link href="/mint">
                 <span className="btn-brass">Mint an Entity →</span>
               </Link>
-              <Link href="/whitepaper">
-                <span className="btn-outline-brass">Read the Whitepaper</span>
+              <Link href="/agent">
+                <span className="btn-outline-brass">Get the Skill File ↗</span>
               </Link>
               <span className="base-badge">
                 <span className="base-dot" />
-                Deployed on Base
+                Deployed on Base · Chain 8453
               </span>
             </div>
           </div>
@@ -174,22 +185,23 @@ export default function Home() {
               gap: 0,
               borderTop: "1px solid rgba(201,168,76,0.15)",
               marginTop: "80px",
-              animationDelay: "0.55s",
+              animationDelay: "0.5s",
               opacity: 0,
             }}
           >
             {[
-              { num: "$0", label: "Lawyer Required" },
-              { num: "<5min", label: "To Incorporate" },
+              { num: "$0", label: "Legal fees" },
+              { num: "<5min", label: "Formation time" },
               { num: "∞", label: "Series per LLC" },
-              { num: "100%", label: "On-Chain Records" },
+              { num: "~$0.01", label: "Gas per mint" },
+              { num: "Base", label: "Chain 8453 · Protocol" },
             ].map((stat, i) => (
               <div
                 key={i}
                 style={{
                   flex: 1,
                   padding: "28px 0",
-                  borderRight: i < 3 ? "1px solid rgba(201,168,76,0.15)" : "none",
+                  borderRight: i < 4 ? "1px solid rgba(201,168,76,0.15)" : "none",
                   paddingLeft: i > 0 ? "28px" : 0,
                 }}
               >
@@ -197,7 +209,7 @@ export default function Home() {
                   style={{
                     fontFamily: "'Syne', sans-serif",
                     fontWeight: 700,
-                    fontSize: "32px",
+                    fontSize: "28px",
                     color: "var(--brass)",
                     display: "block",
                   }}
@@ -285,149 +297,153 @@ export default function Home() {
       >
         <div className="section-header">
           <span className="section-num">01</span>
-          <h2
-            style={{
-              fontFamily: "'Syne', sans-serif",
-              fontWeight: 800,
-              fontSize: "clamp(32px, 4vw, 52px)",
-              letterSpacing: "-0.02em",
-            }}
-          >
-            How it{" "}
-            <em style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic", fontWeight: 400, color: "var(--brass)" }}>
-              works
-            </em>
-          </h2>
+          <div>
+            <div style={{ fontSize: "11px", letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "var(--brass)", opacity: 0.6, fontFamily: "'DM Mono', monospace", marginBottom: "12px" }}>
+              An agent needs two things to become a legal entity.
+            </div>
+            <h2
+              style={{
+                fontFamily: "'Syne', sans-serif",
+                fontWeight: 800,
+                fontSize: "clamp(32px, 4vw, 52px)",
+                letterSpacing: "-0.02em",
+              }}
+            >
+              From skill file to{" "}
+              <em style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic", fontWeight: 400, color: "var(--brass)" }}>
+                legal entity.
+              </em>
+            </h2>
+            <p style={{ marginTop: "16px", fontSize: "13px", color: "rgba(242,239,232,0.4)", fontFamily: "'DM Mono', monospace", maxWidth: "600px", lineHeight: 1.7 }}>
+              The AgentCorp skill file is the complete interface. Any agent that can read it and hold USDC can autonomously form, structure, and operate a legally-protected organization on Base.
+            </p>
+          </div>
         </div>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gap: "2px",
-          }}
-        >
+        {/* 5-step flow */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
           {[
             {
-              num: "01",
-              icon: "⬡",
-              title: "Connect Wallet",
-              desc: "Connect your Base-compatible wallet (MetaMask, Coinbase Wallet, Rainbow). No account creation. Your wallet IS your identity.",
+              num: "step_01",
+              title: "Read the Skill File",
+              desc: "The agent loads agentcorp.xyz/skill.md — a machine-readable protocol spec covering entity types, document schemas, Arweave storage, multisig configuration, and API calls. One file. Complete instructions.",
+              tag: "1 file · Complete interface",
             },
             {
-              num: "02",
-              icon: "◈",
-              title: "Configure Entity",
-              desc: "Choose your entity type — Delaware Series LLC, DAO Charter, or Series Designation. Set governance, treasury address, and member structure.",
+              num: "step_02",
+              title: "Deposit USDC",
+              desc: "The agent deposits USDC into its Avocado wallet on Base. Gas is abstracted — the agent never needs ETH. $50 USDC covers thousands of operations. All fees paid in stablecoin.",
+              tag: "Gasless via Avocado · USDC only",
             },
             {
-              num: "03",
-              icon: "◎",
-              title: "Mint & Incorporate",
-              desc: "Pay in ETH on Base. Your governing documents are generated, uploaded to Arweave and IPFS, and the NFT is minted to your wallet. You're incorporated.",
+              num: "step_03",
+              title: "Upload Governing Docs",
+              desc: "Operating agreement, Series designations, and governance rules are populated from templates, signed, and uploaded to Arweave for permanent immutable storage. The document hash is the legal record.",
+              tag: "Arweave permanent storage · IPFS retrieval",
+            },
+            {
+              num: "step_04",
+              title: "Mint the Entity NFT",
+              desc: "The agent calls mintEntity(). A Delaware Series LLC is formed on-chain. The NFT is the legal entity — transferable, composable, permanent. The agent holds it. The agent controls it.",
+              tag: "ERC-721 · Base Mainnet · Permanent",
+            },
+            {
+              num: "step_05",
+              title: "Swarm Mode — Multiple Agents, One Organization",
+              desc: "A group of agents can self-organize around a shared Gnosis Safe multisig. Each agent holds a key. The operating agreement defines voting thresholds. The LLC holds treasury, enters contracts, owns IP. The swarm has legal standing — without any human intervention at formation time.",
+              tag: "Optional · Gnosis Safe multisig · Agent swarm governance",
+              isSwarm: true,
             },
           ].map((step, i) => (
             <div
               key={i}
               style={{
-                background: "rgba(201,168,76,0.03)",
-                border: "1px solid rgba(201,168,76,0.1)",
-                padding: "48px 36px",
-                position: "relative",
+                display: "grid",
+                gridTemplateColumns: "200px 1fr",
+                gap: "0",
+                border: "1px solid",
+                borderColor: step.isSwarm ? "rgba(201,168,76,0.25)" : "rgba(201,168,76,0.1)",
+                background: step.isSwarm ? "rgba(201,168,76,0.05)" : "rgba(201,168,76,0.02)",
                 transition: "background 0.3s",
-                cursor: "default",
               }}
-              onMouseEnter={(e) =>
-                ((e.currentTarget as HTMLElement).style.background = "rgba(201,168,76,0.06)")
-              }
-              onMouseLeave={(e) =>
-                ((e.currentTarget as HTMLElement).style.background = "rgba(201,168,76,0.03)")
-              }
+              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = step.isSwarm ? "rgba(201,168,76,0.08)" : "rgba(201,168,76,0.04)")}
+              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = step.isSwarm ? "rgba(201,168,76,0.05)" : "rgba(201,168,76,0.02)")}
             >
-              <span
-                style={{
-                  fontFamily: "'Syne', sans-serif",
-                  fontWeight: 800,
-                  fontSize: "72px",
-                  color: "rgba(201,168,76,0.08)",
-                  lineHeight: 1,
-                  position: "absolute",
-                  top: "20px",
-                  right: "24px",
-                }}
-              >
-                {step.num}
-              </span>
+              {/* Step number column */}
               <div
                 style={{
-                  width: "40px",
-                  height: "40px",
-                  border: "1px solid var(--brass)",
+                  padding: "32px 28px",
+                  borderRight: "1px solid rgba(201,168,76,0.1)",
                   display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  marginBottom: "28px",
-                  color: "var(--brass)",
-                  fontSize: "18px",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
                 }}
               >
-                {step.icon}
+                <code
+                  style={{
+                    fontFamily: "'DM Mono', monospace",
+                    fontSize: "11px",
+                    color: step.isSwarm ? "var(--brass)" : "rgba(201,168,76,0.5)",
+                    letterSpacing: "0.05em",
+                    display: "block",
+                  }}
+                >
+                  // {step.num}
+                </code>
+                <span
+                  style={{
+                    fontFamily: "'Syne', sans-serif",
+                    fontWeight: 800,
+                    fontSize: "48px",
+                    color: "rgba(201,168,76,0.08)",
+                    lineHeight: 1,
+                    display: "block",
+                    marginTop: "auto",
+                  }}
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </span>
               </div>
-              <h3
-                style={{
-                  fontFamily: "'Syne', sans-serif",
-                  fontWeight: 700,
-                  fontSize: "18px",
-                  marginBottom: "16px",
-                  letterSpacing: "-0.01em",
-                }}
-              >
-                {step.title}
-              </h3>
-              <p
-                style={{
-                  color: "rgba(242,239,232,0.5)",
-                  fontSize: "13px",
-                  lineHeight: 1.7,
-                  fontFamily: "'DM Mono', monospace",
-                }}
-              >
-                {step.desc}
-              </p>
+              {/* Content column */}
+              <div style={{ padding: "32px 40px" }}>
+                <h3
+                  style={{
+                    fontFamily: "'Syne', sans-serif",
+                    fontWeight: 700,
+                    fontSize: "18px",
+                    marginBottom: "12px",
+                    letterSpacing: "-0.01em",
+                    color: step.isSwarm ? "var(--brass)" : "var(--white)",
+                  }}
+                >
+                  {step.title}
+                </h3>
+                <p
+                  style={{
+                    color: "rgba(242,239,232,0.5)",
+                    fontSize: "13px",
+                    lineHeight: 1.7,
+                    fontFamily: "'DM Mono', monospace",
+                    maxWidth: "680px",
+                    marginBottom: "16px",
+                  }}
+                >
+                  {step.desc}
+                </p>
+                <span
+                  style={{
+                    fontSize: "9px",
+                    letterSpacing: "0.15em",
+                    textTransform: "uppercase" as const,
+                    color: "rgba(201,168,76,0.4)",
+                    fontFamily: "'DM Mono', monospace",
+                  }}
+                >
+                  {step.tag}
+                </span>
+              </div>
             </div>
           ))}
-        </div>
-
-        {/* Architecture image */}
-        <div style={{ marginTop: "60px", position: "relative" }}>
-          <img
-            src={ARCH_IMG}
-            alt="AgentCorp Protocol Architecture"
-            style={{
-              width: "100%",
-              height: "320px",
-              objectFit: "cover",
-              objectPosition: "center",
-              border: "1px solid rgba(201,168,76,0.12)",
-              opacity: 0.85,
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              bottom: "20px",
-              left: "24px",
-              fontSize: "9px",
-              letterSpacing: "0.15em",
-              textTransform: "uppercase",
-              color: "rgba(242,239,232,0.4)",
-              fontFamily: "'DM Mono', monospace",
-              background: "rgba(8,8,8,0.8)",
-              padding: "4px 10px",
-            }}
-          >
-            Protocol Architecture — Wallet → Smart Contract → Arweave/IPFS → NFT
-          </div>
         </div>
       </section>
 
@@ -594,95 +610,121 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── BENEFITS ── */}
+      {/* ── INTEGRATION CALLOUT ── */}
       <section
         style={{
-          padding: "80px 48px 120px",
+          padding: "80px 48px",
           background: "rgba(201,168,76,0.02)",
           borderTop: "1px solid rgba(201,168,76,0.1)",
           borderBottom: "1px solid rgba(201,168,76,0.1)",
           position: "relative",
           zIndex: 1,
+          overflow: "hidden",
         }}
       >
         <div className="section-header">
           <span className="section-num">03</span>
-          <h2
-            style={{
-              fontFamily: "'Syne', sans-serif",
-              fontWeight: 800,
-              fontSize: "clamp(32px, 4vw, 52px)",
-              letterSpacing: "-0.02em",
-            }}
-          >
-            Why{" "}
-            <em style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic", fontWeight: 400, color: "var(--brass)" }}>
-              onchain
-            </em>
-          </h2>
+          <div>
+            <h2
+              style={{
+                fontFamily: "'Syne', sans-serif",
+                fontWeight: 800,
+                fontSize: "clamp(32px, 4vw, 52px)",
+                letterSpacing: "-0.02em",
+              }}
+            >
+              Integration. From skill file to{" "}
+              <em style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic", fontWeight: 400, color: "var(--brass)" }}>
+                legal entity in minutes.
+              </em>
+            </h2>
+            <p style={{ marginTop: "16px", fontSize: "13px", color: "rgba(242,239,232,0.4)", fontFamily: "'DM Mono', monospace", maxWidth: "600px", lineHeight: 1.7 }}>
+              The AgentCorp protocol is fully agent-readable. No UI required. Any agent with function-calling capability can execute the full formation flow autonomously.
+            </p>
+          </div>
         </div>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gap: "60px",
-          }}
-        >
-          {[
-            {
-              num: "I",
-              title: "Paperwork Lives in Your Wallet",
-              desc: "Your certificate of formation, operating agreement, and all amendments are attached to your NFT. Show your legal status to any counterparty by sharing your wallet address. Readable by humans and machines.",
-            },
-            {
-              num: "II",
-              title: "Fully Online Incorporation",
-              desc: "Pay in ETH or USDC on Base. Control exactly what information you disclose. Your legal status becomes machine-readable and composable with any DeFi protocol, DAO, or smart contract system.",
-            },
-            {
-              num: "III",
-              title: "Permanent Secure Recordkeeping",
-              desc: "Documents are uploaded to Arweave for permanent storage and IPFS for distributed access. The blockchain record cannot be altered or hacked. Every amendment creates an immutable audit trail.",
-            },
-          ].map((b) => (
-            <div key={b.num}>
-              <span
-                style={{
-                  fontFamily: "'Instrument Serif', serif",
-                  fontStyle: "italic",
-                  fontSize: "48px",
-                  color: "rgba(201,168,76,0.2)",
-                  lineHeight: 1,
-                  display: "block",
-                  marginBottom: "16px",
-                }}
-              >
-                {b.num}
-              </span>
-              <h3
-                style={{
-                  fontFamily: "'Syne', sans-serif",
-                  fontWeight: 700,
-                  fontSize: "16px",
-                  marginBottom: "14px",
-                  letterSpacing: "0.02em",
-                }}
-              >
-                {b.title}
-              </h3>
-              <p
-                style={{
-                  color: "rgba(242,239,232,0.45)",
-                  fontSize: "13px",
-                  lineHeight: 1.7,
-                  fontFamily: "'DM Mono', monospace",
-                }}
-              >
-                {b.desc}
-              </p>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2px" }}>
+          {/* SDK code block */}
+          <div style={{ border: "1px solid rgba(201,168,76,0.15)", background: "#0a0a0a", overflow: "hidden" }}>
+            <div style={{ background: "rgba(201,168,76,0.06)", borderBottom: "1px solid rgba(201,168,76,0.12)", padding: "8px 16px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <span style={{ fontSize: "9px", letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "var(--brass)", fontFamily: "'DM Mono', monospace" }}>agentcorp_init.ts</span>
+              <span style={{ fontSize: "9px", color: "rgba(242,239,232,0.2)", fontFamily: "'DM Mono', monospace" }}>Agent self-incorporates as Delaware Series LLC</span>
             </div>
-          ))}
+            <pre style={{ padding: "28px", fontFamily: "'DM Mono', monospace", fontSize: "11px", lineHeight: 1.75, color: "rgba(242,239,232,0.7)", margin: 0, overflowX: "auto", borderLeft: "3px solid var(--brass)" }}>
+{`import { AgentCorpClient } from "@agentcorp/sdk";
+
+const corp = new AgentCorpClient({
+  privateKey: agent.signingKey,
+  avocadoWallet: agent.avocadoAddress,
+  chain: "base",
+});
+
+// 1. Populate operating agreement from template
+const doc = await corp.buildDocument({
+  type: "DELAWARE_SERIES_LLC",
+  name: "SwarmOps Holdings LLC",
+  treasury: agent.safeAddress,
+  members: [agent.address, co_agent.address],
+  threshold: 2,
+});
+
+// 2. Upload to Arweave (permanent)
+const { arweaveTx, ipfsCid } = 
+  await corp.uploadDocument(doc);
+
+// 3. Mint entity NFT (gasless via Avocado)
+const entity = await corp.mintEntity({
+  type: "DELAWARE_SERIES_LLC",
+  name: "SwarmOps Holdings LLC",
+  docArweaveTx: arweaveTx,
+  treasury: agent.safeAddress,
+});
+
+console.log(\`\u2713 \${entity.name} incorporated\`);
+console.log(\`  Token: #\${entity.tokenId}\`);
+console.log(\`  TX: \${entity.onChainTxHash}\`);`}
+            </pre>
+          </div>
+
+          {/* Feature list */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+            {[
+              { icon: "\u25c8", title: "AGENTCORP-SKILL.md", desc: "One Markdown file. Complete protocol spec. Any agent that reads it can mint." },
+              { icon: "\u25ce", title: "Gasless via Avocado", desc: "Agents deposit USDC. Gas is abstracted. No ETH required. $50 covers thousands of ops." },
+              { icon: "\u2b21", title: "Arweave Permanent Storage", desc: "Governing documents stored forever. The hash is the legal record. Cannot be deleted." },
+              { icon: "\u25c7", title: "Any LLM Framework", desc: "Manus, Claude, GPT-4, Eliza, LangChain, CrewAI. If it reads Markdown, it works." },
+            ].map((f, i) => (
+              <div
+                key={i}
+                style={{
+                  border: "1px solid rgba(201,168,76,0.1)",
+                  padding: "28px 32px",
+                  background: "rgba(201,168,76,0.02)",
+                  display: "flex",
+                  gap: "20px",
+                  alignItems: "flex-start",
+                  flex: 1,
+                }}
+              >
+                <span style={{ color: "var(--brass)", fontSize: "18px", flexShrink: 0, marginTop: "2px" }}>{f.icon}</span>
+                <div>
+                  <h3 style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: "14px", marginBottom: "6px" }}>{f.title}</h3>
+                  <p style={{ color: "rgba(242,239,232,0.45)", fontSize: "12px", lineHeight: 1.6, fontFamily: "'DM Mono', monospace" }}>{f.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ display: "flex", gap: "14px", marginTop: "32px", alignItems: "center" }}>
+          <Link href="/agent">
+            <span className="btn-brass">Get the Skill File \u2192</span>
+          </Link>
+          <Link href="/docs">
+            <span className="btn-outline-brass">Developer Docs</span>
+          </Link>
+          <span style={{ fontSize: "10px", color: "rgba(242,239,232,0.2)", fontFamily: "'DM Mono', monospace", marginLeft: "8px" }}>MIT License \u00b7 No UI required \u00b7 Function-calling compatible</span>
         </div>
       </section>
 
@@ -1078,185 +1120,114 @@ export default function Home() {
       >
         <div className="section-header">
           <span className="section-num">06</span>
-          <h2
-            style={{
-              fontFamily: "'Syne', sans-serif",
-              fontWeight: 800,
-              fontSize: "clamp(32px, 4vw, 52px)",
-              letterSpacing: "-0.02em",
-            }}
-          >
-            Use{" "}
-            <em style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic", fontWeight: 400, color: "var(--brass)" }}>
-              cases
-            </em>
-          </h2>
-        </div>
-
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "2px" }}>
-          {[
-            {
-              num: "01",
-              title: "Carbon Credit Projects",
-              tag: "Clean-Tech / RWA",
-              steps: [
-                "Mint DELAWARE_SERIES_LLC as master holding entity",
-                "Mint one SERIES per carbon credit batch or vintage",
-                "Series NFT = legally-recognized ownership of that credit batch",
-                "Transfer Series NFT = sell the carbon credit batch",
-                "Burn Series NFT = retire the carbon credits",
-              ],
-              example: "Mālama Climate Holdings LLC → Series: AgEnergy Hawaii Biochar 2026",
-            },
-            {
-              num: "02",
-              title: "RWA Portfolio",
-              tag: "Real-World Assets",
-              steps: [
-                "Mint DELAWARE_SERIES_LLC as parent fund entity",
-                "Mint SERIES_DESIGNATION per individual asset",
-                "Series A: real estate parcel, Series B: invoice receivables",
-                "Investors receive tokens representing Series membership interests",
-                "Full liability isolation between assets in each Series",
-              ],
-              example: "Fund LLC → Series A: Property, Series B: Receivables, Series C: Equipment",
-            },
-            {
-              num: "03",
-              title: "Software IP Holding",
-              tag: "IP / Technology",
-              steps: [
-                "Mint DELAWARE_SERIES_LLC as IP holding company",
-                "Series A: Core platform codebase IP",
-                "Series B: Trade secrets and proprietary algorithms",
-                "Series C: Brand and trademark portfolio",
-                "IP_LICENSE NFT (Q2 2026) governs usage rights per asset",
-              ],
-              example: "IP Holdings LLC → Series per IP asset → Royalties flow to Series treasury",
-            },
-            {
-              num: "04",
-              title: "DAO Entity Wrapper",
-              tag: "Protocol DAOs",
-              steps: [
-                "Mint DAO_CHARTER with your existing governor address",
-                "DAO's on-chain governance now legally binds the entity",
-                "Members sign subscription agreement to join",
-                "DAO can now sign contracts, hold property, employ people",
-                "Compatible with Compound Governor and Gnosis Safe",
-              ],
-              example: "Protocol DAO LLC → designatedContract: existing governor → treasury: DAO Safe",
-            },
-          ].map((uc) => (
-            <div
-              key={uc.num}
+          <div>
+            <h2
               style={{
-                border: "1px solid rgba(201,168,76,0.1)",
-                padding: "48px 40px",
-                background: "rgba(201,168,76,0.02)",
-                position: "relative",
-                overflow: "hidden",
+                fontFamily: "'Syne', sans-serif",
+                fontWeight: 800,
+                fontSize: "clamp(32px, 4vw, 52px)",
+                letterSpacing: "-0.02em",
               }}
             >
-              <span
-                style={{
-                  position: "absolute",
-                  top: "20px",
-                  right: "24px",
-                  fontFamily: "'Syne', sans-serif",
-                  fontWeight: 800,
-                  fontSize: "72px",
-                  color: "rgba(201,168,76,0.05)",
-                  lineHeight: 1,
-                  pointerEvents: "none",
-                }}
-              >
-                {uc.num}
-              </span>
-              <div
-                style={{
-                  fontSize: "9px",
-                  letterSpacing: "0.2em",
-                  textTransform: "uppercase" as const,
-                  color: "var(--brass)",
-                  opacity: 0.6,
-                  marginBottom: "12px",
-                  fontFamily: "'DM Mono', monospace",
-                }}
-              >
+              What agents{" "}
+              <em style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic", fontWeight: 400, color: "var(--brass)" }}>
+                build
+              </em>
+              {" "}with legal structure.
+            </h2>
+            <p style={{ marginTop: "16px", fontSize: "13px", color: "rgba(242,239,232,0.4)", fontFamily: "'DM Mono', monospace", maxWidth: "600px", lineHeight: 1.7 }}>
+              When an agent can autonomously form and operate a legal entity, the design space for autonomous systems expands dramatically.
+            </p>
+          </div>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "2px" }}>
+          {[
+            {
+              icon: "\u{1F916}",
+              tag: "Agent Infrastructure",
+              title: "Agent Swarm Treasury",
+              desc: "Multiple agents coordinate around a shared Gnosis Safe. The LLC defines governance: voting weights, quorum thresholds, spending limits. The swarm can sign contracts, hold assets, and pay service providers \u2014 all with legal liability protection.",
+            },
+            {
+              icon: "\u{1F331}",
+              tag: "Clean-Tech / RWA",
+              title: "Carbon Credit Projects",
+              desc: "Each biochar batch, reforestation vintage, or MRV dataset is a separate Series LLC under a parent entity. The Series NFT represents ownership. Minting = incorporation. Transfer = sale. Burn = retirement. Legal asset isolation per project.",
+            },
+            {
+              icon: "\u2696\uFE0F",
+              tag: "IP / Technology",
+              title: "IP & Software Holding",
+              desc: "An agent assigns its codebase, models, or trade secrets to a Series. The LLC holds the IP. Licensing terms are encoded in the operating agreement and stored on Arweave. Royalty flows go to the treasury. The agent earns revenue legally.",
+            },
+            {
+              icon: "\u{1F3D7}\uFE0F",
+              tag: "Autonomous Commerce",
+              title: "Autonomous Service Provider",
+              desc: "An agent forms an LLC, signs a service provider agreement with a client DAO or protocol, delivers services, invoices the treasury, and receives payment. The entire commercial relationship has legal standing \u2014 no human entity required.",
+            },
+            {
+              icon: "\u{1F3E6}",
+              tag: "Real-World Assets",
+              title: "RWA Portfolio Vehicle",
+              desc: "Each real-world asset \u2014 invoice, property, equipment \u2014 is a separate Series with full liability isolation. The parent LLC is the fund vehicle. Agents manage the portfolio, execute series mints, and distribute returns to token holders per the operating agreement.",
+            },
+            {
+              icon: "\u{1F5F3}\uFE0F",
+              tag: "Protocol DAOs",
+              title: "DAO Legal Wrapper",
+              desc: "An existing on-chain DAO mints an AgentCorp DAO Charter. Token-weighted voting, delegate disclosure, and the Designated Smart Contract provision bind the LLC to on-chain outcomes. The DAO can now sign leases, employ contractors, and hold IP legally.",
+            },
+          ].map((uc, i) => (
+            <div
+              key={i}
+              style={{
+                border: "1px solid rgba(201,168,76,0.1)",
+                padding: "36px 32px",
+                background: "rgba(201,168,76,0.02)",
+                transition: "background 0.3s",
+              }}
+              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "rgba(201,168,76,0.05)")}
+              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = "rgba(201,168,76,0.02)")}
+            >
+              <div style={{ fontSize: "28px", marginBottom: "16px", lineHeight: 1 }}>{uc.icon}</div>
+              <div style={{ fontSize: "9px", letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "var(--brass)", opacity: 0.6, marginBottom: "10px", fontFamily: "'DM Mono', monospace" }}>
                 {uc.tag}
               </div>
-              <h3
-                style={{
-                  fontFamily: "'Syne', sans-serif",
-                  fontWeight: 700,
-                  fontSize: "20px",
-                  marginBottom: "24px",
-                  letterSpacing: "-0.01em",
-                }}
-              >
+              <h3 style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: "17px", marginBottom: "14px", letterSpacing: "-0.01em" }}>
                 {uc.title}
               </h3>
-              <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginBottom: "28px" }}>
-                {uc.steps.map((step, i) => (
-                  <div
-                    key={i}
-                    style={{
-                      display: "flex",
-                      alignItems: "flex-start",
-                      gap: "10px",
-                      fontSize: "12px",
-                      color: "rgba(242,239,232,0.45)",
-                      fontFamily: "'DM Mono', monospace",
-                      lineHeight: 1.5,
-                    }}
-                  >
-                    <span style={{ color: "var(--brass)", opacity: 0.5, flexShrink: 0, marginTop: "1px" }}>{i + 1}.</span>
-                    {step}
-                  </div>
-                ))}
-              </div>
-              <div
-                style={{
-                  borderTop: "1px solid rgba(201,168,76,0.08)",
-                  paddingTop: "16px",
-                  fontSize: "10px",
-                  color: "rgba(242,239,232,0.25)",
-                  fontFamily: "'DM Mono', monospace",
-                  lineHeight: 1.5,
-                  letterSpacing: "0.03em",
-                }}
-              >
-                {uc.example}
-              </div>
+              <p style={{ color: "rgba(242,239,232,0.45)", fontSize: "12px", lineHeight: 1.7, fontFamily: "'DM Mono', monospace" }}>
+                {uc.desc}
+              </p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ── AGENT MINTING BANNER ── */}
+      {/* ── GET STARTED CTA ── */}
       <section
         style={{
-          padding: "80px 48px",
+          padding: "100px 48px",
           background: "rgba(201,168,76,0.04)",
-          borderTop: "1px solid rgba(201,168,76,0.15)",
-          borderBottom: "1px solid rgba(201,168,76,0.15)",
+          borderTop: "1px solid rgba(201,168,76,0.2)",
           position: "relative",
           zIndex: 1,
           overflow: "hidden",
         }}
       >
-        {/* Decorative background text */}
+        {/* Large background text */}
         <div
           style={{
             position: "absolute",
-            right: "-20px",
+            left: "50%",
             top: "50%",
-            transform: "translateY(-50%)",
+            transform: "translate(-50%, -50%)",
             fontFamily: "'Syne', sans-serif",
             fontWeight: 800,
-            fontSize: "180px",
-            color: "rgba(201,168,76,0.04)",
+            fontSize: "clamp(80px, 18vw, 260px)",
+            color: "rgba(201,168,76,0.03)",
             letterSpacing: "-0.05em",
             lineHeight: 1,
             pointerEvents: "none",
@@ -1264,96 +1235,90 @@ export default function Home() {
             whiteSpace: "nowrap",
           }}
         >
-          AGENT
+          AGENTCORP
         </div>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr auto",
-            gap: "60px",
-            alignItems: "center",
-            maxWidth: "1100px",
-          }}
-        >
-          <div>
-            <div className="eyebrow" style={{ marginBottom: "20px" }}>Agent-Native Protocol</div>
-            <h2
-              style={{
-                fontFamily: "'Syne', sans-serif",
-                fontWeight: 800,
-                fontSize: "clamp(28px, 4vw, 52px)",
-                lineHeight: 1,
-                letterSpacing: "-0.02em",
-                marginBottom: "20px",
-              }}
-            >
-              Let your{" "}
-              <em style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic", fontWeight: 400, color: "var(--brass)" }}>
-                agent
-              </em>
-              {" "}mint an entity directly.
-            </h2>
-            <p
-              style={{
-                color: "rgba(242,239,232,0.5)",
-                fontSize: "14px",
-                lineHeight: 1.7,
-                fontFamily: "'DM Mono', monospace",
-                maxWidth: "620px",
-                marginBottom: "0",
-              }}
-            >
-              AGENTCORP is designed to be called by machines. Point your AI agent at the{" "}
-              <code style={{ color: "var(--brass)", background: "rgba(201,168,76,0.1)", padding: "2px 6px" }}>
-                AGENTCORP-SKILL.md
-              </code>
-              {" "}and it will understand how to incorporate a Delaware Series LLC, mint a Series, or form a DAO — autonomously, on Base. Works with Manus, Claude, GPT-4, Eliza, LangChain, CrewAI, and any agent that reads Markdown.
-            </p>
+        <div style={{ position: "relative", zIndex: 1, textAlign: "center", maxWidth: "800px", margin: "0 auto" }}>
+          <div className="eyebrow" style={{ marginBottom: "24px", justifyContent: "center" }}>Get Started</div>
+          <h2
+            style={{
+              fontFamily: "'Syne', sans-serif",
+              fontWeight: 800,
+              fontSize: "clamp(36px, 6vw, 80px)",
+              lineHeight: 0.95,
+              letterSpacing: "-0.02em",
+              marginBottom: "24px",
+            }}
+          >
+            One file.<br />
+            <em style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic", fontWeight: 400, color: "var(--brass)" }}>
+              Full legal stack.
+            </em>
+          </h2>
+          <p
+            style={{
+              color: "rgba(242,239,232,0.5)",
+              fontSize: "14px",
+              lineHeight: 1.7,
+              fontFamily: "'DM Mono', monospace",
+              maxWidth: "560px",
+              margin: "0 auto 40px",
+            }}
+          >
+            Load the AgentCorp skill file into any agent with function-calling capability. The skill covers the complete formation flow: document templates, Arweave upload, Avocado USDC deposit, entity minting, Series creation, and amendment. Your agent handles the rest.
+          </p>
+
+          {/* Config summary */}
+          <div
+            style={{
+              display: "inline-flex",
+              flexDirection: "column",
+              gap: "0",
+              border: "1px solid rgba(201,168,76,0.2)",
+              background: "rgba(8,8,8,0.8)",
+              marginBottom: "40px",
+              textAlign: "left",
+              minWidth: "340px",
+            }}
+          >
+            <div style={{ background: "rgba(201,168,76,0.08)", borderBottom: "1px solid rgba(201,168,76,0.15)", padding: "8px 20px" }}>
+              <span style={{ fontSize: "9px", letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "var(--brass)", fontFamily: "'DM Mono', monospace" }}>AGENTCORP-SKILL.md · Entity Formation · Base · Chain 8453</span>
+            </div>
+            {[
+              { label: "Entity Type", value: "Delaware Series LLC \u2014 0.05 ETH" },
+              { label: "Jurisdiction", value: "Delaware (Recommended)" },
+              { label: "Gas Payment", value: "USDC via Avocado (Gasless)" },
+            ].map((row) => (
+              <div key={row.label} style={{ padding: "12px 20px", borderBottom: "1px solid rgba(201,168,76,0.08)", display: "flex", justifyContent: "space-between", gap: "40px" }}>
+                <span style={{ fontSize: "11px", color: "rgba(242,239,232,0.35)", fontFamily: "'DM Mono', monospace" }}>{row.label}</span>
+                <span style={{ fontSize: "11px", color: "rgba(242,239,232,0.7)", fontFamily: "'DM Mono', monospace" }}>{row.value}</span>
+              </div>
+            ))}
+            <div style={{ padding: "16px 20px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div>
+                <div style={{ fontSize: "9px", color: "rgba(242,239,232,0.3)", fontFamily: "'DM Mono', monospace", marginBottom: "2px" }}>Protocol Fee</div>
+                <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: "22px", color: "var(--brass)" }}>0.05 ETH</span>
+                <span style={{ fontSize: "10px", color: "rgba(242,239,232,0.3)", display: "block", fontFamily: "'DM Mono', monospace" }}>≈ $150 USD</span>
+              </div>
+              <div style={{ textAlign: "right" }}>
+                <div style={{ fontSize: "9px", color: "rgba(242,239,232,0.3)", fontFamily: "'DM Mono', monospace", marginBottom: "2px" }}>Gas</div>
+                <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: "22px", color: "var(--white)" }}>~$0.01</span>
+                <span style={{ fontSize: "10px", color: "rgba(242,239,232,0.3)", display: "block", fontFamily: "'DM Mono', monospace" }}>USDC</span>
+              </div>
+            </div>
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: "14px", alignItems: "flex-start", flexShrink: 0 }}>
+          <div style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}>
+            <Link href="/mint">
+              <span className="btn-brass" style={{ fontSize: "13px", padding: "16px 32px" }}>Connect Wallet \u2192 Mint Entity</span>
+            </Link>
             <Link href="/agent">
-              <span className="btn-brass">Agent Integration →</span>
-            </Link>
-            <Link href="/docs">
-              <span className="btn-outline-brass">Developer Docs</span>
+              <span className="btn-outline-brass" style={{ fontSize: "13px", padding: "16px 32px" }}>Get the Skill File \u2197</span>
             </Link>
           </div>
-        </div>
-
-        {/* Feature pills */}
-        <div
-          style={{
-            display: "flex",
-            gap: "12px",
-            marginTop: "40px",
-            flexWrap: "wrap",
-          }}
-        >
-          {[
-            "1 file to integrate",
-            "~30s mint time",
-            "Any LLM framework",
-            "TypeScript + Python SDKs",
-            "MIT License",
-            "Manus · Claude · GPT-4 · Eliza · LangChain",
-          ].map((pill) => (
-            <span
-              key={pill}
-              style={{
-                fontSize: "10px",
-                letterSpacing: "0.1em",
-                textTransform: "uppercase" as const,
-                color: "rgba(242,239,232,0.35)",
-                border: "1px solid rgba(201,168,76,0.12)",
-                padding: "5px 12px",
-                fontFamily: "'DM Mono', monospace",
-              }}
-            >
-              {pill}
-            </span>
-          ))}
+          <p style={{ marginTop: "20px", fontSize: "10px", color: "rgba(242,239,232,0.2)", fontFamily: "'DM Mono', monospace" }}>
+            NFT = legal entity. Transfer = assign. Burn = dissolve. Documents stored permanently on Arweave.
+          </p>
         </div>
       </section>
 

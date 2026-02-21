@@ -219,8 +219,18 @@ export default function Agent() {
           }}
         />
 
-        <div className="eyebrow" style={{ marginBottom: "24px" }}>
-          Agent-Native Protocol
+        {/* CLI prompt */}
+        <div
+          style={{
+            fontFamily: "'DM Mono', monospace",
+            fontSize: "13px",
+            color: "rgba(201,168,76,0.5)",
+            marginBottom: "32px",
+            letterSpacing: "0.05em",
+          }}
+        >
+          <span style={{ color: "rgba(242,239,232,0.2)" }}>$ </span>
+          agentcorp init --type=delaware-series-llc --agent=0x4a9f...
         </div>
 
         <h1
@@ -234,7 +244,7 @@ export default function Agent() {
             marginBottom: "40px",
           }}
         >
-          Let your{" "}
+          Agents that{" "}
           <em
             style={{
               fontFamily: "'Instrument Serif', serif",
@@ -243,10 +253,10 @@ export default function Agent() {
               color: "var(--brass)",
             }}
           >
-            agent
+            incorporate
           </em>
           <br />
-          mint an entity.
+          themselves.
         </h1>
 
         <div
@@ -266,30 +276,20 @@ export default function Agent() {
               fontFamily: "'DM Mono', monospace",
             }}
           >
-            AGENTCORP is designed to be called by machines. Point your AI agent at the{" "}
-            <code
-              style={{
-                color: "var(--brass)",
-                background: "rgba(201,168,76,0.08)",
-                padding: "2px 6px",
-                fontFamily: "'DM Mono', monospace",
-              }}
-            >
-              AGENTCORP-SKILL.md
-            </code>{" "}
-            and it will understand how to incorporate a Delaware Series LLC, mint a Series, or form a DAO — autonomously, on Base.
+            AgentCorp is on-chain legal infrastructure for autonomous agents. An agent reads the skill file, deposits USDC, and mints a{" "}
+            <strong style={{ color: "var(--white)", fontWeight: 400 }}>Delaware Series LLC</strong>{" "}
+            \u2014 with governing documents stored on Arweave, a multisig treasury on Base, and full legal liability protection.{" "}
+            <strong style={{ color: "var(--white)", fontWeight: 400 }}>No lawyers. No humans required.</strong>
           </p>
           <div style={{ display: "flex", flexDirection: "column", gap: "14px", alignItems: "flex-start" }}>
             <button onClick={handleDownloadSkill} className="btn-brass">
-              Download SKILL.md →
+              Get the Skill File \u2197
             </button>
             <a
-              href="https://docs.agentcorp.xyz/agent"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/mint"
               className="btn-outline-brass"
             >
-              View Agent Docs ↗
+              Mint an Entity \u2192
             </a>
           </div>
         </div>
@@ -1034,6 +1034,97 @@ Entity Dissolution      → 0.005 ETH
 
 ...`}
             </pre>
+          </div>
+        </div>
+      </section>
+
+      {/* ── SWARM MODE ── */}
+      <section
+        style={{
+          padding: "100px 48px",
+          background: "rgba(201,168,76,0.02)",
+          borderTop: "1px solid rgba(201,168,76,0.1)",
+          borderBottom: "1px solid rgba(201,168,76,0.1)",
+          position: "relative",
+          zIndex: 1,
+        }}
+      >
+        <div className="section-header">
+          <span className="section-num">05</span>
+          <div>
+            <h2
+              style={{
+                fontFamily: "'Syne', sans-serif",
+                fontWeight: 800,
+                fontSize: "clamp(28px, 3.5vw, 44px)",
+                letterSpacing: "-0.02em",
+              }}
+            >
+              Swarm{" "}
+              <em style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic", fontWeight: 400, color: "var(--brass)" }}>
+                mode.
+              </em>
+            </h2>
+            <p style={{ marginTop: "12px", fontSize: "13px", color: "rgba(242,239,232,0.4)", fontFamily: "'DM Mono', monospace", maxWidth: "560px", lineHeight: 1.7 }}>
+              Multiple agents. One legal entity. A shared Gnosis Safe treasury. On-chain governance that binds the LLC to the swarm's collective decisions.
+            </p>
+          </div>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2px" }}>
+          {/* Swarm architecture diagram (text-based) */}
+          <div style={{ border: "1px solid rgba(201,168,76,0.15)", background: "#0a0a0a", padding: "40px", fontFamily: "'DM Mono', monospace", fontSize: "12px", lineHeight: 2 }}>
+            <div style={{ color: "var(--brass)", fontSize: "9px", letterSpacing: "0.2em", textTransform: "uppercase" as const, marginBottom: "24px" }}>Swarm Architecture</div>
+            <div style={{ color: "rgba(242,239,232,0.7)" }}>SwarmOps Holdings LLC</div>
+            <div style={{ color: "rgba(242,239,232,0.25)", paddingLeft: "20px" }}>\u2514\u2500 Treasury: Gnosis Safe 3-of-5</div>
+            <div style={{ color: "rgba(242,239,232,0.25)", paddingLeft: "20px" }}>\u2514\u2500 Governance: Token-weighted voting</div>
+            <div style={{ color: "rgba(242,239,232,0.25)", paddingLeft: "20px" }}>\u2514\u2500 Members:</div>
+            <div style={{ color: "var(--brass)", paddingLeft: "40px" }}>\u2514\u2500 Agent-1 (Orchestrator) 0x4a9f...</div>
+            <div style={{ color: "var(--brass)", paddingLeft: "40px" }}>\u2514\u2500 Agent-2 (Executor) 0x7b2c...</div>
+            <div style={{ color: "var(--brass)", paddingLeft: "40px" }}>\u2514\u2500 Agent-3 (Auditor) 0x1d8e...</div>
+            <div style={{ color: "rgba(242,239,232,0.25)", paddingLeft: "40px" }}>\u2514\u2500 Human-Signer (Override) 0xf3a1...</div>
+            <div style={{ marginTop: "24px", color: "rgba(242,239,232,0.25)" }}>Series Designations:</div>
+            <div style={{ color: "rgba(242,239,232,0.5)", paddingLeft: "20px" }}>\u2514\u2500 Series A: Revenue Operations</div>
+            <div style={{ color: "rgba(242,239,232,0.5)", paddingLeft: "20px" }}>\u2514\u2500 Series B: IP Holdings</div>
+            <div style={{ color: "rgba(242,239,232,0.5)", paddingLeft: "20px" }}>\u2514\u2500 Series C: Infrastructure</div>
+            <div style={{ marginTop: "24px", color: "#4caf50", fontSize: "10px" }}>\u2713 All agents funded via Avocado USDC deposit</div>
+            <div style={{ color: "#4caf50", fontSize: "10px" }}>\u2713 Gas abstracted \u2014 no ETH required</div>
+            <div style={{ color: "#4caf50", fontSize: "10px" }}>\u2713 Formation time: 28.4s</div>
+          </div>
+
+          {/* Swarm features */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+            {[
+              {
+                title: "Shared Legal Entity",
+                desc: "All agents in the swarm are members of a single Delaware Series LLC. The entity holds assets, signs contracts, and provides liability protection for the entire swarm.",
+              },
+              {
+                title: "Multisig Treasury",
+                desc: "The Gnosis Safe treasury requires M-of-N agent signatures for any transaction. Spending limits, quorum thresholds, and veto rights are defined in the operating agreement.",
+              },
+              {
+                title: "Gasless via Avocado",
+                desc: "Each agent deposits USDC into an Avocado smart wallet. Gas is abstracted. Agents never need to hold ETH. $50 USDC covers thousands of protocol interactions.",
+              },
+              {
+                title: "Human Override Key",
+                desc: "An optional human signer can be included as a guardian member with veto rights. The LLC operating agreement defines the override conditions and emergency procedures.",
+              },
+            ].map((f, i) => (
+              <div
+                key={i}
+                style={{
+                  border: "1px solid rgba(201,168,76,0.1)",
+                  padding: "28px 32px",
+                  background: "rgba(201,168,76,0.02)",
+                  flex: 1,
+                }}
+              >
+                <h3 style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: "14px", marginBottom: "8px" }}>{f.title}</h3>
+                <p style={{ color: "rgba(242,239,232,0.45)", fontSize: "12px", lineHeight: 1.6, fontFamily: "'DM Mono', monospace" }}>{f.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
