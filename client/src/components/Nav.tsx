@@ -148,23 +148,33 @@ export default function Nav() {
             <span
               className="nav-mint-cta"
               style={{
-                display: "inline-block",
-                background: BRASS,
-                color: BLACK,
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "7px",
+                border: `1px solid rgba(201,168,76,0.35)`,
+                color: BRASS,
                 fontFamily: "'Syne', sans-serif",
                 fontWeight: 700,
                 fontSize: "11px",
                 letterSpacing: "0.12em",
                 textTransform: "uppercase",
-                padding: "10px 20px",
+                padding: "9px 18px",
                 cursor: "pointer",
-                transition: "opacity 0.2s",
+                transition: "border-color 0.2s, background 0.2s",
                 whiteSpace: "nowrap",
+                background: "transparent",
               }}
-              onMouseEnter={(e) => ((e.target as HTMLElement).style.opacity = "0.82")}
-              onMouseLeave={(e) => ((e.target as HTMLElement).style.opacity = "1")}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.borderColor = BRASS;
+                (e.currentTarget as HTMLElement).style.background = "rgba(201,168,76,0.06)";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.borderColor = "rgba(201,168,76,0.35)";
+                (e.currentTarget as HTMLElement).style.background = "transparent";
+              }}
             >
-              Mint Entity
+              <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#f59e0b", boxShadow: "0 0 6px #f59e0b", display: "inline-block", flexShrink: 0 }} />
+              Mint — Q2 2026
             </span>
           </Link>
 
@@ -247,9 +257,12 @@ export default function Nav() {
             <span
               onClick={() => setMenuOpen(false)}
               style={{
-                display: "block",
-                background: BRASS,
-                color: BLACK,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "8px",
+                border: "1px solid rgba(201,168,76,0.3)",
+                color: BRASS,
                 fontFamily: "'Syne', sans-serif",
                 fontWeight: 700,
                 fontSize: "12px",
@@ -259,9 +272,11 @@ export default function Nav() {
                 cursor: "pointer",
                 textAlign: "center",
                 marginTop: "12px",
+                background: "transparent",
               }}
             >
-              Mint Entity →
+              <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#f59e0b", boxShadow: "0 0 6px #f59e0b", display: "inline-block" }} />
+              Mint — Coming Q2 2026
             </span>
           </Link>
         </div>

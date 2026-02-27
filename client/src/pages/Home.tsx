@@ -192,7 +192,9 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
             <Link href="/mint">
               <span
                 style={{
-                  display: "inline-block",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "10px",
                   background: BRASS,
                   color: BLACK,
                   fontFamily: "'Syne', sans-serif",
@@ -204,10 +206,13 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
                   cursor: "pointer",
                   transition: "opacity 0.2s",
                 }}
-                onMouseEnter={(e) => ((e.target as HTMLElement).style.opacity = "0.85")}
-                onMouseLeave={(e) => ((e.target as HTMLElement).style.opacity = "1")}
+                onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.opacity = "0.85")}
+                onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.opacity = "1")}
               >
-                Mint an Entity
+                <span style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#080808", boxShadow: "0 0 0 2px #080808", display: "inline-block", flexShrink: 0, position: "relative" }}>
+                  <span style={{ position: "absolute", inset: 0, borderRadius: "50%", background: "#080808", animation: "none" }} />
+                </span>
+                Get Early Access — Q2 2026
               </span>
             </Link>
             <Link href="/whitepaper">
@@ -848,7 +853,7 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
                     tag: "DE-SERIES-LLC",
                     use: "Agent swarms, fund vehicles, protocol operators, multi-project holdings",
                     fee: "0.05 ETH",
-                    status: "Live",
+                    status: "Coming Soon",
                   },
                   {
                     name: "Series Designation",
@@ -856,7 +861,7 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
                     tag: "DE-SERIES",
                     use: "Per-project, per-asset, per-batch isolation with liability segregation",
                     fee: "0.02 ETH",
-                    status: "Live",
+                    status: "Coming Soon",
                   },
                   {
                     name: "DAO Operating Charter",
@@ -864,7 +869,7 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
                     tag: "DE-DAO-LLC",
                     use: "On-chain governance with legal binding, Designated Smart Contract provision",
                     fee: "0.05 ETH",
-                    status: "Live",
+                    status: "Coming Soon",
                   },
                   {
                     name: "Standard Delaware LLC",
@@ -872,7 +877,7 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
                     tag: "DE-LLC",
                     use: "General purpose, contractor entities, single-agent vehicles",
                     fee: "0.05 ETH",
-                    status: "Live",
+                    status: "Coming Soon",
                   },
                   {
                     name: "IP License NFT",
@@ -925,27 +930,25 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
                           fontSize: "9px",
                           letterSpacing: "0.1em",
                           textTransform: "uppercase" as const,
-                          color: row.status === "Live" ? "#4ade80" : MUTED,
-                          border: `1px solid ${row.status === "Live" ? "rgba(74,222,128,0.3)" : "rgba(242,239,232,0.1)"}`,
+                          color: BRASS,
+                          border: `1px solid rgba(201,168,76,0.25)`,
                           padding: "4px 10px",
+                          background: "rgba(201,168,76,0.06)",
                         }}
                       >
-                        {row.status === "Live" && (
-                          <span
-                            style={{
-                              width: "5px",
-                              height: "5px",
-                              borderRadius: "50%",
-                              background: "#4ade80",
-                              animation: "pulse 2s infinite",
-                            }}
-                          />
-                        )}
-                        {row.status}
+                        <span
+                          style={{
+                            width: "5px",
+                            height: "5px",
+                            borderRadius: "50%",
+                            background: "#f59e0b",
+                            boxShadow: "0 0 5px #f59e0b",
+                            animation: "pulse 2s infinite",
+                          }}
+                        />
+                        {row.status === "Q2 2026" || row.status === "Q3 2026" || row.status === "Q4 2026" ? row.status : "Coming Soon"}
                       </span>
-                      {row.status !== "Live" && (
-                        <WaitlistForm entityType={row.name} source="entity-table" />
-                      )}
+                      <WaitlistForm entityType={row.name} source="entity-table" />
                     </td>
                   </tr>
                 ))}
@@ -983,7 +986,7 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
         </div>
 
         <div ref={cta.ref} style={{ ...cta.style, position: "relative", zIndex: 1 }}>
-          <SectionEyebrow num="05" label="Get Started" />
+          <SectionEyebrow num="05" label="Get Early Access" />
           <div className="grid-2" style={{ alignItems: "start" }}>
             <div>
               <h2
@@ -996,7 +999,7 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
                   marginBottom: "28px",
                 }}
               >
-                Mint your<br />
+                Launching<br />
                 <em
                   style={{
                     fontFamily: "'Instrument Serif', serif",
@@ -1005,17 +1008,22 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
                     color: BRASS,
                   }}
                 >
-                  entity today.
+                  Q2 2026.
                 </em>
               </h2>
-              <p style={{ fontSize: "14px", lineHeight: 1.7, color: MUTED, maxWidth: "480px", marginBottom: "40px" }}>
-                The entire process takes under five minutes. Connect your wallet, choose your entity type, configure your documents, and mint. Your legal entity lives on Base — permanently.
+              <p style={{ fontSize: "14px", lineHeight: 1.7, color: MUTED, maxWidth: "480px", marginBottom: "16px" }}>
+                Smart contracts are on testnet and undergoing independent security audit. Mainnet launches on Base in Q2 2026. Sign up to be first to mint.
+              </p>
+              <p style={{ fontSize: "11px", lineHeight: 1.7, color: "rgba(242,239,232,0.25)", maxWidth: "480px", marginBottom: "40px", fontStyle: "italic" }}>
+                Contracts will be fully audited prior to mainnet launch.
               </p>
               <div style={{ display: "flex", gap: "14px", flexWrap: "wrap" }}>
                 <Link href="/mint">
                   <span
                     style={{
-                      display: "inline-block",
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: "10px",
                       background: BRASS,
                       color: BLACK,
                       fontFamily: "'Syne', sans-serif",
@@ -1027,10 +1035,10 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
                       cursor: "pointer",
                       transition: "opacity 0.2s",
                     }}
-                    onMouseEnter={(e) => ((e.target as HTMLElement).style.opacity = "0.85")}
-                    onMouseLeave={(e) => ((e.target as HTMLElement).style.opacity = "1")}
+                    onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.opacity = "0.85")}
+                    onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.opacity = "1")}
                   >
-                    Connect Wallet → Mint Entity
+                    Join the Waitlist →
                   </span>
                 </Link>
                 <Link href="/agent">
@@ -1054,7 +1062,7 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
               </p>
             </div>
 
-            {/* Mint card */}
+            {/* Coming Soon card */}
             <div
               style={{
                 border: `1px solid rgba(201,168,76,0.25)`,
@@ -1062,21 +1070,32 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
                 minWidth: "320px",
               }}
             >
+              {/* Card header */}
               <div
                 style={{
                   background: "rgba(201,168,76,0.08)",
                   borderBottom: `1px solid rgba(201,168,76,0.15)`,
                   padding: "10px 20px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
                 }}
               >
                 <span style={{ fontSize: "9px", letterSpacing: "0.2em", textTransform: "uppercase" as const, color: BRASS }}>
-                  AGENTCORP-SKILL.md · Entity Formation · Base · Chain 8453
+                  AGENTCORP · Base Mainnet · Chain 8453
+                </span>
+                <span style={{ display: "inline-flex", alignItems: "center", gap: "5px", fontSize: "8px", color: "#f59e0b", letterSpacing: "0.12em" }}>
+                  <span style={{ width: "5px", height: "5px", borderRadius: "50%", background: "#f59e0b", boxShadow: "0 0 5px #f59e0b", display: "inline-block", animation: "pulse 2s infinite" }} />
+                  TESTNET
                 </span>
               </div>
+
+              {/* Status rows */}
               {[
-                { label: "Entity Type", value: "Delaware Series LLC — 0.05 ETH" },
-                { label: "Jurisdiction", value: "Delaware (Recommended)" },
-                { label: "Gas Payment", value: "USDC via Avocado (Gasless)" },
+                { label: "Smart Contracts", value: "Audit in Progress" },
+                { label: "Testnet", value: "Base Sepolia ✔" },
+                { label: "Mainnet Launch", value: "Q2 2026" },
+                { label: "Gas Model", value: "USDC via Avocado (Gasless)" },
               ].map((row) => (
                 <div
                   key={row.label}
@@ -1089,27 +1108,16 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
                   }}
                 >
                   <span style={{ fontSize: "11px", color: "rgba(242,239,232,0.35)" }}>{row.label}</span>
-                  <span style={{ fontSize: "11px", color: "rgba(242,239,232,0.7)" }}>{row.value}</span>
+                  <span style={{ fontSize: "11px", color: row.label === "Smart Contracts" ? "#f59e0b" : row.label === "Testnet" ? "#4ade80" : "rgba(242,239,232,0.7)" }}>{row.value}</span>
                 </div>
               ))}
-              <div
-                style={{
-                  padding: "20px 20px",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <div>
-                  <div style={{ fontSize: "9px", color: "rgba(242,239,232,0.3)", marginBottom: "2px" }}>Protocol Fee</div>
-                  <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: "24px", color: BRASS }}>0.05 ETH</span>
-                  <span style={{ fontSize: "10px", color: "rgba(242,239,232,0.3)", display: "block" }}>≈ $150 USD</span>
-                </div>
-                <div style={{ textAlign: "right" }}>
-                  <div style={{ fontSize: "9px", color: "rgba(242,239,232,0.3)", marginBottom: "2px" }}>Gas</div>
-                  <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: "24px", color: WHITE }}>~$0.01</span>
-                  <span style={{ fontSize: "10px", color: "rgba(242,239,232,0.3)", display: "block" }}>USDC</span>
-                </div>
+
+              {/* Waitlist CTA */}
+              <div style={{ padding: "24px 20px" }}>
+                <p style={{ fontSize: "11px", color: MUTED, marginBottom: "14px", lineHeight: 1.6 }}>
+                  Be first to mint when contracts go live on mainnet.
+                </p>
+                <WaitlistForm entityType="DELAWARE_SERIES_LLC" source="home-cta-card" variant="hero" />
               </div>
             </div>
           </div>
@@ -1142,7 +1150,7 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
               { label: "Whitepaper", href: "/whitepaper" },
               { label: "Dev Docs", href: "/docs" },
               { label: "For Agents", href: "/agent" },
-              { label: "Mint Entity", href: "/mint" },
+              { label: "Mint — Q2 2026", href: "/mint" },
             ].map((link) => (
               <Link key={link.label} href={link.href}>
                 <span style={{ fontSize: "11px", color: MUTED, cursor: "pointer", letterSpacing: "0.05em" }}>{link.label}</span>
