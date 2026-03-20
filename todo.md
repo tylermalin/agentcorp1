@@ -12,6 +12,8 @@
 - [x] SEO optimization with OG tags, Twitter cards, JSON-LD
 - [x] Shared Nav with all links and mobile hamburger
 - [x] Auto-promote owner to admin on first OAuth login
+- [x] SEO fix: shorten homepage title from 68 to 43 characters
+- [x] SEO fix: reduce meta keywords from 10 to 6 focused keywords
 - [x] Tag all minting features as Coming Soon — replace Mint page with coming-soon waitlist CTA
 - [x] Update nav "Mint Entity" CTA to Coming Soon state
 - [x] Update hero "Mint an Entity" button to scroll to waitlist

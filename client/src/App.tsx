@@ -13,7 +13,7 @@ import Admin from "./pages/Admin";
 import { useEffect } from "react";
 
 const PAGE_TITLES: Record<string, string> = {
-  "/": "AgentCorp — On-Chain Legal Infrastructure for the Autonomous Economy",
+  "/": "AgentCorp — On-Chain Legal Infrastructure",
   "/whitepaper": "Whitepaper v1.0 — AgentCorp Protocol",
   "/docs": "Developer Docs — AgentCorp Protocol",
   "/mint": "Mint Your Legal Entity — AgentCorp",
