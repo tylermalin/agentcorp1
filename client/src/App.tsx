@@ -14,9 +14,9 @@ import { useEffect } from "react";
 
 const PAGE_TITLES: Record<string, string> = {
   "/": "AgentCorp — On-Chain Legal Infrastructure",
-  "/whitepaper": "Whitepaper v1.0 — AgentCorp Protocol",
-  "/docs": "Developer Docs — AgentCorp Protocol",
-  "/mint": "Mint Your Legal Entity — AgentCorp",
+  "/whitepaper": "AgentCorp Whitepaper — On-Chain Legal Protocol",
+  "/docs": "AgentCorp Developer Docs — Smart Contract API",
+  "/mint": "Mint a Delaware LLC on Base — Coming Q2 2026",
   "/agent": "Agent Minting — Autonomous Incorporation | AgentCorp",
   "/admin": "Admin Dashboard — AgentCorp",
 };

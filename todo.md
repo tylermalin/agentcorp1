@@ -14,6 +14,9 @@
 - [x] Auto-promote owner to admin on first OAuth login
 - [x] SEO fix: shorten homepage title from 68 to 43 characters
 - [x] SEO fix: reduce meta keywords from 10 to 6 focused keywords
+- [x] SEO fix: optimize /whitepaper title (38 → 48 chars, brand-first + keyword)
+- [x] SEO fix: optimize /docs title (37 → 47 chars, brand-first + keyword)
+- [x] SEO fix: optimize /mint title (36 → 46 chars, reflects Coming Soon state)
 - [x] Tag all minting features as Coming Soon — replace Mint page with coming-soon waitlist CTA
 - [x] Update nav "Mint Entity" CTA to Coming Soon state
 - [x] Update hero "Mint an Entity" button to scroll to waitlist
