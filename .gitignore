@@ -112,3 +112,6 @@ temp/
 # Manus scaffolding and debug artifacts
 .manus/
 client/public/__manus__/
+
+# Generated Vercel function bundle (built from server/vercel-entry.ts)
+api/index.js
