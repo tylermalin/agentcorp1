@@ -1,5 +1,5 @@
 import "dotenv/config";
-import express from "express";
+import express, { type Request, type Response } from "express";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { registerOAuthRoutes } from "../server/_core/oauth";
 import { appRouter } from "../server/routers";
@@ -35,7 +35,7 @@ app.use(
 
 // Deployment probe. Returns which env vars are present, never their values,
 // so a failing waitlist can be diagnosed without reading the function logs.
-app.get("/api/health", (_req, res) => {
+app.get("/api/health", (_req: Request, res: Response) => {
   res.json({
     ok: true,
     env: {
