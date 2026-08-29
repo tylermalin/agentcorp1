@@ -250,6 +250,12 @@ var SDKServer = class {
   }
   getSessionSecret() {
     const secret = ENV.cookieSecret;
+    if (!secret) {
+      if (ENV.isProduction) {
+        throw new Error("JWT_SECRET is not set. Refusing to sign session tokens.");
+      }
+      console.warn("[Auth] JWT_SECRET is not set. Sessions are insecure in this environment.");
+    }
     return new TextEncoder().encode(secret);
   }
   /**
@@ -546,6 +552,7 @@ var systemRouter = router({
 
 // server/routers.ts
 import { z as z2 } from "zod";
+import { TRPCError as TRPCError3 } from "@trpc/server";
 function getMailchimpConfig() {
   const apiKey = process.env.MAILCHIMP_API_KEY;
   const audienceId = process.env.MAILCHIMP_AUDIENCE_ID;
@@ -573,7 +580,15 @@ async function subscribeToMailchimp(email, entityType, tags) {
   if (data.title === "Member Exists") {
     return { success: true, message: "You're already on the waitlist!", alreadySubscribed: true };
   }
-  throw new Error(data.detail || data.title || "Failed to subscribe");
+  const message = data.detail || data.title || "Failed to subscribe";
+  if (res.status === 400) {
+    throw new TRPCError3({ code: "BAD_REQUEST", message });
+  }
+  console.error("[Waitlist] Mailchimp error", res.status, message);
+  throw new TRPCError3({
+    code: "INTERNAL_SERVER_ERROR",
+    message: "Something went wrong on our end. Please try again shortly."
+  });
 }
 async function fetchMailchimpMembers(offset = 0, count = 100, entityFilter) {
   const { dc, audienceId, auth } = getMailchimpConfig();

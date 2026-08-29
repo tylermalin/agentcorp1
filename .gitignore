@@ -112,3 +112,5 @@ temp/
 # Manus scaffolding and debug artifacts
 .manus/
 client/public/__manus__/
+.vercel
+.env*

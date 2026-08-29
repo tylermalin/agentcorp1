@@ -4,6 +4,7 @@ import { notifyOwner } from "./_core/notification";
 import { systemRouter } from "./_core/systemRouter";
 import { adminProcedure, publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
+import { TRPCError } from "@trpc/server";
 
 // ── Mailchimp helpers ──────────────────────────────────────────────────────
 function getMailchimpConfig() {
@@ -46,7 +47,21 @@ async function subscribeToMailchimp(
   if (data.title === "Member Exists") {
     return { success: true, message: "You're already on the waitlist!", alreadySubscribed: true };
   }
-  throw new Error(data.detail || data.title || "Failed to subscribe");
+
+  // Mailchimp returns 400 for problems the visitor can fix: a malformed address,
+  // a domain on their fake-domain list, a previously unsubscribed member. Those
+  // are BAD_REQUEST, and the message is safe to show. Anything else is ours
+  // (bad key, wrong datacenter, missing audience) and stays a generic 500 so we
+  // don't leak configuration detail to the browser.
+  const message = data.detail || data.title || "Failed to subscribe";
+  if (res.status === 400) {
+    throw new TRPCError({ code: "BAD_REQUEST", message });
+  }
+  console.error("[Waitlist] Mailchimp error", res.status, message);
+  throw new TRPCError({
+    code: "INTERNAL_SERVER_ERROR",
+    message: "Something went wrong on our end. Please try again shortly.",
+  });
 }
 
 // Mailchimp member shape returned from the list API

@@ -156,6 +156,15 @@ class SDKServer {
 
   private getSessionSecret() {
     const secret = ENV.cookieSecret;
+    // An empty secret signs and verifies every session cookie with a key anyone
+    // can reproduce, which makes admin sessions forgeable. Refuse rather than
+    // silently issuing worthless tokens.
+    if (!secret) {
+      if (ENV.isProduction) {
+        throw new Error("JWT_SECRET is not set. Refusing to sign session tokens.");
+      }
+      console.warn("[Auth] JWT_SECRET is not set. Sessions are insecure in this environment.");
+    }
     return new TextEncoder().encode(secret);
   }
 

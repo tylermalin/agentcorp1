@@ -150,7 +150,18 @@ function vitePluginManusDebugCollector(): Plugin {
   };
 }
 
-const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector()];
+// Manus authoring tooling: the runtime overlay, the JSX source-location tagger,
+// and the debug collector. These are development aids. Shipping them to
+// production inlines a second copy of React plus the DOM selector, edit toolbar,
+// and comment markers into index.html, which is where ~90% of the HTML payload
+// was going. Dev only.
+const isProd = process.env.NODE_ENV === "production";
+
+const plugins = [
+  react(),
+  tailwindcss(),
+  ...(isProd ? [] : [jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector()]),
+];
 
 export default defineConfig({
   plugins,
