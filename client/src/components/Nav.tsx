@@ -174,7 +174,7 @@ export default function Nav() {
               }}
             >
               <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#f59e0b", boxShadow: "0 0 6px #f59e0b", display: "inline-block", flexShrink: 0 }} />
-              Mint — Q2 2026
+              Mint — Q1 2027
             </span>
           </Link>
 
@@ -276,7 +276,7 @@ export default function Nav() {
               }}
             >
               <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#f59e0b", boxShadow: "0 0 6px #f59e0b", display: "inline-block" }} />
-              Mint — Coming Q2 2026
+              Mint — Coming Q1 2027
             </span>
           </Link>
         </div>

@@ -80,7 +80,7 @@ export default function Whitepaper() {
               marginBottom: "24px",
             }}
           >
-            AgentCorp Protocol · Whitepaper v1.0 · February 2026 · agentcorp.xyz
+            AgentCorp Protocol · Whitepaper v1.0 · February 2026 · www.agentscorp.xyz
           </div>
           <h1
             style={{
@@ -261,7 +261,7 @@ export default function Whitepaper() {
               <WpTable
                 headers={["", "Input / Output"]}
                 rows={[
-                  ["Input 1", "agentcorp.xyz/skill.md — the agent reads the protocol"],
+                  ["Input 1", "www.agentscorp.xyz/skill.md — the agent reads the protocol"],
                   ["Input 2", "USDC balance — the agent pays for everything"],
                   ["Output", "A Delaware Series LLC with governing documents on Arweave, a Gnosis Safe treasury, and an on-chain NFT representing the entity"],
                 ]}
@@ -327,7 +327,7 @@ LAYER 4: Gas Abstraction
               </WpP>
               <div style={{ display: "flex", flexDirection: "column", gap: "2px", margin: "28px 0" }}>
                 {[
-                  { n: "01", t: "Load Skill File", d: "The agent fetches agentcorp.xyz/skill.md. The file defines all subsequent steps, entity types, document templates, and API endpoints. No additional configuration is required." },
+                  { n: "01", t: "Load Skill File", d: "The agent fetches www.agentscorp.xyz/skill.md. The file defines all subsequent steps, entity types, document templates, and API endpoints. No additional configuration is required." },
                   { n: "02", t: "Fund Avocado Wallet", d: "The agent deposits USDC to its Avocado wallet address on Base. This single balance pays for all gas across the entire formation flow — no ETH required at any point." },
                   { n: "03", t: "Deploy Gnosis Safe", d: "The agent deploys a multisig Safe with the defined set of signers (agents, humans, or both) and signing threshold. This Safe becomes the legal treasury of the entity." },
                   { n: "04", t: "Draft and Upload Documents", d: "The agent populates an operating agreement from the protocol template — entity name, members, governance rules, voting thresholds. The completed document is uploaded to Arweave. The resulting transaction ID is the permanent legal record." },
@@ -554,8 +554,8 @@ const entity = await corp.mintEntity({
                   ["Delaware Series LLC", "DELAWARE_SERIES_LLC", "0.05 ETH", "Master entity with unlimited Series. Primary vehicle for swarms and multi-project organizations."],
                   ["Series Designation", "SERIES_DESIGNATION", "0.02 ETH", "Child Series under a parent Series LLC. Full liability isolation. Maps to individual projects, batches, or asset pools."],
                   ["Standard Delaware LLC", "DELAWARE_LLC", "0.05 ETH", "Single or multi-member LLC without Series capability. For single-agent entities or simple holdings."],
-                  ["IP License NFT", "IP_LICENSE", "0.03 ETH", "Transferable license agreement as an NFT. Q2 2026."],
-                  ["Wyoming LLC", "WYOMING_LLC", "0.03 ETH", "Privacy-preserving alternative for low-cost single-agent structures. Q3 2026."],
+                  ["IP License NFT", "IP_LICENSE", "0.03 ETH", "Transferable license agreement as an NFT. Q1 2027."],
+                  ["Wyoming LLC", "WYOMING_LLC", "0.03 ETH", "Privacy-preserving alternative for low-cost single-agent structures. Q2 2027."],
                 ]}
               />
               <WpH3>Amendment Fee</WpH3>
@@ -608,10 +608,10 @@ const entity = await corp.mintEntity({
               <WpTable
                 headers={["Phase", "Timeline", "Deliverable"]}
                 rows={[
-                  ["Phase 1", "Q1 2026", "Base mainnet deployment. Delaware Series LLC, Series Designation, Standard Delaware LLC. Avocado gas abstraction. Arweave document storage. Gnosis Safe integration. Skill file v1.0 release."],
-                  ["Phase 2", "Q2 2026", "IP License NFT entity type. Document amendment flow with on-chain version history. Series-to-Series transfer mechanics. SDK v1.0 public release."],
-                  ["Phase 3", "Q3 2026", "Wyoming LLC support. Multi-chain expansion (Optimism, Arbitrum). Agent identity registry (ENS-linked). Cross-chain Series management."],
-                  ["Phase 4", "Q4 2026", "On-chain amendment voting. Token-gated governance for DAO Charter entities. Regulatory compliance modules (KYB, AML). AgentCorp DAO governance of protocol itself."],
+                  ["Phase 1", "Q1 2027", "Base mainnet deployment. Delaware Series LLC, Series Designation, Standard Delaware LLC. Avocado gas abstraction. Arweave document storage. Gnosis Safe integration. Skill file v1.0 release."],
+                  ["Phase 2", "Q2 2027", "IP License NFT entity type. Document amendment flow with on-chain version history. Series-to-Series transfer mechanics. SDK v1.0 public release."],
+                  ["Phase 3", "Q3 2027", "Wyoming LLC support. Multi-chain expansion (Optimism, Arbitrum). Agent identity registry (ENS-linked). Cross-chain Series management."],
+                  ["Phase 4", "Q4 2027", "On-chain amendment voting. Token-gated governance for DAO Charter entities. Regulatory compliance modules (KYB, AML). AgentCorp DAO governance of protocol itself."],
                 ]}
               />
             </WpSection>
@@ -621,7 +621,7 @@ const entity = await corp.mintEntity({
               <WpH3>Contract Addresses (Base Mainnet)</WpH3>
               <WpP>
                 To be published at deployment. Monitor{" "}
-                <a href="https://agentcorp.xyz/contracts" style={{ color: S.brassDeep, textDecoration: "none", borderBottom: `1px solid ${S.brassDeep}` }}>agentcorp.xyz/contracts</a>{" "}
+                <a href="https://github.com/tylermalin/agentcorp1" style={{ color: S.brassDeep, textDecoration: "none", borderBottom: `1px solid ${S.brassDeep}` }}>www.agentscorp.xyz/contracts</a>{" "}
                 for verified addresses.
               </WpP>
               <WpH3>Entity Type Enum</WpH3>
@@ -631,7 +631,7 @@ enum EntityType {
   DELAWARE_SERIES_LLC,    // 1 — Series LLC (parent)
   SERIES_DESIGNATION,     // 2 — Series designation (child)
   DAO_CHARTER,            // 3 — Token-governed Delaware LLC
-  WYOMING_LLC,            // 4 — Wyoming LLC (Q3 2026)
+  WYOMING_LLC,            // 4 — Wyoming LLC (Q2 2027)
   NONPROFIT,              // 5 — Reserved
   IP_LICENSE,             // 6 — Transferable IP license NFT
   IP_ASSIGNMENT           // 7 — Full IP assignment
@@ -651,7 +651,7 @@ enum EntityType {
               />
               <WpH3>Skill File Specification</WpH3>
               <WpP>
-                The <WpCode>AGENTCORP-SKILL.md</WpCode> file is a structured Markdown document that follows the AgentCorp Skill File Specification v1.0. It includes: protocol overview, entity type definitions with fees and use cases, document template schemas, Arweave upload instructions with required metadata fields, Gnosis Safe deployment parameters, Avocado wallet configuration guide, factory contract ABI summaries for <WpCode>mintEntity()</WpCode> and <WpCode>mintSeries()</WpCode>, amendment procedures, and dissolution procedures. The skill file is versioned at agentcorp.xyz/skill.md with permanent Arweave copies linked from each version.
+                The <WpCode>AGENTCORP-SKILL.md</WpCode> file is a structured Markdown document that follows the AgentCorp Skill File Specification v1.0. It includes: protocol overview, entity type definitions with fees and use cases, document template schemas, Arweave upload instructions with required metadata fields, Gnosis Safe deployment parameters, Avocado wallet configuration guide, factory contract ABI summaries for <WpCode>mintEntity()</WpCode> and <WpCode>mintSeries()</WpCode>, amendment procedures, and dissolution procedures. The skill file is versioned at www.agentscorp.xyz/skill.md with permanent Arweave copies linked from each version.
               </WpP>
               <WpH3>Legal Considerations</WpH3>
               <WpCallout label="Disclaimer">

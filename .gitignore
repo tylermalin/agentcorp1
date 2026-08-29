@@ -108,3 +108,7 @@ temp/
 
 # Webdev artifacts (checkpoint zips, migrations, etc.)
 .webdev/
+
+# Manus scaffolding and debug artifacts
+.manus/
+client/public/__manus__/

@@ -14,7 +14,7 @@ const SKILL_CONTENT = `# AGENTCORP SKILL.md
 > **Version:** 1.0
 > **Chain:** Base (Chain ID 8453)
 > **License:** MIT
-> **Docs:** docs.agentcorp.xyz
+> **Docs:** www.agentscorp.xyz/docs
 > **GitHub:** github.com/agentcorp
 
 ---
@@ -60,11 +60,11 @@ A Delaware LLC with full blockchain governance provisions.
 - Governance: Compound Governor compatible, Gnosis Safe compatible
 - Use case: Protocol DAOs, investment clubs, onchain organizations
 
-### Coming Q2 2026
+### Coming Q1 2027
 - IP_LICENSE — Software license NFT with royalty hooks
 - IP_ASSIGNMENT — IP transfer with chain of title
 
-### Coming Q3 2026
+### Coming Q2 2027
 - NONPROFIT — Delaware non-profit with 501(c) pathway
 - RWA_HOLDING — Real-world asset holding agreement
 
@@ -73,7 +73,7 @@ A Delaware LLC with full blockchain governance provisions.
 ## Smart Contract Interface
 
 Network: Base Mainnet (Chain ID: 8453)
-Factory Address: 0x[DEPLOYED_ADDRESS] (see docs.agentcorp.xyz)
+Factory Address: NOT YET DEPLOYED. Mainnet target Q1 2027. Do not attempt mainnet calls; there is no contract to call. Use Base Sepolia for integration work.
 
 \`\`\`solidity
 // Mint a new legal entity
@@ -114,9 +114,9 @@ enum EntityType {
     DELAWARE_SERIES_LLC,    // 1 — parent
     SERIES_DESIGNATION,     // 2 — child series
     DAO_CHARTER,            // 3
-    NONPROFIT,              // 4 (Q3 2026)
-    IP_LICENSE,             // 5 (Q2 2026)
-    IP_ASSIGNMENT           // 6 (Q2 2026)
+    NONPROFIT,              // 4 (Q2 2027)
+    IP_LICENSE,             // 5 (Q1 2027)
+    IP_ASSIGNMENT           // 6 (Q1 2027)
 }
 \`\`\`
 
@@ -129,7 +129,7 @@ enum EntityType {
 | Mint Delaware LLC | 0.05 ETH | ~$150 at $3k/ETH |
 | Mint Series Designation | 0.02 ETH | Per series under parent |
 | Mint DAO Charter | 0.05 ETH | Governance adapter included |
-| Mint Non-Profit | 0.05 ETH | Q3 2026 |
+| Mint Non-Profit | 0.05 ETH | Q2 2027 |
 | Document Amendment | 0.01 ETH | Per amendment event |
 | Entity Transfer | Gas only | Standard ERC-721 |
 | Entity Dissolution | 0.005 ETH | Burns token, creates record |
@@ -250,7 +250,7 @@ Timelock: Configurable delay (default: 48 hours)
 1. Use a Gnosis Safe — Never hold entity NFTs in a hot wallet. Use multisig 2-of-3 minimum.
 2. Verify document hashes — Retrieve and hash governing docs, compare to on-chain record.
 3. Back up documents — Store copies independently of Arweave/IPFS.
-4. Test on Base Sepolia first — testnet.agentcorp.xyz
+4. Test on Base Sepolia first — Base Sepolia (testnet dApp not yet live)
 5. Review templates with counsel — Templates are starting points for material transactions.
 
 ---
@@ -259,11 +259,11 @@ Timelock: Configurable delay (default: 48 hours)
 
 | Resource | URL |
 |----------|-----|
-| Protocol dApp | agentcorp.xyz |
-| Developer Docs | docs.agentcorp.xyz |
+| Protocol dApp | www.agentscorp.xyz |
+| Developer Docs | www.agentscorp.xyz/docs |
 | GitHub (contracts) | github.com/agentcorp/contracts |
 | GitHub (templates) | github.com/agentcorp/templates |
-| Base Sepolia Testnet | testnet.agentcorp.xyz |
+| Base Sepolia Testnet | Base Sepolia (testnet dApp not yet live) |
 | Avocado Wallet | avcd.io |
 | Avocado Skill | avcd.io/skill.md |
 | Discord | discord.gg/agentcorp |
@@ -381,7 +381,7 @@ const frameworks = [
     tag: "Direct Integration",
     desc: "Use the REST API or call the smart contract directly. Point your agent at the SKILL.md URL and the factory contract address on Base.",
     steps: [
-      "Fetch SKILL.md from docs.agentcorp.xyz/skill.md",
+      "Fetch SKILL.md from www.agentscorp.xyz/skill.md",
       "Parse entity types, fees, and function signatures",
       "Upload governing documents to Arweave, get TX ID",
       "Call mintEntity() on Base with correct parameters and ETH value",
@@ -1191,7 +1191,7 @@ print(f"Entity minted: tx {tx_hash.hex()}")`}
 
 > Protocol: AGENTCORP — On-Chain Legal Infrastructure
 > Version: 1.0 | Chain: Base (Chain ID 8453)
-> License: MIT | Docs: docs.agentcorp.xyz
+> License: MIT | Docs: www.agentscorp.xyz/docs
 
 ## Overview
 

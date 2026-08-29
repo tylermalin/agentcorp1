@@ -241,7 +241,7 @@ export default function Docs() {
 
           <div style={{ padding: "24px 24px 0", marginTop: "24px", borderTop: "1px solid rgba(201,168,76,0.1)" }}>
             <a
-              href="https://docs.agentcorp.xyz"
+              href="https://www.agentscorp.xyz/docs"
               target="_blank"
               rel="noopener noreferrer"
               style={{
@@ -257,7 +257,7 @@ export default function Docs() {
               Full Docs ↗
             </a>
             <a
-              href="https://github.com/agentcorp"
+              href="https://github.com/tylermalin/agentcorp1"
               target="_blank"
               rel="noopener noreferrer"
               style={{
@@ -382,7 +382,7 @@ await window.ethereum.request({
               </DocSection>
               <DocSection title="2. Mint a Delaware Series LLC">
                 <CodeBlock lang="solidity">{`// AGENTCORP Factory Interface
-// Factory Address: see docs.agentcorp.xyz for current address
+// Factory Address: NOT YET DEPLOYED — mainnet target Q1 2027
 
 IAgentCorpFactory factory = IAgentCorpFactory(FACTORY_ADDRESS);
 
@@ -484,9 +484,9 @@ function getSeriesTokens(uint256 parentTokenId)
     DELAWARE_SERIES_LLC,    // 1 — parent
     SERIES_DESIGNATION,     // 2 — child series
     DAO_CHARTER,            // 3
-    NONPROFIT,              // 4 (Q3 2026)
-    IP_LICENSE,             // 5 (Q2 2026)
-    IP_ASSIGNMENT           // 6 (Q2 2026)
+    NONPROFIT,              // 4 (Q2 2027)
+    IP_LICENSE,             // 5 (Q1 2027)
+    IP_ASSIGNMENT           // 6 (Q1 2027)
 }`}</CodeBlock>
               </DocSection>
               <DocSection title="mintEntity Parameters">
@@ -531,7 +531,7 @@ function getSeriesTokens(uint256 parentTokenId)
                 },
                 {
                   name: "IP_LICENSE",
-                  status: "Q2 2026",
+                  status: "Q1 2027",
                   price: "TBD",
                   desc: "Software license NFT with royalty hooks and sublicense controls.",
                   docs: ["Software License Agreement", "Royalty Schedule"],
@@ -539,7 +539,7 @@ function getSeriesTokens(uint256 parentTokenId)
                 },
                 {
                   name: "NONPROFIT",
-                  status: "Q3 2026",
+                  status: "Q2 2027",
                   price: "0.05 ETH",
                   desc: "Delaware non-profit with 501(c) pathway documentation.",
                   docs: ["Non-Profit Charter", "Foundation Operating Agreement"],
@@ -649,23 +649,36 @@ function getSeriesTokens(uint256 parentTokenId)
 }`}</CodeBlock>
               </DocSection>
               <DocSection title="Verification Protocol">
-                <CodeBlock lang="javascript">{`// Verify document authenticity
+                <CodeBlock lang="javascript">{`// Verify document authenticity.
+//
+// The chain anchors the MANIFEST, not each document. primaryDocArweaveTx is a
+// storage pointer, not a digest of the file, so verification takes two steps:
+// resolve the manifest from the pointer, then check each document against the
+// sha256 recorded inside it. Arweave transactions are immutable, which is what
+// makes the pointer sufficient on its own.
 async function verifyDocument(tokenId, documentType) {
-  // 1. Get entity state from contract
+  // 1. Resolve the manifest pointer from on-chain state
   const entityState = await factory.getEntityState(tokenId);
-  const arweaveTx = entityState.primaryDocArweaveTx;
-  
-  // 2. Retrieve document from Arweave
-  const doc = await fetch(\`https://arweave.net/\${arweaveTx}\`);
-  const docBytes = await doc.arrayBuffer();
-  
-  // 3. Compute SHA-256 hash
-  const hash = await crypto.subtle.digest('SHA-256', docBytes);
-  const hashHex = Buffer.from(hash).toString('hex');
-  
-  // 4. Compare to on-chain hash
-  const onChainHash = entityState.primaryDocArweaveTx;
-  return hashHex === onChainHash; // true = authentic
+  const manifestTx = entityState.primaryDocArweaveTx;
+
+  // 2. Fetch the manifest
+  const res = await fetch(\`https://arweave.net/\${manifestTx}\`);
+  const manifest = await res.json();
+
+  // 3. Locate the entry for the document you are verifying
+  const entry = manifest.documents.find((d) => d.type === documentType);
+  if (!entry) throw new Error(\`No \${documentType} in manifest \${manifestTx}\`);
+
+  // 4. Fetch that document and hash its bytes
+  const docRes = await fetch(\`https://arweave.net/\${entry.arweave_tx}\`);
+  const docBytes = await docRes.arrayBuffer();
+  const digest = await crypto.subtle.digest('SHA-256', docBytes);
+  const hashHex = [...new Uint8Array(digest)]
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
+
+  // 5. Compare against the sha256 recorded in the manifest
+  return hashHex === entry.sha256.replace(/^0x/, '').toLowerCase();
 }`}</CodeBlock>
               </DocSection>
             </div>
@@ -783,7 +796,7 @@ interface IAgentCorpGovernance {
                   { action: "mintEntity(DELAWARE_SERIES_LLC)", eth: "0.05 ETH", note: "~$150 at $3k/ETH" },
                   { action: "mintSeries()", eth: "0.02 ETH", note: "Per series under parent" },
                   { action: "mintEntity(DAO_CHARTER)", eth: "0.05 ETH", note: "Governance adapter included" },
-                  { action: "mintEntity(NONPROFIT)", eth: "0.05 ETH", note: "Q3 2026" },
+                  { action: "mintEntity(NONPROFIT)", eth: "0.05 ETH", note: "Q2 2027" },
                   { action: "amendEntity()", eth: "0.01 ETH", note: "Per amendment event" },
                   { action: "transfer()", eth: "Gas only", note: "Standard ERC-721" },
                   { action: "dissolveEntity()", eth: "0.005 ETH", note: "Burns token, creates record" },

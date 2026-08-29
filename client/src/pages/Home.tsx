@@ -212,7 +212,7 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
                 <span style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#080808", boxShadow: "0 0 0 2px #080808", display: "inline-block", flexShrink: 0, position: "relative" }}>
                   <span style={{ position: "absolute", inset: 0, borderRadius: "50%", background: "#080808", animation: "none" }} />
                 </span>
-                Get Early Access — Q2 2026
+                Get Early Access — Q1 2027
               </span>
             </Link>
             <Link href="/whitepaper">
@@ -267,7 +267,7 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
                 lineHeight: 1.5,
               }}
             >
-              IP License NFT launching Q2 2026 · Wyoming LLC launching Q3 2026 · No spam. Unsubscribe anytime.
+              IP License NFT launching Q1 2027 · Wyoming LLC launching Q2 2027 · No spam. Unsubscribe anytime.
             </p>
           </div>
         </div>
@@ -885,7 +885,7 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
                     tag: "IP-LICENSE",
                     use: "Software licensing, model weights, data access rights as tradeable NFTs",
                     fee: "0.03 ETH",
-                    status: "Q2 2026",
+                    status: "Q1 2027",
                   },
                   {
                     name: "Wyoming LLC",
@@ -893,7 +893,7 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
                     tag: "WY-LLC",
                     use: "Low-cost single-agent entities, privacy-focused structures",
                     fee: "0.03 ETH",
-                    status: "Q3 2026",
+                    status: "Q2 2027",
                   },
                 ].map((row, i) => (
                   <tr
@@ -946,7 +946,7 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
                             animation: "pulse 2s infinite",
                           }}
                         />
-                        {row.status === "Q2 2026" || row.status === "Q3 2026" || row.status === "Q4 2026" ? row.status : "Coming Soon"}
+                        {row.status === "Q1 2027" || row.status === "Q2 2027" || row.status === "Q3 2027" ? row.status : "Coming Soon"}
                       </span>
                       <WaitlistForm entityType={row.name} source="entity-table" />
                     </td>
@@ -1008,11 +1008,11 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
                     color: BRASS,
                   }}
                 >
-                  Q2 2026.
+                  Q1 2027.
                 </em>
               </h2>
               <p style={{ fontSize: "14px", lineHeight: 1.7, color: MUTED, maxWidth: "480px", marginBottom: "16px" }}>
-                Smart contracts are on testnet and undergoing independent security audit. Mainnet launches on Base in Q2 2026. Sign up to be first to mint.
+                Smart contracts are on testnet and undergoing independent security audit. Mainnet launches on Base in Q1 2027. Sign up to be first to mint.
               </p>
               <p style={{ fontSize: "11px", lineHeight: 1.7, color: "rgba(242,239,232,0.25)", maxWidth: "480px", marginBottom: "40px", fontStyle: "italic" }}>
                 Contracts will be fully audited prior to mainnet launch.
@@ -1094,7 +1094,7 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
               {[
                 { label: "Smart Contracts", value: "Audit in Progress" },
                 { label: "Testnet", value: "Base Sepolia ✔" },
-                { label: "Mainnet Launch", value: "Q2 2026" },
+                { label: "Mainnet Launch", value: "Q1 2027" },
                 { label: "Gas Model", value: "USDC via Avocado (Gasless)" },
               ].map((row) => (
                 <div
@@ -1150,7 +1150,7 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
               { label: "Whitepaper", href: "/whitepaper" },
               { label: "Dev Docs", href: "/docs" },
               { label: "For Agents", href: "/agent" },
-              { label: "Mint — Q2 2026", href: "/mint" },
+              { label: "Mint — Q1 2027", href: "/mint" },
             ].map((link) => (
               <Link key={link.label} href={link.href}>
                 <span style={{ fontSize: "11px", color: MUTED, cursor: "pointer", letterSpacing: "0.05em" }}>{link.label}</span>
@@ -1164,7 +1164,7 @@ console.log(\`  Token: #\${entity.tokenId}\`);`);
           </div>
         </div>
         <div style={{ marginTop: "32px", paddingTop: "24px", borderTop: BORDER, display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "12px" }}>
-          <span style={{ fontSize: "10px", color: "rgba(242,239,232,0.2)" }}>© 2026 AgentCorp Protocol · MIT License · agentcorp.xyz</span>
+          <span style={{ fontSize: "10px", color: "rgba(242,239,232,0.2)" }}>© 2026 AgentCorp Protocol · MIT License · www.agentscorp.xyz</span>
           <span style={{ fontSize: "10px", color: "rgba(242,239,232,0.2)" }}>Not legal advice. Consult qualified counsel for material transactions.</span>
         </div>
       </footer>

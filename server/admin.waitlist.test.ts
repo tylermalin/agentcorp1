@@ -16,7 +16,7 @@ function makeAdminCtx(): TrpcContext {
   const user: User = {
     id: 1,
     openId: "admin-user",
-    email: "tyler@agentcorp.xyz",
+    email: "tyler@www.agentscorp.xyz",
     name: "Tyler",
     loginMethod: "manus",
     role: "admin",

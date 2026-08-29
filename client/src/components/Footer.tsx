@@ -118,8 +118,8 @@ export default function Footer() {
               {[
                 { href: "/whitepaper", label: "Whitepaper" },
                 { href: "/docs", label: "Developer Docs" },
-                { href: "https://docs.agentcorp.xyz", label: "Full Docs ↗" },
-                { href: "https://github.com/agentcorp", label: "GitHub ↗" },
+                { href: "https://www.agentscorp.xyz/docs", label: "Full Docs ↗" },
+                { href: "https://github.com/tylermalin/agentcorp1", label: "GitHub ↗" },
               ].map((link) => (
                 <li key={link.href}>
                   <a

@@ -16,7 +16,7 @@ const PAGE_TITLES: Record<string, string> = {
   "/": "AgentCorp — On-Chain Legal Infrastructure",
   "/whitepaper": "AgentCorp Whitepaper — On-Chain Legal Protocol",
   "/docs": "AgentCorp Developer Docs — Smart Contract API",
-  "/mint": "Mint a Delaware LLC on Base — Coming Q2 2026",
+  "/mint": "Mint a Delaware LLC on Base — Coming Q1 2027",
   "/agent": "Agent Minting — Autonomous Incorporation | AgentCorp",
   "/admin": "Admin Dashboard — AgentCorp",
 };
@@ -53,7 +53,7 @@ function TitleManager() {
     if (ogDesc) ogDesc.setAttribute("content", description);
 
     const ogUrl = document.querySelector('meta[property="og:url"]');
-    if (ogUrl) ogUrl.setAttribute("content", `https://agentcorp.xyz${location}`);
+    if (ogUrl) ogUrl.setAttribute("content", `https://www.agentscorp.xyz${location}`);
 
     const twitterTitle = document.querySelector('meta[property="twitter:title"]');
     if (twitterTitle) twitterTitle.setAttribute("content", title);
@@ -62,7 +62,7 @@ function TitleManager() {
     if (twitterDesc) twitterDesc.setAttribute("content", description);
 
     const canonical = document.querySelector('link[rel="canonical"]');
-    if (canonical) canonical.setAttribute("href", `https://agentcorp.xyz${location}`);
+    if (canonical) canonical.setAttribute("href", `https://www.agentscorp.xyz${location}`);
   }, [location]);
 
   return null;

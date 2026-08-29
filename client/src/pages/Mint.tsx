@@ -1,6 +1,6 @@
 /* ============================================================
    AGENTCORP MINT PAGE — Coming Soon
-   Smart contracts under audit. Testnet live. Mainnet Q2 2026.
+   Smart contracts under audit. Testnet live. Mainnet Q1 2027.
    Industrial Legal Modernism — dark, brass accents
    ============================================================ */
 import { useEffect, useRef, useState } from "react";
@@ -38,7 +38,7 @@ const ENTITY_TYPES = [
     priceUsd: "~$150",
     desc: "The most powerful structure for onchain organizations. Unlimited legally-segregated Series under one parent entity.",
     badge: "Most Popular",
-    timeline: "Q2 2026",
+    timeline: "Q1 2027",
   },
   {
     id: "SERIES_DESIGNATION",
@@ -47,7 +47,7 @@ const ENTITY_TYPES = [
     priceUsd: "~$60",
     desc: "A legally-isolated Series under an existing parent Delaware Series LLC. Requires parent LLC token.",
     badge: null,
-    timeline: "Q2 2026",
+    timeline: "Q1 2027",
   },
   {
     id: "DAO_CHARTER",
@@ -56,7 +56,7 @@ const ENTITY_TYPES = [
     priceUsd: "~$150",
     desc: "Delaware LLC with full blockchain governance provisions: designated smart contract, token-weighted voting, delegate disclosure.",
     badge: null,
-    timeline: "Q2 2026",
+    timeline: "Q1 2027",
   },
   {
     id: "IP_LICENSE",
@@ -64,8 +64,8 @@ const ENTITY_TYPES = [
     price: "TBD",
     priceUsd: "",
     desc: "Software license NFT with royalty hooks and sublicense controls.",
-    badge: "Q3 2026",
-    timeline: "Q3 2026",
+    badge: "Q2 2027",
+    timeline: "Q2 2027",
   },
   {
     id: "WYOMING_LLC",
@@ -73,8 +73,8 @@ const ENTITY_TYPES = [
     price: "TBD",
     priceUsd: "",
     desc: "Wyoming LLC with DAO-friendly provisions and member anonymity protections.",
-    badge: "Q3 2026",
-    timeline: "Q3 2026",
+    badge: "Q2 2027",
+    timeline: "Q2 2027",
   },
   {
     id: "NONPROFIT",
@@ -82,8 +82,8 @@ const ENTITY_TYPES = [
     price: "0.05 ETH",
     priceUsd: "~$150",
     desc: "Delaware non-profit with 501(c) pathway documentation.",
-    badge: "Q4 2026",
-    timeline: "Q4 2026",
+    badge: "Q3 2027",
+    timeline: "Q3 2027",
   },
 ];
 
@@ -173,7 +173,7 @@ export default function Mint() {
               }}
             />
             <span style={{ fontSize: "10px", letterSpacing: "0.2em", color: BRASS, textTransform: "uppercase" as const }}>
-              Testnet Live — Mainnet Coming Q2 2026
+              Testnet Live — Mainnet Coming Q1 2027
             </span>
           </div>
 
@@ -198,7 +198,7 @@ export default function Mint() {
                 color: BRASS,
               }}
             >
-              Q2 2026.
+              Q1 2027.
             </em>
           </h1>
 
