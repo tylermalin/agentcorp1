@@ -1,227 +1,86 @@
-/* ============================================================
-   AGENTCORP FOOTER — Industrial Legal Modernism
-   ============================================================ */
+/**
+ * AGENTCORP FOOTER: brand statement + newsletter, numbered link columns,
+ * statutory disclaimer, oversized wordmark.
+ */
 import { Link } from "wouter";
+import { GITHUB_URL, LEGAL_DISCLAIMER } from "@/lib/site";
+import WaitlistForm from "@/components/WaitlistForm";
+import { Mark } from "@/components/Nav";
+
+const linkCls = "text-[#a3a3a3] transition-colors duration-300 hover:text-white";
 
 export default function Footer() {
   return (
-    <footer
-      style={{
-        borderTop: "1px solid rgba(201,168,76,0.12)",
-        padding: "48px",
-        position: "relative",
-        zIndex: 1,
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "flex-start",
-          flexWrap: "wrap",
-          gap: "32px",
-          marginBottom: "40px",
-        }}
-      >
-        {/* Brand */}
-        <div>
-          <div
-            style={{
-              fontFamily: "'Syne', sans-serif",
-              fontWeight: 800,
-              fontSize: "18px",
-              letterSpacing: "0.15em",
-              color: "var(--brass)",
-              marginBottom: "12px",
-            }}
-          >
-            AGENT<span style={{ color: "var(--white)", opacity: 0.2, fontWeight: 400 }}>CORP</span>
+    <footer className="px-3 pb-3">
+      <div className="mx-auto max-w-6xl overflow-hidden rounded-3xl border border-white/10 bg-[#0b0b0b] px-6 pt-14 sm:px-10">
+        <div className="grid gap-12 md:grid-cols-12">
+          <div className="md:col-span-5">
+            <Mark className="h-8 w-8 text-white" />
+            <p className="mt-6 max-w-sm text-2xl font-medium tracking-tight text-white text-balance">
+              Filed. Signed. Verifiable. Structure for the agent economy.
+            </p>
           </div>
-          <p
-            style={{
-              fontSize: "12px",
-              color: "rgba(242,239,232,0.3)",
-              maxWidth: "280px",
-              lineHeight: 1.6,
-              fontFamily: "'DM Mono', monospace",
-            }}
-          >
-            On-chain legal infrastructure for the decentralized economy. Built on Base.
-          </p>
-          <div style={{ marginTop: "16px" }}>
-            <span className="base-badge">
-              <span className="base-dot" />
-              Base Mainnet · Chain ID 8453
-            </span>
+
+          <nav aria-label="Footer" className="grid grid-cols-2 gap-8 text-sm sm:grid-cols-3 md:col-span-4">
+            <div>
+              <div className="font-mono-index text-[11px] uppercase text-[#6ee7b7]">1.0 Product</div>
+              <ul className="mt-4 space-y-2.5">
+                <li><a href="/#protocol" className={linkCls}>Protocol</a></li>
+                <li><a href="/#use-cases" className={linkCls}>Use cases</a></li>
+                <li><a href="/#entities" className={linkCls}>Entities</a></li>
+                <li><Link href="/agent" className={linkCls}>For agents</Link></li>
+              </ul>
+            </div>
+            <div>
+              <div className="font-mono-index text-[11px] uppercase text-[#6ee7b7]">2.0 Build</div>
+              <ul className="mt-4 space-y-2.5">
+                <li><Link href="/whitepaper" className={linkCls}>Whitepaper</Link></li>
+                <li><Link href="/docs" className={linkCls}>Docs</Link></li>
+                <li><a href="/skill.md" className={linkCls}>/skill.md</a></li>
+                <li>
+                  <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className={linkCls}>
+                    GitHub ↗
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <div className="font-mono-index text-[11px] uppercase text-[#6ee7b7]">3.0 Legal</div>
+              <ul className="mt-4 space-y-2.5">
+                <li><a href="#disclaimer" className={linkCls}>Disclaimer</a></li>
+                <li>
+                  <a href={`${GITHUB_URL}/blob/main/LICENSE`} target="_blank" rel="noopener noreferrer" className={linkCls}>
+                    MIT License
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+
+          <div className="md:col-span-3">
+            <div className="font-mono-index text-[11px] uppercase text-[#6ee7b7]">Launch updates</div>
+            <p className="mt-4 text-sm text-[#a3a3a3]">
+              Testnet access, design-partner invitations, and the Q1 2027 mainnet date.
+            </p>
+            <WaitlistForm entityType="Newsletter" source="footer" className="[&>div]:flex-col sm:[&>div]:flex-col" />
           </div>
         </div>
 
-        {/* Links */}
-        <div style={{ display: "flex", gap: "64px", flexWrap: "wrap" }}>
-          <div>
-            <div
-              style={{
-                fontSize: "9px",
-                letterSpacing: "0.2em",
-                textTransform: "uppercase",
-                color: "var(--brass)",
-                opacity: 0.6,
-                marginBottom: "16px",
-                fontFamily: "'DM Mono', monospace",
-              }}
-            >
-              Protocol
-            </div>
-            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "10px" }}>
-              {[
-                { href: "/#how", label: "How It Works" },
-                { href: "/#entities", label: "Entity Types" },
-                { href: "/#docs", label: "Document Library" },
-                { href: "/mint", label: "Mint Entity" },
-              ].map((link) => (
-                <li key={link.href}>
-                  <a
-                    href={link.href}
-                    style={{
-                      color: "rgba(242,239,232,0.3)",
-                      textDecoration: "none",
-                      fontSize: "11px",
-                      letterSpacing: "0.08em",
-                      fontFamily: "'DM Mono', monospace",
-                      transition: "color 0.2s",
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = "var(--brass)")}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(242,239,232,0.3)")}
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+        <p id="disclaimer" className="mt-14 border-t border-white/10 pt-6 text-xs leading-5 text-[#737373]">
+          <span className="text-[#a3a3a3]">Disclaimer.</span> {LEGAL_DISCLAIMER}
+        </p>
 
-          <div>
-            <div
-              style={{
-                fontSize: "9px",
-                letterSpacing: "0.2em",
-                textTransform: "uppercase",
-                color: "var(--brass)",
-                opacity: 0.6,
-                marginBottom: "16px",
-                fontFamily: "'DM Mono', monospace",
-              }}
-            >
-              Resources
-            </div>
-            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "10px" }}>
-              {[
-                { href: "/whitepaper", label: "Whitepaper" },
-                { href: "/docs", label: "Developer Docs" },
-                { href: "https://www.agentscorp.xyz/docs", label: "Full Docs ↗" },
-                { href: "https://github.com/tylermalin/agentcorp1", label: "GitHub ↗" },
-              ].map((link) => (
-                <li key={link.href}>
-                  <a
-                    href={link.href}
-                    target={link.href.startsWith("http") ? "_blank" : undefined}
-                    rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                    style={{
-                      color: "rgba(242,239,232,0.3)",
-                      textDecoration: "none",
-                      fontSize: "11px",
-                      letterSpacing: "0.08em",
-                      fontFamily: "'DM Mono', monospace",
-                      transition: "color 0.2s",
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = "var(--brass)")}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(242,239,232,0.3)")}
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <div
-              style={{
-                fontSize: "9px",
-                letterSpacing: "0.2em",
-                textTransform: "uppercase",
-                color: "var(--brass)",
-                opacity: 0.6,
-                marginBottom: "16px",
-                fontFamily: "'DM Mono', monospace",
-              }}
-            >
-              Community
-            </div>
-            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "10px" }}>
-              {[
-                { href: "#", label: "Discord" },
-                { href: "#", label: "Twitter / X" },
-                { href: "#", label: "Telegram" },
-                { href: "#", label: "Terms of Service" },
-              ].map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    style={{
-                      color: "rgba(242,239,232,0.3)",
-                      textDecoration: "none",
-                      fontSize: "11px",
-                      letterSpacing: "0.08em",
-                      fontFamily: "'DM Mono', monospace",
-                      transition: "color 0.2s",
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = "var(--brass)")}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(242,239,232,0.3)")}
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-2 text-xs text-[#737373]">
+          <span>© 2026 AgentCorp · agentscorp.xyz</span>
+          <span className="font-mono-index uppercase">Pre-mainnet · target Q1 2027</span>
         </div>
-      </div>
 
-      {/* Bottom bar */}
-      <div
-        style={{
-          borderTop: "1px solid rgba(201,168,76,0.08)",
-          paddingTop: "24px",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          flexWrap: "wrap",
-          gap: "12px",
-        }}
-      >
-        <p
-          style={{
-            fontSize: "10px",
-            color: "rgba(242,239,232,0.2)",
-            letterSpacing: "0.05em",
-            fontFamily: "'DM Mono', monospace",
-          }}
+        <div
+          aria-hidden
+          className="pointer-events-none mt-8 -mb-[0.18em] select-none text-center text-[19vw] font-semibold leading-none tracking-tighter text-white/[0.04] md:text-[11.5rem]"
         >
-          © 2026 AgentCorp Protocol · Built on Base · Delaware Registered · Open Source · MIT License
-        </p>
-        <p
-          style={{
-            fontSize: "10px",
-            color: "rgba(242,239,232,0.15)",
-            letterSpacing: "0.05em",
-            fontFamily: "'DM Mono', monospace",
-            maxWidth: "500px",
-            textAlign: "right",
-          }}
-        >
-          Not legal advice. AgentCorp provides legal document templates and infrastructure. Consult qualified legal counsel for your specific situation.
-        </p>
+          AGENTCORP
+        </div>
       </div>
     </footer>
   );

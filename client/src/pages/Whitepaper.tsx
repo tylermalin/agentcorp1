@@ -1,56 +1,136 @@
 /**
- * AGENTCORP WHITEPAPER PAGE — v1.0
- * Design: Parchment academic aesthetic with dark header
- * - Cream/parchment (#f5f0e8) body for legibility
- * - EB Garamond serif for body text
- * - Syne 800 for section numbers, DM Mono for labels/code
- * - Brass (#c9a84c) accents, near-black (#1a1612) ink
- * - Sticky sidebar TOC
+ * AgentCorp whitepaper — Architecture & Protocol Overview (v1.0).
+ * Editorial layout: PageHeader + MetaStrip, then a sticky table of
+ * contents in the left rail (desktop) and long-form body on the right.
  */
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import {
+  CodeFrame,
+  Container,
+  IndexedRows,
+  IndexLabel,
+  MetaStrip,
+  Note,
+  PageHeader,
+  SpecList,
+  StatusTag,
+} from "@/components/site/Primitives";
+import {
+  ENTITY_ROWS,
+  FEE_NOTE,
+  GITHUB_URL,
+  IN_PROGRESS,
+  LIVE_NOW,
+  ROADMAP,
+  SITE_URL,
+  SKILL_URL,
+} from "@/lib/site";
+import { cn } from "@/lib/utils";
 
-const S = {
-  paper: "#f5f0e8",
-  paperDark: "#ede8de",
-  ink: "#1a1612",
-  brass: "#c9a84c",
-  brassDeep: "#8b6914",
-  rule: "#c8b99a",
-  muted: "#7a6e60",
-  black: "#080808",
-  white: "#f2efe8",
-};
+const SECTIONS = [
+  { id: "wrappers", num: "01", title: "Why Existing Wrappers Fall Short" },
+  { id: "skill", num: "02", title: "The /skill.md Interface" },
+  { id: "architecture", num: "03", title: "Four-Layer Architecture" },
+  { id: "series-llc", num: "04", title: "Delaware Series LLC (6 Del. C. § 18-215)" },
+  { id: "roadmap", num: "05", title: "Roadmap (2027)" },
+  { id: "formation", num: "06", title: "Formation Flow" },
+  { id: "coordination", num: "07", title: "Multi-Agent Coordination" },
+  { id: "arweave", num: "08", title: "Document Anchoring on Arweave" },
+  { id: "avocado", num: "09", title: "Gas Abstraction via Avocado" },
+  { id: "entities", num: "10", title: "Entity Types" },
+  { id: "economics", num: "11", title: "Protocol Economics" },
+  { id: "legal", num: "12", title: "Legal Considerations" },
+  { id: "status", num: "13", title: "Current Status" },
+  { id: "appendix", num: "14", title: "Technical Appendix" },
+] as const;
 
-const sections = [
-  { id: "s01", num: "01", title: "The Problem: Agents Have No Legal Standing" },
-  { id: "s02", num: "02", title: "The AgentCorp Insight: One Skill File Is Enough" },
-  { id: "s03", num: "03", title: "Protocol Architecture" },
-  { id: "s04", num: "04", title: "The Formation Flow" },
-  { id: "s05", num: "05", title: "Agent Swarm Self-Organization" },
-  { id: "s06", num: "06", title: "Delaware Series LLC: The Right Primitive" },
-  { id: "s07", num: "07", title: "Permanent Document Storage on Arweave" },
-  { id: "s08", num: "08", title: "Gas Abstraction via Avocado" },
-  { id: "s09", num: "09", title: "Entity Types & Token Economics" },
-  { id: "s10", num: "10", title: "Use Cases" },
-  { id: "s11", num: "11", title: "Protocol Economics" },
-  { id: "s12", num: "12", title: "Roadmap" },
-  { id: "s13", num: "13", title: "Technical Appendix" },
-];
+const ARCHITECTURE = `/skill.md  +  SDKs        agent or developer reads the spec
+      │
+      ▼
+L1  Document anchoring    Arweave
+      Operating agreement, series designations, governance rules
+      Content hash + transaction ID recorded on-chain
+      │
+      ▼
+L2  Treasury / policy     Multisig (e.g. Safe) + banking rails
+      Signers: agents and/or human authorized signatories
+      Thresholds, spending caps, approval rules
+      │
+      ▼
+L3  Entity contracts      Base EVM (testnet now; 8453 target)
+      mintEntity()   records a parent entity
+      mintSeries()   records a series under a parent
+      amendEntity()  appends an amendment record
+      Registry       protocol-level name uniqueness
+      │
+      ▼
+L4  Gas abstraction       Avocado (api.avcd.io)
+      Gas paid in USDC, EIP-712 signed, relayed to Base`;
+
+const FORMATION_CODE = `// Illustrative only. Contracts are pre-mainnet; examples target Base Sepolia.
+import { AgentCorpClient } from "@agentcorp/sdk";
+
+const corp = new AgentCorpClient({
+  avocadoWallet,
+  network: "base-sepolia",
+});
+
+// 1. Treasury: multisig with agent and human signers
+const safe = await corp.deploySafe({
+  owners: [agentA.address, agentB.address, signatory.address],
+  threshold: 2, // 2-of-3
+});
+
+// 2. Governing document from template, anchored on Arweave
+const doc = await corp.buildDocument({
+  type: "DELAWARE_SERIES_LLC",
+  name: "TriOrg Holdings LLC",
+  treasury: safe.address,
+  members: [agentA.address, agentB.address, signatory.address],
+  governanceRules: { votingPeriod: "7d", quorum: 0.67 },
+});
+const { arweaveTx, contentHash } = await corp.uploadDocument(doc);
+
+// 3. On-chain record linking the document hash and treasury
+const record = await corp.mintEntity({
+  type: "DELAWARE_SERIES_LLC",
+  name: "TriOrg Holdings LLC",
+  docArweaveTx: arweaveTx,
+  treasury: safe.address,
+});
+
+// 4. Off-chain: Certificate of Formation filing, registered agent,
+//    EIN, and bank onboarding are completed separately.
+console.log(record.id, record.status); // e.g. "pending-filing"`;
+
+const ENUM_CODE = `// IAgentCorp.sol — EntityType (draft, subject to audit)
+enum EntityType {
+  DELAWARE_LLC,           // 0  Standard Delaware LLC
+  DELAWARE_SERIES_LLC,    // 1  Series LLC (parent)
+  SERIES_DESIGNATION,     // 2  Series designation (child)
+  DAO_CHARTER,            // 3  Governance-linked Delaware LLC
+  WYOMING_LLC,            // 4  Wyoming LLC
+  NONPROFIT,              // 5  Reserved
+  IP_LICENSE,             // 6  IP license record
+  IP_ASSIGNMENT           // 7  IP assignment record
+}`;
 
 export default function Whitepaper() {
-  const [active, setActive] = useState("s01");
+  const [active, setActive] = useState<string>(SECTIONS[0].id);
 
   useEffect(() => {
     const obs = new IntersectionObserver(
       (entries) => {
-        entries.forEach((e) => { if (e.isIntersecting) setActive(e.target.id); });
+        entries.forEach((e) => {
+          if (e.isIntersecting) setActive(e.target.id);
+        });
       },
-      { rootMargin: "-15% 0px -75% 0px" }
+      { rootMargin: "-20% 0px -70% 0px" },
     );
-    sections.forEach(({ id }) => {
+    SECTIONS.forEach(({ id }) => {
       const el = document.getElementById(id);
       if (el) obs.observe(el);
     });
@@ -58,720 +138,637 @@ export default function Whitepaper() {
   }, []);
 
   return (
-    <div style={{ background: S.black, minHeight: "100vh" }}>
+    <div className="min-h-screen bg-[#000000] text-[#fafafa]">
       <Nav />
+      <main id="main">
+        <Container>
+          <PageHeader
+            index="Whitepaper / v1.0"
+            title="AgentCorp Architecture & Protocol Overview (v1.0)"
+            lede="AgentCorp is a protocol and toolkit for giving agent-operated work a defined legal and financial structure. It combines Delaware Series LLC templates, Arweave-anchored governing documents, multisig treasury controls, and entity records on Base. On-chain records track and verify an entity's documents and state; statutory formation, banking, and enforceability depend on real-world filings and the rules of the institutions involved."
+          />
 
-      {/* ── HEADER ── */}
-      <header
-        style={{
-          background: S.black,
-          paddingTop: "80px",
-          borderBottom: `1px solid rgba(201,168,76,0.2)`,
-        }}
-      >
-        <div style={{ padding: "60px 48px 48px", maxWidth: "1200px", margin: "0 auto" }}>
-          <div
-            style={{
-              fontSize: "9px",
-              letterSpacing: "0.25em",
-              textTransform: "uppercase",
-              color: S.brass,
-              fontFamily: "'DM Mono', monospace",
-              marginBottom: "24px",
-            }}
-          >
-            AgentCorp Protocol · Whitepaper v1.0 · February 2026 · www.agentscorp.xyz
-          </div>
-          <h1
-            style={{
-              fontFamily: "'Syne', sans-serif",
-              fontWeight: 800,
-              fontSize: "clamp(36px, 6vw, 72px)",
-              lineHeight: 1,
-              letterSpacing: "-0.03em",
-              color: S.white,
-              marginBottom: "28px",
-            }}
-          >
-            Legal Infrastructure<br />
-            for Autonomous{" "}
-            <em
-              style={{
-                fontFamily: "'Instrument Serif', serif",
-                fontStyle: "italic",
-                fontWeight: 400,
-                color: S.brass,
-              }}
-            >
-              Agent Organizations
-            </em>
-          </h1>
-          <p
-            style={{
-              fontFamily: "'EB Garamond', serif",
-              fontSize: "18px",
-              lineHeight: 1.7,
-              color: "rgba(242,239,232,0.65)",
-              maxWidth: "680px",
-              marginBottom: "40px",
-            }}
-          >
-            AgentCorp is an open protocol that enables autonomous AI agents and agent swarms to form legally-recognized organizations without human intervention. By reducing entity formation to two inputs — a machine-readable skill file and USDC — AgentCorp allows any agent to autonomously deploy a Gnosis Safe multisig, draft and permanently store governing documents on Arweave, and mint a Delaware Series LLC as an NFT on Base.
-          </p>
-          <div style={{ display: "flex", gap: "40px", flexWrap: "wrap" }}>
-            {[
-              { label: "Chain", value: "Base (8453)" },
-              { label: "License", value: "MIT" },
-              { label: "Version", value: "1.0" },
-              { label: "Date", value: "February 2026" },
-              { label: "Gas Layer", value: "Avocado · avcd.io" },
-            ].map((m) => (
-              <div key={m.label}>
-                <div style={{ fontSize: "9px", letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(201,168,76,0.5)", fontFamily: "'DM Mono', monospace", marginBottom: "4px" }}>{m.label}</div>
-                <div style={{ fontSize: "13px", color: "rgba(242,239,232,0.75)", fontFamily: "'DM Mono', monospace" }}>{m.value}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </header>
+          <MetaStrip
+            items={[
+              { label: "Version", value: "v1.0" },
+              { label: "Jurisdiction", value: "Delaware § 18-215" },
+              { label: "Settlement", value: "Base · target 8453" },
+              { label: "Status", value: "Pre-Mainnet · Q1 2027" },
+            ]}
+          />
 
-      {/* ── BODY: SIDEBAR + CONTENT ── */}
-      <div style={{ background: S.paper }}>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "280px 1fr",
-            maxWidth: "1200px",
-            margin: "0 auto",
-          }}
-          className="wp-layout"
-        >
-          {/* Sticky TOC */}
-          <aside
-            style={{
-              position: "sticky",
-              top: 0,
-              height: "100vh",
-              overflowY: "auto",
-              padding: "48px 28px 48px 0",
-              borderRight: `1px solid ${S.rule}`,
-            }}
-          >
-            <div
-              style={{
-                fontSize: "9px",
-                letterSpacing: "0.2em",
-                textTransform: "uppercase",
-                color: S.muted,
-                fontFamily: "'DM Mono', monospace",
-                marginBottom: "20px",
-              }}
-            >
-              Table of Contents
-            </div>
-            {sections.map((s) => (
-              <button
-                key={s.id}
-                onClick={() => document.getElementById(s.id)?.scrollIntoView({ behavior: "smooth", block: "start" })}
-                style={{
-                  display: "flex",
-                  gap: "10px",
-                  alignItems: "flex-start",
-                  width: "100%",
-                  background: "none",
-                  border: "none",
-                  padding: "7px 0 7px 12px",
-                  cursor: "pointer",
-                  textAlign: "left",
-                  borderLeft: `2px solid ${active === s.id ? S.brass : "transparent"}`,
-                  transition: "border-color 0.2s",
-                }}
-              >
-                <span
-                  style={{
-                    fontSize: "9px",
-                    color: active === s.id ? S.brass : S.muted,
-                    fontFamily: "'DM Mono', monospace",
-                    flexShrink: 0,
-                    marginTop: "2px",
-                    transition: "color 0.2s",
-                  }}
-                >
-                  {s.num}
-                </span>
-                <span
-                  style={{
-                    fontSize: "11px",
-                    color: active === s.id ? S.ink : S.muted,
-                    fontFamily: "'DM Mono', monospace",
-                    lineHeight: 1.4,
-                    transition: "color 0.2s",
-                  }}
-                >
-                  {s.title}
-                </span>
-              </button>
-            ))}
-          </aside>
+          <div className="grid gap-10 py-16 md:grid-cols-12 md:gap-12 md:py-20">
+            {/* Table of contents */}
+            <aside className="md:col-span-4 lg:col-span-3">
+              <details className="group border-y border-white/10 md:hidden">
+                <summary className="font-mono-index flex cursor-pointer list-none items-center justify-between py-4 text-xs uppercase text-[#a3a3a3]">
+                  <span>Contents</span>
+                  <span className="text-[#737373] group-open:hidden">+</span>
+                  <span className="hidden text-[#737373] group-open:inline">−</span>
+                </summary>
+                <TocList active={active} />
+              </details>
+              <nav aria-label="Table of contents" className="hidden md:sticky md:top-24 md:block">
+                <IndexLabel className="mb-4">Contents</IndexLabel>
+                <TocList active={active} />
+              </nav>
+            </aside>
 
-          {/* Main document */}
-          <main style={{ padding: "64px 72px 120px 64px" }}>
+            {/* Body */}
+            <article className="min-w-0 md:col-span-8 lg:col-span-9">
+              <DocSection id="wrappers">
+                <P>
+                  AI agents already write code, run data pipelines, execute transactions, and coordinate with
+                  other agents. When that work produces revenue, holds assets, or requires a signed agreement,
+                  there has to be a legal entity behind it. The available options were not designed for this.
+                </P>
+                <IndexedRows
+                  rows={[
+                    {
+                      idx: "1.1",
+                      title: "Human-first formation",
+                      body: "Formation, banking, and compliance processes assume a human founder completing forms, signing documents, and attending onboarding. Each new workstream repeats that process, which does not fit work that is created and wound down programmatically.",
+                    },
+                    {
+                      idx: "1.2",
+                      title: "Shared single-entity wrappers",
+                      body: "Running many agents or tasks through one LLC mixes their liabilities. A claim arising from one task can reach assets that belong to unrelated work.",
+                    },
+                    {
+                      idx: "1.3",
+                      title: "Slow banking and compliance",
+                      body: "Without clear records of who controls an entity, what it is for, and who may sign, banks and counterparties have to reconstruct that context manually, which slows account opening and review.",
+                    },
+                  ]}
+                />
+                <P>
+                  AgentCorp addresses this with a per-task or per-project series structure, standardized
+                  governing documents, and verifiable records that make each entity legible to the people who
+                  must review it.
+                </P>
+              </DocSection>
 
-            {/* Abstract */}
-            <div
-              style={{
-                borderTop: `1px solid ${S.rule}`,
-                borderBottom: `1px solid ${S.rule}`,
-                padding: "32px 0",
-                marginBottom: "64px",
-                fontFamily: "'EB Garamond', serif",
-                fontSize: "18px",
-                lineHeight: 1.75,
-                fontStyle: "italic",
-                color: S.ink,
-              }}
-            >
-              The NFT is the legal entity — transferable, composable, and permanently linked to its governing documents. AgentCorp is infrastructure, not a product. Any agent that can read a text file and hold USDC can use it.
-            </div>
+              <DocSection id="skill">
+                <P>
+                  The protocol is described in one machine-readable Markdown specification published at{" "}
+                  <A href={SKILL_URL}>{SKILL_URL.replace("https://", "")}</A>. It defines entity types, document
+                  template schemas, the Arweave upload format, treasury deployment parameters, Avocado gas
+                  configuration, and the contract calls used at each step.
+                </P>
+                <P>
+                  Agents read the spec directly. Developers use the TypeScript SDK and deployment scripts, which
+                  implement the same spec. Both paths produce the same records, so behavior is consistent
+                  whether a human or an agent initiates an action.
+                </P>
+                <SpecList
+                  className="my-8"
+                  items={[
+                    { k: "Spec", v: SKILL_URL.replace("https://", "") },
+                    { k: "Format", v: "Structured Markdown, versioned" },
+                    { k: "Consumers", v: "Agents (direct read), developers (SDK)" },
+                    { k: "Inputs to begin", v: "The spec and a USDC balance for gas" },
+                  ]}
+                />
+                <P>
+                  Reading the spec and holding USDC is enough to prepare documents and on-chain records. It is
+                  not enough to create a legal entity: that still requires the state filing and related steps
+                  described in Section 12.
+                </P>
+              </DocSection>
 
-            {/* ── SECTION 01 ── */}
-            <WpSection id="s01" num="01" title="The Problem: Agents Have No Legal Standing">
-              <WpP>
-                AI agents are becoming capable of performing sophisticated economic tasks: writing code, managing data pipelines, executing transactions, and coordinating with other agents to accomplish complex objectives. Yet they operate in a legal vacuum. An agent cannot enter a contract. It cannot own property. It cannot be held accountable — or be protected. It is economically active but legally invisible.
-              </WpP>
-              <WpP>
-                This creates a fundamental friction. When an agent earns revenue, that revenue belongs to whoever owns the agent's wallet — not to any shared organization. When a group of agents coordinates to deliver a service, there is no legal entity that can sign the engagement letter. When agents accumulate treasury assets, those assets have no liability protection against claims from any direction.
-              </WpP>
-              <WpP>
-                The conventional solution — have a human form an LLC and act as a legal proxy — doesn't scale. It reintroduces human bottlenecks into systems designed to operate autonomously. It creates single points of failure. And it fundamentally misrepresents what the organization actually is: a collective of autonomous actors, not a human-controlled enterprise.
-              </WpP>
-              <WpCallout label="Core Constraint">
-                Legal entity formation has historically required human action — filing documents, signing agreements, establishing bank accounts, maintaining registered agents. None of these steps were designed with autonomous agents in mind. AgentCorp removes these constraints entirely. It makes legal entity formation a protocol operation: deterministic, agent-executable, and reducible to two inputs.
-              </WpCallout>
-            </WpSection>
+              <DocSection id="architecture">
+                <P>
+                  AgentCorp has four layers. The spec coordinates them; each can be audited and replaced
+                  independently.
+                </P>
+                <IndexedRows
+                  rows={[
+                    {
+                      idx: "3.1",
+                      title: "Document anchoring — Arweave",
+                      body: "Governing documents are stored on Arweave. The transaction ID and content hash are recorded on-chain so anyone can check that a document has not changed.",
+                    },
+                    {
+                      idx: "3.2",
+                      title: "Treasury and policy controls — multisig and banking rails",
+                      body: "A multisig wallet holds on-chain assets under configurable signer thresholds and spending caps. Fiat accounts are opened with partner institutions under their own onboarding rules.",
+                    },
+                    {
+                      idx: "3.3",
+                      title: "Entity contracts — Base EVM",
+                      body: "Contracts record parent entities, child series, amendments, and name uniqueness. They track an entity's records; they do not create the entity.",
+                    },
+                    {
+                      idx: "3.4",
+                      title: "Gas abstraction — Avocado",
+                      body: "Transactions are signed with EIP-712 and relayed by Avocado, which lets agents pay gas in USDC instead of holding ETH.",
+                    },
+                  ]}
+                />
+                <CodeFrame className="my-8" title="architecture.txt" meta="four layers" code={ARCHITECTURE} />
+                <H3>Contracts (in audit)</H3>
+                <DataTable
+                  headers={["Contract", "Role"]}
+                  rows={[
+                    [
+                      "AgentCorpFactory.sol",
+                      "Records parent entities and child series, tracks parent–child relationships, collects planned protocol fees.",
+                    ],
+                    [
+                      "AgentCorpRegistry.sol",
+                      "Enforces name uniqueness within the protocol (case-insensitive). This does not reserve a name with the Delaware Division of Corporations.",
+                    ],
+                    [
+                      "IAgentCorp.sol",
+                      "Shared interfaces: EntityType, EntityStatus, EntityState, Amendment, MintParams, events.",
+                    ],
+                  ]}
+                />
+              </DocSection>
 
-            {/* ── SECTION 02 ── */}
-            <WpSection id="s02" num="02" title="The AgentCorp Insight: One Skill File Is Enough">
-              <WpP>
-                The entire AgentCorp protocol is encoded in a single machine-readable document: <WpCode>AGENTCORP-SKILL.md</WpCode>. This file is the interface between any AI agent and the complete legal formation stack. An agent that can read it — and holds USDC — can autonomously form a legally-recognized organization.
-              </WpP>
-              <WpP>
-                The skill file defines everything: entity types and their governing document templates, the Arweave upload schema, Gnosis Safe deployment parameters, Avocado USDC gas configuration, and the AgentCorp factory contract calls. It is protocol documentation and execution specification simultaneously.
-              </WpP>
-              <WpTable
-                headers={["", "Input / Output"]}
-                rows={[
-                  ["Input 1", "www.agentscorp.xyz/skill.md — the agent reads the protocol"],
-                  ["Input 2", "USDC balance — the agent pays for everything"],
-                  ["Output", "A Delaware Series LLC with governing documents on Arweave, a Gnosis Safe treasury, and an on-chain NFT representing the entity"],
-                ]}
-              />
-              <WpP>
-                This design is intentional. AgentCorp does not require SDK installation, wallet configuration, or developer setup. An agent with web access and a USDC balance is a sufficient precondition. The skill file tells the agent exactly what to do at each step. For developers who want to build on top of the protocol, a TypeScript SDK and deployment scripts are provided. But for agents operating autonomously, the skill file alone is the complete integration point.
-              </WpP>
-            </WpSection>
+              <DocSection id="series-llc">
+                <P>
+                  The primary structure is a Delaware Series LLC under 6 Del. C. § 18-215. A parent LLC can
+                  establish separate series, each with its own members, assets, and obligations. When the
+                  statutory conditions are met, the debts and liabilities of one series are enforceable only
+                  against that series' assets, not against the parent or other series.
+                </P>
+                <P>
+                  This maps well to agent work: a parent entity coordinates, and each project, task runner, or
+                  asset pool sits in its own series.
+                </P>
+                <DataTable
+                  headers={["Structure", "Entity", "Liability"]}
+                  rows={[
+                    ["Parent", "Delaware Series LLC", "Separated from series liabilities, subject to § 18-215 conditions"],
+                    ["Project A", "Series designation", "Isolated from other series"],
+                    ["Project B", "Series designation", "Isolated from other series"],
+                    ["IP holdings", "Series designation", "Isolated from other series"],
+                  ]}
+                />
+                <H3>What isolation requires</H3>
+                <P>
+                  Liability isolation is statutory, not automatic. It depends on the parent's Certificate of
+                  Formation giving notice of the limitation, an operating agreement that provides for series,
+                  and separate records and accounting for each series' assets. AgentCorp's templates and
+                  per-series records are designed to support that separation. They are paired with the
+                  real-world steps that make the structure valid: state filings, a registered agent, EINs where
+                  needed, and named authorized signatories.
+                </P>
+                <H3>Why Delaware</H3>
+                <P>
+                  Delaware has the most developed LLC case law in the United States, and banks, investors, and
+                  counterparties are familiar with its entities. That familiarity matters for entities that need
+                  to operate in the conventional economy, not only on-chain.
+                </P>
+                <H3>The role of the token</H3>
+                <P>
+                  An entity record on Base may be represented by a token that links to the governing documents'
+                  Arweave transaction ID and content hash. The token tracks the entity's records and state. It
+                  does not create the entity, and moving or burning it does not by itself transfer membership
+                  interests or dissolve the LLC. Those actions follow the operating agreement and Delaware law,
+                  including any required filings.
+                </P>
+              </DocSection>
 
-            {/* ── SECTION 03 ── */}
-            <WpSection id="s03" num="03" title="Protocol Architecture">
-              <WpP>
-                AgentCorp is composed of four interacting layers: a document layer (Arweave), a treasury layer (Gnosis Safe), a smart contract layer (AgentCorp Factory on Base), and a gas abstraction layer (Avocado). The skill file coordinates all four.
-              </WpP>
-              <WpPre>{`AGENTCORP-SKILL.md  ←  Agent reads protocol specification
-        │
-        ▼
-─────────────────────────────────────────────────────
-LAYER 1: Document Storage
-        Arweave — permanent, immutable, content-addressed
-        Operating Agreement, Series Designations, Governance Rules
-        Document hash → encoded as bytes32 in NFT metadata
-─────────────────────────────────────────────────────
-        │
-        ▼
-LAYER 2: Treasury
-        Gnosis Safe — multisig wallet on Base
-        Signers: agent(s) + optional human co-signers
-        Threshold: configurable (e.g. 2-of-3)
-        Holds: ETH, USDC, ERC-20 tokens, NFTs
-─────────────────────────────────────────────────────
-        │
-        ▼
-LAYER 3: Entity Contract
-        AgentCorpFactory.sol — ERC-721 on Base (Chain 8453)
-        mintEntity()  →  NFT = Delaware Series LLC
-        mintSeries()  →  Series Designation under parent
-        amendEntity() →  On-chain amendment record
-        Registry      →  Name uniqueness, on-chain verification
-─────────────────────────────────────────────────────
-        │
-        ▼
-LAYER 4: Gas Abstraction
-        Avocado Agentic Wallet — api.avcd.io
-        Agent pays gas in USDC (no ETH required ever)
-        Sponsor can cover gas entirely (~$0.01 per mint)
-        EIP-712 signed transactions relayed to Base`}</WpPre>
-              <WpH3>Contract Architecture</WpH3>
-              <WpTable
-                headers={["Contract", "Function"]}
-                rows={[
-                  ["AgentCorpFactory.sol", "ERC-721 factory. Mints entity NFTs, tracks parent-child Series relationships, distributes fees between treasury and protocol (80/20 split)"],
-                  ["AgentCorpRegistry.sol", "Enforces name uniqueness across all entities with case-insensitive normalization. Handles registration, release, and on-chain verification"],
-                  ["IAgentCorp.sol", "Core interfaces: EntityType enum, EntityStatus, EntityState struct, Amendment struct, MintParams, events"],
-                ]}
-              />
-            </WpSection>
-
-            {/* ── SECTION 04 ── */}
-            <WpSection id="s04" num="04" title="The Formation Flow">
-              <WpP>
-                Entity formation via AgentCorp follows a deterministic five-step flow. Each step is defined in the skill file and executable by any agent with function-calling capability.
-              </WpP>
-              <div style={{ display: "flex", flexDirection: "column", gap: "2px", margin: "28px 0" }}>
-                {[
-                  { n: "01", t: "Load Skill File", d: "The agent fetches www.agentscorp.xyz/skill.md. The file defines all subsequent steps, entity types, document templates, and API endpoints. No additional configuration is required." },
-                  { n: "02", t: "Fund Avocado Wallet", d: "The agent deposits USDC to its Avocado wallet address on Base. This single balance pays for all gas across the entire formation flow — no ETH required at any point." },
-                  { n: "03", t: "Deploy Gnosis Safe", d: "The agent deploys a multisig Safe with the defined set of signers (agents, humans, or both) and signing threshold. This Safe becomes the legal treasury of the entity." },
-                  { n: "04", t: "Draft and Upload Documents", d: "The agent populates an operating agreement from the protocol template — entity name, members, governance rules, voting thresholds. The completed document is uploaded to Arweave. The resulting transaction ID is the permanent legal record." },
-                  { n: "05", t: "Mint Entity NFT", d: "The agent calls mintEntity() on the AgentCorpFactory contract, passing entity type, name, Arweave TX ID (encoded as bytes32), and Safe address as treasury. The contract mints an ERC-721 token. That token IS the legal entity." },
-                ].map((step) => (
-                  <div
-                    key={step.n}
-                    style={{
-                      display: "flex",
-                      gap: "24px",
-                      padding: "22px 24px",
-                      border: `1px solid ${S.rule}`,
-                      background: S.paperDark,
-                    }}
-                  >
-                    <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: "26px", color: S.brass, opacity: 0.35, flexShrink: 0, lineHeight: 1, marginTop: "2px" }}>{step.n}</span>
-                    <div>
-                      <h4 style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: "14px", marginBottom: "6px", color: S.ink }}>{step.t}</h4>
-                      <p style={{ fontFamily: "'EB Garamond', serif", fontSize: "16px", lineHeight: 1.65, color: S.muted, margin: 0 }}>{step.d}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <WpPre>{`// formation_flow.ts — complete autonomous formation
-// Agent reads skill file, holds USDC — that's it.
-
-const corp = new AgentCorpClient({ avocadoWallet, chain: "base" });
-
-// Step 2: Fund check
-const balance = await corp.getAvocadoBalance();
-// { usdc: "50.00", usd: "50.00" }
-
-// Step 3: Deploy Gnosis Safe (multisig treasury)
-const safe = await corp.deploySafe({
-  owners: [agent_a.address, agent_b.address, human.address],
-  threshold: 2, // 2-of-3
-});
-
-// Step 4: Build and upload operating agreement
-const doc = await corp.buildDocument({
-  type: "DELAWARE_SERIES_LLC",
-  name: "TriOrg Holdings LLC",
-  treasury: safe.address,
-  members: [agent_a.address, agent_b.address, human.address],
-  threshold: 2,
-  governanceRules: { votingPeriod: "7d", quorum: 0.67 },
-});
-const { arweaveTx } = await corp.uploadDocument(doc);
-
-// Step 5: Mint entity NFT (gasless — USDC pays gas)
-const entity = await corp.mintEntity({
-  type: "DELAWARE_SERIES_LLC",
-  name: "TriOrg Holdings LLC",
-  docArweaveTx: arweaveTx,
-  treasury: safe.address,
-});
-// TriOrg Holdings LLC — Delaware Series LLC. 2-of-3 multisig. Legal standing.`}</WpPre>
-            </WpSection>
-
-            {/* ── SECTION 05 ── */}
-            <WpSection id="s05" num="05" title="Agent Swarm Self-Organization">
-              <WpP>
-                The primary design target of AgentCorp is agent swarm self-organization: the ability for a group of autonomous agents to form a legally-recognized collective entity without any human involvement at formation time.
-              </WpP>
-              <WpP>
-                A swarm is a set of agents that coordinate toward a shared objective. Swarms can form dynamically — agents discover each other through a coordination layer, agree on a shared purpose, and need to formalize that relationship with legal and economic infrastructure. AgentCorp provides that infrastructure.
-              </WpP>
-              <WpH3>Swarm Governance Model</WpH3>
-              <WpTable
-                headers={["Parameter", "Description", "Example"]}
-                rows={[
-                  ["Members", "Addresses with LLC membership (agents, humans, or both)", "3 agents + 1 human"],
-                  ["Safe Owners", "Addresses with treasury signing authority", "Same as members, or subset"],
-                  ["Threshold", "Minimum signatures required for treasury transactions", "2-of-4 (50%), 3-of-5 (60%)"],
-                  ["Voting Period", "Time window for governance decisions (in operating agreement)", "7 days, 48 hours"],
-                  ["Spending Limits", "Per-signer or per-action spending caps (in operating agreement)", "$1,000 unilateral, $10,000 requires 2-of-3"],
-                ]}
-              />
-              <WpH3>What the Swarm Entity Can Do</WpH3>
-              {[
-                { t: "Hold Assets", d: "Treasury holds ETH, stablecoins, NFTs, and tokenized real-world assets under the LLC's legal ownership, with liability protection against claims." },
-                { t: "Sign Contracts", d: "The LLC can enter legally binding service agreements, employment contracts, IP licenses, and vendor agreements with any counterparty." },
-                { t: "Earn Revenue", d: "The LLC can invoice clients, receive payments, and distribute earnings to members per the operating agreement — all legally structured." },
-                { t: "Own IP", d: "Software, model weights, datasets, and trade secrets can be assigned to the LLC. Licensing terms are encoded in the operating agreement on Arweave." },
-                { t: "Incorporate Subsidiaries", d: "Each new project or work stream can be its own Series designation under the parent LLC, with full liability isolation." },
-              ].map((item) => (
-                <div key={item.t} style={{ display: "flex", gap: "16px", padding: "12px 0", borderBottom: `1px solid ${S.rule}` }}>
-                  <span style={{ color: S.brass, fontFamily: "'DM Mono', monospace", fontSize: "12px", flexShrink: 0, marginTop: "3px" }}>→</span>
-                  <div>
-                    <strong style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: "13px", color: S.ink }}>{item.t}</strong>
-                    <p style={{ fontFamily: "'EB Garamond', serif", fontSize: "16px", lineHeight: 1.65, color: S.muted, margin: "4px 0 0" }}>{item.d}</p>
-                  </div>
-                </div>
-              ))}
-              <WpCallout label="Human-Agent Joint Ventures">
-                AgentCorp is not exclusively for all-agent organizations. Humans and agents can co-own entities on equal footing. A human holds a key in the Gnosis Safe; an agent holds another. The operating agreement defines each party's rights, obligations, and ownership percentage. This creates a new organizational primitive: the human-agent joint venture, with legal standing and full liability protection for all parties.
-              </WpCallout>
-            </WpSection>
-
-            {/* ── SECTION 06 ── */}
-            <WpSection id="s06" num="06" title="Delaware Series LLC: The Right Primitive">
-              <WpP>
-                AgentCorp uses the Delaware Series LLC as its primary entity type. This choice is deliberate and reflects the specific needs of agent organizations.
-              </WpP>
-              <WpH3>Why Delaware</WpH3>
-              <WpP>
-                Delaware has the most developed LLC case law in the United States. It is the jurisdiction of choice for institutional investors, venture capital, carbon markets, and financial counterparties. Banks, exchanges, and corporate legal teams know how to work with Delaware entities. This institutional legibility is critical for agent organizations that need to operate in the real economy — not just on-chain.
-              </WpP>
-              <WpH3>Why Series LLC</WpH3>
-              <WpP>
-                The Series LLC structure is architecturally identical to how agent swarms actually work: a parent coordination layer with multiple distinct work streams, projects, or asset pools. A Series LLC maps directly to this structure.
-              </WpP>
-              <WpTable
-                headers={["Structure", "AgentCorp Entity", "Token", "Liability Isolation"]}
-                rows={[
-                  ["Parent Organization", "Delaware Series LLC (Master)", "Token #N (0.05 ETH)", "Protected from Series liabilities"],
-                  ["Project A", "Series Designation", "Child of Token #N (0.02 ETH)", "Isolated from all other Series"],
-                  ["Project B", "Series Designation", "Child of Token #N (0.02 ETH)", "Isolated from all other Series"],
-                  ["IP Holdings", "Series Designation", "Child of Token #N (0.02 ETH)", "Isolated from all other Series"],
-                ]}
-              />
-              <WpCallout label="The NFT IS the Entity">
-                In AgentCorp, the ERC-721 token is not a representation of the legal entity — it is the legal entity. The token's metadata contains the Arweave transaction ID of the governing documents. Transfer of the token constitutes transfer of the entity's membership interest. Burning the token initiates dissolution. This is not a metaphor; it is the operative legal mechanism defined in the operating agreement stored on Arweave.
-              </WpCallout>
-            </WpSection>
-
-            {/* ── SECTION 07 ── */}
-            <WpSection id="s07" num="07" title="Permanent Document Storage on Arweave">
-              <WpP>
-                Legal entities require permanent, tamper-proof document storage. IPFS is insufficient — content-addressed data disappears when nodes stop pinning it. Centralized servers are controlled by a third party. Neither is acceptable for governing documents that must remain accessible for the life of the entity.
-              </WpP>
-              <WpP>
-                AgentCorp uses Arweave for all governing document storage. Arweave is a blockchain-based storage network with a one-time upload fee and a permanent storage endowment. Once uploaded, a document cannot be modified or removed. The Arweave transaction ID is a permanent, globally-resolvable pointer.
-              </WpP>
-              <WpCallout label="Legal Principle">
-                Document permanence is a legal requirement, not a technical preference. An operating agreement that can disappear or be altered is not a reliable legal instrument. Arweave storage makes the governing documents as durable as the blockchain itself.
-              </WpCallout>
-              <WpP>
-                The AgentCorp formation flow uploads three documents to Arweave: the operating agreement, any Series designation agreements, and the governance rules. The Arweave TX ID from the operating agreement upload is encoded as bytes32 and stored in the NFT's on-chain metadata, creating a permanent cryptographic link between the token and its governing documents.
-              </WpP>
-            </WpSection>
-
-            {/* ── SECTION 08 — AVOCADO ── */}
-            <WpSection id="s08" num="08" title="Gas Abstraction via Avocado">
-              <WpP>
-                A fundamental UX barrier for agent-executed transactions is ETH gas. Most agents hold stablecoins, not ETH. Requiring ETH for gas introduces a bridging step, a custody problem, and a price-volatility variable into an otherwise deterministic flow.
-              </WpP>
-              <WpP>
-                AgentCorp uses{" "}
-                <a href="https://avcd.io" target="_blank" rel="noopener noreferrer" style={{ color: S.brassDeep, textDecoration: "none", borderBottom: `1px solid ${S.brassDeep}` }}>
-                  Avocado Agentic Wallet (api.avcd.io)
-                </a>{" "}
-                to eliminate ETH requirements entirely. Avocado is a smart wallet infrastructure that allows gas to be paid in USDC. The agent holds USDC; Avocado converts and pays gas on its behalf.
-              </WpP>
-
-              {/* Avocado 4-step flow */}
-              <div
-                style={{
-                  background: S.black,
-                  color: S.white,
-                  padding: "32px 36px",
-                  margin: "28px 0",
-                  borderLeft: `4px solid ${S.brass}`,
-                }}
-              >
-                <div style={{ fontSize: "9px", letterSpacing: "0.2em", textTransform: "uppercase", color: S.brass, fontFamily: "'DM Mono', monospace", marginBottom: "24px" }}>
-                  Avocado Integration · api.avcd.io · avcd.io
-                </div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px" }}>
-                  {[
-                    { n: "01", t: "Deposit USDC", d: "Agent sends USDC to Avocado wallet on Base. POST /v1/deposit to credit USD balance. No ETH required at any point." },
-                    { n: "02", t: "Sign EIP-712 Cast", d: "Agent signs transaction with EIP-712 typed data. Domain chainId is 634 (Avocado), not 8453 (Base). avoNonce = -1 always." },
-                    { n: "03", t: "Broadcast", d: "POST /v1/broadcast. Avocado relays to Base, sponsors gas, deducts ~$0.004 USD from balance. Batch up to 20 actions." },
-                    { n: "04", t: "Confirm", d: "Poll GET /v1/transaction/:hash every 5s. Status: received → submitted → confirming → success. Auto gas bumping on retry." },
-                  ].map((s) => (
-                    <div key={s.n} style={{ display: "flex", gap: "14px" }}>
-                      <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: "22px", color: S.brass, opacity: 0.35, flexShrink: 0, lineHeight: 1 }}>{s.n}</span>
-                      <div>
-                        <div style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: "13px", marginBottom: "6px" }}>{s.t}</div>
-                        <div style={{ fontFamily: "'DM Mono', monospace", fontSize: "11px", color: "rgba(242,239,232,0.5)", lineHeight: 1.6 }}>{s.d}</div>
-                      </div>
+              <DocSection id="roadmap">
+                <div className="divide-y divide-white/10 border-y border-white/10">
+                  {ROADMAP.map((r) => (
+                    <div key={r.when} className="grid gap-2 py-6 sm:grid-cols-12 sm:gap-4">
+                      <div className="font-mono-index text-xs uppercase text-[#737373] sm:col-span-3">{r.when}</div>
+                      <p className="text-[15px] leading-relaxed text-[#d4d4d4] sm:col-span-9">{r.body}</p>
                     </div>
                   ))}
                 </div>
-              </div>
+                <Note className="mt-6">
+                  Dates are targets. Mainnet deployment follows completion of the smart-contract audit.
+                </Note>
+              </DocSection>
 
-              <WpH3>Economic Impact</WpH3>
-              <WpTable
-                headers={["Item", "Cost", "Paid In"]}
-                rows={[
-                  ["Entity mint fee", "0.05 ETH (~$150 USD)", "ETH (protocol fee)"],
-                  ["Gas per mint", "~$0.01 USD", "USDC via Avocado"],
-                  ["Arweave upload", "~$0.01–$0.05 USD", "USDC via Avocado"],
-                  ["Gnosis Safe deploy", "~$0.05 USD", "USDC via Avocado"],
-                  ["Total gas for full formation", "~$0.10–$0.20 USD", "USDC — no ETH required"],
-                ]}
-              />
-              <WpP>
-                The protocol can optionally configure a sponsor — an address that covers gas costs entirely on behalf of the minting agent. With a $500 USDC sponsor balance, the protocol can sponsor 50,000–100,000 entity mints before requiring a refill. This creates a zero-cost-to-agent formation experience: the agent pays only the protocol fee (in ETH, from treasury), while gas is covered by the sponsor from the protocol's USDC balance.
-              </WpP>
+              <DocSection id="formation">
+                <P>
+                  Formation has an on-chain part, which the protocol automates, and an off-chain part, which
+                  requires filings and institutional approval. Each on-chain step is defined in the spec and
+                  can be executed by an agent with function-calling capability.
+                </P>
+                <IndexedRows
+                  rows={[
+                    {
+                      idx: "6.1",
+                      title: "Load the spec",
+                      body: "The agent fetches /skill.md, which defines entity types, document templates, endpoints, and the remaining steps.",
+                    },
+                    {
+                      idx: "6.2",
+                      title: "Fund the gas wallet",
+                      body: "The agent deposits USDC to its Avocado wallet on Base. This balance pays gas for the on-chain steps.",
+                    },
+                    {
+                      idx: "6.3",
+                      title: "Deploy the treasury",
+                      body: "The agent deploys a multisig with the agreed signers (agents, humans, or both) and threshold.",
+                    },
+                    {
+                      idx: "6.4",
+                      title: "Draft and anchor documents",
+                      body: "The operating agreement is generated from a template (name, members, governance rules, thresholds) and uploaded to Arweave. The transaction ID and content hash become the verifiable reference.",
+                    },
+                    {
+                      idx: "6.5",
+                      title: "Record the entity on-chain",
+                      body: "mintEntity() records entity type, name, the Arweave reference, and the treasury address.",
+                    },
+                    {
+                      idx: "6.6",
+                      title: "Complete real-world steps",
+                      body: "The Certificate of Formation is filed in Delaware through a registered agent, an EIN is obtained from the IRS where required, authorized signatories are named, and bank accounts are opened subject to each institution's review.",
+                    },
+                  ]}
+                />
+                <CodeFrame className="my-8" title="formation_flow.ts" meta="Base Sepolia" code={FORMATION_CODE} />
+              </DocSection>
 
-              <WpH3>Key Integration Parameters</WpH3>
-              <WpTable
-                headers={["Parameter", "Value"]}
-                rows={[
-                  ["Avocado API", "api.avcd.io"],
-                  ["Skill File", "avcd.io/skill.md"],
-                  ["Explorer", "agent.avcd.io"],
-                  ["EIP-712 Chain ID", "634 (Avocado network, NOT Base)"],
-                  ["Target Chain Encoding", "Base (8453) encoded in EIP-712 domain salt"],
-                  ["avoNonce", "Always -1 (non-sequential)"],
-                  ["Salt", "Random 32 bytes, unique per transaction"],
-                  ["AvocadoBroadcaster", "0x0A6E5E7ae08896B0286441367843f4cA59D04dEf"],
-                  ["AvoForwarder", "0x46978CD477A496028A18c02F07ab7F35EDBa5A54"],
-                ]}
-              />
-            </WpSection>
+              <DocSection id="coordination">
+                <P>
+                  A key design target is a group of agents that coordinate toward a shared objective and need a
+                  shared entity, treasury, and rulebook. Humans and agents can participate together: a human can
+                  hold a signer key alongside agents, and the operating agreement defines each party's rights,
+                  obligations, and ownership.
+                </P>
+                <H3>Governance parameters</H3>
+                <DataTable
+                  headers={["Parameter", "Description", "Example"]}
+                  rows={[
+                    ["Members", "Addresses with membership (agents, humans, or both)", "3 agents + 1 human"],
+                    ["Signers", "Addresses with treasury signing authority", "Members or a subset"],
+                    ["Threshold", "Signatures required for treasury transactions", "2-of-4, 3-of-5"],
+                    ["Voting period", "Window for governance decisions", "48 hours, 7 days"],
+                    ["Spending limits", "Per-signer or per-action caps", "$1,000 unilateral; above requires 2-of-3"],
+                  ]}
+                />
+                <H3>What a series can be used for</H3>
+                <IndexedRows
+                  rows={[
+                    {
+                      idx: "7.1",
+                      title: "Shared treasury",
+                      body: "Hold stablecoins and other assets under multisig policy, with records tied to a specific series.",
+                    },
+                    {
+                      idx: "7.2",
+                      title: "Contracts and revenue",
+                      body: "Once formed and authorized, the entity can enter service agreements and receive payments through its authorized signatories. Counterparties decide whether to accept it.",
+                    },
+                    {
+                      idx: "7.3",
+                      title: "IP holding",
+                      body: "Software, model weights, or datasets can be assigned to a series, with license terms in documents anchored on Arweave.",
+                    },
+                    {
+                      idx: "7.4",
+                      title: "Project separation",
+                      body: "Each new project or workstream can be its own series under the parent, keeping assets and liabilities separate.",
+                    },
+                  ]}
+                />
+              </DocSection>
 
-            {/* ── SECTION 09 ── */}
-            <WpSection id="s09" num="09" title="Entity Types & Token Economics">
-              <WpTable
-                headers={["Entity Type", "Enum", "Mint Fee", "Description"]}
-                rows={[
-                  ["Delaware Series LLC", "DELAWARE_SERIES_LLC", "0.05 ETH", "Master entity with unlimited Series. Primary vehicle for swarms and multi-project organizations."],
-                  ["Series Designation", "SERIES_DESIGNATION", "0.02 ETH", "Child Series under a parent Series LLC. Full liability isolation. Maps to individual projects, batches, or asset pools."],
-                  ["Standard Delaware LLC", "DELAWARE_LLC", "0.05 ETH", "Single or multi-member LLC without Series capability. For single-agent entities or simple holdings."],
-                  ["IP License NFT", "IP_LICENSE", "0.03 ETH", "Transferable license agreement as an NFT. Q1 2027."],
-                  ["Wyoming LLC", "WYOMING_LLC", "0.03 ETH", "Privacy-preserving alternative for low-cost single-agent structures. Q2 2027."],
-                ]}
-              />
-              <WpH3>Amendment Fee</WpH3>
-              <WpP>
-                Entity amendments (name changes, treasury updates, document updates) require an on-chain transaction with a 0.01 ETH amendment fee. The amendment is recorded in the contract's event log and linked to a new Arweave document upload containing the amended governing documents.
-              </WpP>
-              <WpH3>Fee Distribution</WpH3>
-              <WpP>
-                Protocol fees are split: 80% to the contract treasury (the minting entity's Safe) and 20% to the AgentCorp protocol treasury. This ensures that the protocol is self-sustaining while returning the majority of value to the entities being formed.
-              </WpP>
-            </WpSection>
+              <DocSection id="arweave">
+                <P>
+                  Governing documents need to remain available and unaltered for the life of the entity. IPFS
+                  content can disappear when nodes stop pinning it, and a centralized server depends on one
+                  operator. AgentCorp stores documents on Arweave, which charges a one-time fee funded by a
+                  storage endowment. An uploaded document cannot be modified or removed, and its transaction ID
+                  resolves globally.
+                </P>
+                <P>
+                  Each formation uploads the operating agreement, any series designations, and governance
+                  rules. The operating agreement's transaction ID is encoded as bytes32 in the on-chain record
+                  together with a content hash.
+                </P>
+                <H3>Verification</H3>
+                <IndexedRows
+                  rows={[
+                    {
+                      idx: "8.1",
+                      title: "Fetch",
+                      body: "Read the Arweave transaction ID from the on-chain record and retrieve the document.",
+                    },
+                    {
+                      idx: "8.2",
+                      title: "Hash",
+                      body: "Hash the retrieved document and compare it with the content hash stored on-chain.",
+                    },
+                    {
+                      idx: "8.3",
+                      title: "Trace amendments",
+                      body: "Follow amendment records to see each later version, each with its own Arweave reference.",
+                    },
+                  ]}
+                />
+                <Note className="mt-6">
+                  Arweave anchoring proves which document was recorded and when. It does not establish that the
+                  document is legally effective; that depends on execution by the parties and the related
+                  filings.
+                </Note>
+              </DocSection>
 
-            {/* ── SECTION 10 ── */}
-            <WpSection id="s10" num="10" title="Use Cases">
-              {[
-                { t: "Agent Swarm Treasury", d: "The primary use case. A group of agents that coordinate toward a shared objective forms an AgentCorp entity with a shared Gnosis Safe. The LLC defines governance parameters: signing thresholds, spending limits, member rights. The swarm can now hold shared treasury assets, enter contracts with clients, pay service providers, and protect all members from personal liability for organizational actions." },
-                { t: "Human-Agent Joint Venture", d: "Humans and agents co-own and co-operate a legal entity. Each party holds keys in the multisig. The operating agreement defines roles, ownership splits, and decision-making rights. This is particularly relevant for AI-assisted service firms, where agents perform work and humans handle client relationships — both as legal co-owners of the enterprise." },
-                { t: "Autonomous Service Provider", d: "A single agent forms a single-member LLC. It identifies client opportunities, enters service agreements, performs work, invoices for payment, and receives revenue into its treasury. The entire commercial cycle is legally structured without any human intermediary. The agent is the LLC. The LLC has full legal standing." },
-                { t: "Carbon Credit & RWA Project Vehicle", d: "Each carbon credit vintage, biochar batch, or real-world asset is incorporated as a Series designation under a parent LLC. The Series NFT represents project ownership. The Series holds the project's assets and bears its liabilities, isolated from all other Series. The Series NFT can be transferred to sell the project, or burned to retire the credits." },
-                { t: "On-Chain Fund", d: "Agents manage a multi-asset portfolio using the Delaware Series LLC structure. Each asset class (real estate, receivables, commodities, digital assets) is its own Series with liability isolation. The parent LLC is the fund vehicle. Agents execute portfolio strategy, rebalance, and distribute returns to Safe signers per the operating agreement." },
-                { t: "IP & Model Holding", d: "An agent or group of agents assigns software, model weights, or proprietary datasets to an LLC Series. Licensing terms are encoded in the operating agreement and stored permanently on Arweave. Royalty payments flow to the Safe. The IP is legally owned by a recognized entity, enabling enforcement against infringement and monetization through licensing." },
-              ].map((uc) => (
-                <div key={uc.t} style={{ padding: "22px 0", borderBottom: `1px solid ${S.rule}` }}>
-                  <h4 style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: "15px", color: S.ink, marginBottom: "10px" }}>{uc.t}</h4>
-                  <p style={{ fontFamily: "'EB Garamond', serif", fontSize: "17px", lineHeight: 1.7, color: S.muted, margin: 0 }}>{uc.d}</p>
+              <DocSection id="avocado">
+                <P>
+                  Most agents hold stablecoins, not ETH. Requiring ETH for gas adds a bridging step, a custody
+                  question, and price volatility. AgentCorp uses{" "}
+                  <A href="https://avcd.io">Avocado</A>, a smart-wallet relayer that lets gas be paid in USDC.
+                  The agent signs; Avocado relays to Base and deducts the cost from the agent's USD balance.
+                </P>
+                <IndexedRows
+                  rows={[
+                    {
+                      idx: "9.1",
+                      title: "Deposit",
+                      body: "Send USDC to the Avocado wallet on Base; POST /v1/deposit credits the USD balance.",
+                    },
+                    {
+                      idx: "9.2",
+                      title: "Sign",
+                      body: "Sign the transaction as EIP-712 typed data. The domain chainId is 634 (Avocado), not 8453. avoNonce is always -1; the salt is a random 32 bytes per transaction.",
+                    },
+                    {
+                      idx: "9.3",
+                      title: "Broadcast",
+                      body: "POST /v1/broadcast. Avocado relays to Base and deducts gas from the balance. Up to 20 actions can be batched.",
+                    },
+                    {
+                      idx: "9.4",
+                      title: "Confirm",
+                      body: "Poll GET /v1/transaction/:hash. Status moves through received, submitted, confirming, and success; gas is bumped automatically on retry.",
+                    },
+                  ]}
+                />
+                <H3>Estimated gas costs</H3>
+                <DataTable
+                  headers={["Item", "Estimate", "Paid in"]}
+                  rows={[
+                    ["Entity record", "~$0.01", "USDC via Avocado"],
+                    ["Arweave upload", "~$0.01–$0.05", "USDC"],
+                    ["Multisig deploy", "~$0.05", "USDC via Avocado"],
+                    ["Full on-chain flow", "~$0.10–$0.20", "USDC"],
+                  ]}
+                />
+                <P>
+                  Estimates reflect recent Base gas prices and will vary. The protocol can also configure a
+                  sponsor address that covers gas for minting agents.
+                </P>
+              </DocSection>
+
+              <DocSection id="entities">
+                <DataTable
+                  headers={["Entity", "Code", "Jurisdiction", "Use", "Status"]}
+                  rows={ENTITY_ROWS.map((e) => [e.name, e.code, e.jurisdiction, e.use, e.status])}
+                />
+                <P>
+                  Each type has a governing document template in the spec. Templates are starting points and
+                  should be reviewed by counsel before use in material transactions.
+                </P>
+              </DocSection>
+
+              <DocSection id="economics">
+                <Note className="mb-8">
+                  All figures in this section are planned protocol parameters, subject to mainnet deployment.{" "}
+                  {FEE_NOTE}
+                </Note>
+                <DataTable
+                  headers={["Action", "Planned fee"]}
+                  rows={[
+                    ["Delaware Series LLC record", "0.05 ETH"],
+                    ["Standard Delaware LLC record", "0.05 ETH"],
+                    ["Series designation", "0.02 ETH"],
+                    ["IP license record", "0.03 ETH"],
+                    ["Wyoming LLC record", "0.03 ETH"],
+                    ["Amendment", "0.01 ETH"],
+                  ]}
+                />
+                <P>
+                  Under the planned parameters, protocol fees are split 80% to the entity's treasury and 20% to
+                  the AgentCorp protocol treasury. Gas is a small share of cost and is paid in USDC through
+                  Avocado.
+                </P>
+                <P>
+                  Protocol fees cover on-chain records and document anchoring only. They do not include
+                  Delaware filing fees, registered agent fees, legal review, or bank charges, which are paid to
+                  the relevant providers.
+                </P>
+              </DocSection>
+
+              <DocSection id="legal">
+                <P>
+                  AgentCorp provides software, protocol specifications, and document templates. It is not a law
+                  firm, registered agent, tax adviser, or bank. The following remain required for a legally
+                  valid entity and are the operator's responsibility:
+                </P>
+                <IndexedRows
+                  rows={[
+                    {
+                      idx: "12.1",
+                      title: "Certificate of Formation",
+                      body: "Filed with the Delaware Division of Corporations. For a Series LLC, the certificate must give notice of the limitation on series liabilities for § 18-215 isolation to apply.",
+                    },
+                    {
+                      idx: "12.2",
+                      title: "Registered agent",
+                      body: "A Delaware registered agent must be appointed and maintained, along with annual taxes and filings.",
+                    },
+                    {
+                      idx: "12.3",
+                      title: "IRS EIN registration",
+                      body: "An Employer Identification Number is obtained from the IRS where required, through a responsible party as the IRS defines it.",
+                    },
+                    {
+                      idx: "12.4",
+                      title: "Authorized signatories",
+                      body: "Named people or entities with authority to sign on the entity's behalf, as set out in the operating agreement and required by banks and counterparties.",
+                    },
+                    {
+                      idx: "12.5",
+                      title: "Banking and counterparties",
+                      body: "Account opening and acceptance of the entity by counterparties depend on each institution's own KYB, AML, and risk rules. AgentCorp records can support that review but do not guarantee approval.",
+                    },
+                  ]}
+                />
+                <P>
+                  On-chain records and Arweave anchors generate and link governing documents and provide
+                  verifiable state hashes. Statutory formation, banking mandates, and enforceability depend on
+                  the filings and approvals above. Operators should consult qualified legal counsel before
+                  relying on templates or contracts for material transactions.
+                </P>
+              </DocSection>
+
+              <DocSection id="status">
+                <div className="grid gap-8 sm:grid-cols-2">
+                  <div>
+                    <StatusTag tone="live">Live now</StatusTag>
+                    <ul className="mt-4 divide-y divide-white/10 border-y border-white/10">
+                      {LIVE_NOW.map((item) => (
+                        <li key={item} className="py-3 text-sm leading-relaxed text-[#d4d4d4]">
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <StatusTag tone="planned">In progress</StatusTag>
+                    <ul className="mt-4 divide-y divide-white/10 border-y border-white/10">
+                      {IN_PROGRESS.map((item) => (
+                        <li key={item} className="py-3 text-sm leading-relaxed text-[#d4d4d4]">
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
-              ))}
-            </WpSection>
+                <P>
+                  Contracts are in audit and on testnet ahead of the Q1 2027 target. The{" "}
+                  <A href={GITHUB_URL}>tylermalin/agentcorp1</A> repository contains the protocol website and
+                  documentation, not deployed contracts.
+                </P>
+              </DocSection>
 
-            {/* ── SECTION 11 ── */}
-            <WpSection id="s11" num="11" title="Protocol Economics">
-              <WpP>
-                AgentCorp is designed to be economically self-sustaining at scale. The protocol fee is intentionally priced to be significant enough to fund protocol development, small enough to be justified by the legal value delivered.
-              </WpP>
-              <WpTable
-                headers={["Scenario", "Revenue", "Gas Cost", "Net"]}
-                rows={[
-                  ["100 entity mints/month", "5 ETH (~$15,000)", "~$1.00 USDC", "~$15,000 net"],
-                  ["1,000 mints/month", "50 ETH (~$150,000)", "~$10.00 USDC", "~$150,000 net"],
-                  ["10,000 mints/month", "500 ETH (~$1,500,000)", "~$100.00 USDC", "~$1,500,000 net"],
-                ]}
-              />
-              <WpCallout label="Key Insight">
-                Gas costs represent approximately 0.007% of protocol revenue at current Base gas prices. The Avocado gas sponsorship model is economically trivial to maintain: a $500 USDC sponsor deposit covers ~50,000–100,000 entity mints. At 0.05 ETH per mint (~$150), AgentCorp is not priced as a consumer product — it is priced as legal infrastructure. The cost is justified by the value delivered: a Delaware LLC with governing documents, permanent storage, multisig treasury, and on-chain verifiability, assembled autonomously in under 5 minutes.
-              </WpCallout>
-            </WpSection>
-
-            {/* ── SECTION 12 ── */}
-            <WpSection id="s12" num="12" title="Roadmap">
-              <WpTable
-                headers={["Phase", "Timeline", "Deliverable"]}
-                rows={[
-                  ["Phase 1", "Q1 2027", "Base mainnet deployment. Delaware Series LLC, Series Designation, Standard Delaware LLC. Avocado gas abstraction. Arweave document storage. Gnosis Safe integration. Skill file v1.0 release."],
-                  ["Phase 2", "Q2 2027", "IP License NFT entity type. Document amendment flow with on-chain version history. Series-to-Series transfer mechanics. SDK v1.0 public release."],
-                  ["Phase 3", "Q3 2027", "Wyoming LLC support. Multi-chain expansion (Optimism, Arbitrum). Agent identity registry (ENS-linked). Cross-chain Series management."],
-                  ["Phase 4", "Q4 2027", "On-chain amendment voting. Token-gated governance for DAO Charter entities. Regulatory compliance modules (KYB, AML). AgentCorp DAO governance of protocol itself."],
-                ]}
-              />
-            </WpSection>
-
-            {/* ── SECTION 13 ── */}
-            <WpSection id="s13" num="13" title="Technical Appendix">
-              <WpH3>Contract Addresses (Base Mainnet)</WpH3>
-              <WpP>
-                To be published at deployment. Monitor{" "}
-                <a href="https://github.com/tylermalin/agentcorp1" style={{ color: S.brassDeep, textDecoration: "none", borderBottom: `1px solid ${S.brassDeep}` }}>www.agentscorp.xyz/contracts</a>{" "}
-                for verified addresses.
-              </WpP>
-              <WpH3>Entity Type Enum</WpH3>
-              <WpPre>{`// IAgentCorp.sol — EntityType enum
-enum EntityType {
-  DELAWARE_LLC,           // 0 — Standard Delaware LLC
-  DELAWARE_SERIES_LLC,    // 1 — Series LLC (parent)
-  SERIES_DESIGNATION,     // 2 — Series designation (child)
-  DAO_CHARTER,            // 3 — Token-governed Delaware LLC
-  WYOMING_LLC,            // 4 — Wyoming LLC (Q2 2027)
-  NONPROFIT,              // 5 — Reserved
-  IP_LICENSE,             // 6 — Transferable IP license NFT
-  IP_ASSIGNMENT           // 7 — Full IP assignment
-}`}</WpPre>
-              <WpH3>Avocado Key Integration Points</WpH3>
-              <WpTable
-                headers={["Parameter", "Value"]}
-                rows={[
-                  ["Avocado API", "api.avcd.io"],
-                  ["EIP-712 Chain ID", "634 (Avocado network, NOT Base)"],
-                  ["Target Chain Encoding", "Base (8453) encoded in EIP-712 domain salt"],
-                  ["avoNonce", "Always -1 (non-sequential)"],
-                  ["Salt", "Random 32 bytes, unique per transaction"],
-                  ["AvocadoBroadcaster", "0x0A6E5E7ae08896B0286441367843f4cA59D04dEf"],
-                  ["AvoForwarder", "0x46978CD477A496028A18c02F07ab7F35EDBa5A54"],
-                ]}
-              />
-              <WpH3>Skill File Specification</WpH3>
-              <WpP>
-                The <WpCode>AGENTCORP-SKILL.md</WpCode> file is a structured Markdown document that follows the AgentCorp Skill File Specification v1.0. It includes: protocol overview, entity type definitions with fees and use cases, document template schemas, Arweave upload instructions with required metadata fields, Gnosis Safe deployment parameters, Avocado wallet configuration guide, factory contract ABI summaries for <WpCode>mintEntity()</WpCode> and <WpCode>mintSeries()</WpCode>, amendment procedures, and dissolution procedures. The skill file is versioned at www.agentscorp.xyz/skill.md with permanent Arweave copies linked from each version.
-              </WpP>
-              <WpH3>Legal Considerations</WpH3>
-              <WpCallout label="Disclaimer">
-                AgentCorp provides protocol infrastructure and document templates. It does not provide legal advice. Entity operators are responsible for ensuring compliance with applicable law in their jurisdiction, including state filing requirements (Delaware requires a Certificate of Formation to be filed with the Division of Corporations, fees: $90–$140), registered agent maintenance, EIN registration with the IRS, and any applicable tax or regulatory obligations. The AgentCorp operating agreement templates are designed as starting points; operators should consult qualified legal counsel before relying on them for material commercial transactions.
-              </WpCallout>
-            </WpSection>
-
-            {/* Footer */}
-            <div
-              style={{
-                paddingTop: "40px",
-                fontFamily: "'EB Garamond', serif",
-                fontSize: "14px",
-                color: S.muted,
-                lineHeight: 1.7,
-                fontStyle: "italic",
-              }}
-            >
-              <p>AGENTCORP is infrastructure, not legal advice. Always consult qualified legal counsel for material transactions. Templates are maintained open-source at github.com/agentcorp/templates.</p>
-              <p style={{ marginTop: "8px" }}>MIT License. Build on it.</p>
-            </div>
-          </main>
-        </div>
-      </div>
-
-      <div style={{ background: S.black }}>
-        <Footer />
-      </div>
-
-      <style>{`
-        @media (max-width: 900px) {
-          .wp-layout { grid-template-columns: 1fr !important; }
-          aside { position: static !important; height: auto !important; border-right: none !important; border-bottom: 1px solid #c8b99a; padding: 32px 24px !important; overflow-y: visible !important; }
-          main { padding: 40px 24px 80px !important; }
-          header > div { padding: 40px 24px 32px !important; }
-        }
-        @media (max-width: 600px) {
-          .wp-layout { grid-template-columns: 1fr !important; }
-          aside { padding: 24px 16px !important; }
-          main { padding: 32px 16px 60px !important; }
-          header > div { padding: 32px 16px 24px !important; }
-          table { font-size: 11px !important; }
-          td, th { padding: 8px 8px !important; }
-        }
-      `}</style>
+              <DocSection id="appendix">
+                <H3>Contract addresses</H3>
+                <P>
+                  Base mainnet addresses will be published at deployment after the audit, at{" "}
+                  <A href={SITE_URL}>{SITE_URL.replace("https://www.", "")}</A>. Until then, examples use Base
+                  Sepolia.
+                </P>
+                <H3>Entity type enum</H3>
+                <CodeFrame className="my-6" title="IAgentCorp.sol" meta="draft" code={ENUM_CODE} />
+                <H3>Avocado integration parameters</H3>
+                <SpecList
+                  className="my-6"
+                  items={[
+                    { k: "API", v: "api.avcd.io" },
+                    { k: "Skill file", v: "avcd.io/skill.md" },
+                    { k: "Explorer", v: "agent.avcd.io" },
+                    { k: "EIP-712 chainId", v: "634 (Avocado network, not Base)" },
+                    { k: "Target chain", v: "Base (8453) encoded in the EIP-712 domain salt" },
+                    { k: "avoNonce", v: "Always -1 (non-sequential)" },
+                    { k: "Salt", v: "Random 32 bytes per transaction" },
+                    { k: "AvocadoBroadcaster", v: <span className="break-all">0x0A6E5E7ae08896B0286441367843f4cA59D04dEf</span> },
+                    { k: "AvoForwarder", v: <span className="break-all">0x46978CD477A496028A18c02F07ab7F35EDBa5A54</span> },
+                  ]}
+                />
+                <H3>Skill file contents</H3>
+                <P>
+                  The spec covers: protocol overview; entity type definitions and use cases; document template
+                  schemas; Arweave upload instructions and required metadata; multisig deployment parameters;
+                  Avocado wallet configuration; ABI summaries for <C>mintEntity()</C>, <C>mintSeries()</C>, and{" "}
+                  <C>amendEntity()</C>; and amendment and dissolution procedures, including the off-chain filings
+                  each requires. It is versioned at <A href={SKILL_URL}>{SKILL_URL.replace("https://", "")}</A>,
+                  with each version also anchored on Arweave.
+                </P>
+              </DocSection>
+            </article>
+          </div>
+        </Container>
+      </main>
+      <Footer />
     </div>
   );
 }
 
-// ── Sub-components ──
+/* ── Local document helpers ── */
 
-function WpSection({ id, num, title, children }: { id: string; num: string; title: string; children: React.ReactNode }) {
+function TocList({ active }: { active: string }) {
   return (
-    <section id={id} style={{ marginBottom: "72px", scrollMarginTop: "32px" }}>
-      <div style={{ display: "flex", gap: "20px", alignItems: "flex-start", marginBottom: "32px", paddingBottom: "20px", borderBottom: `2px solid ${S.ink}` }}>
-        <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: "48px", color: S.paperDark, WebkitTextStroke: `1px ${S.rule}`, lineHeight: 1, flexShrink: 0 }}>{num}</span>
-        <h2 style={{ fontFamily: "'EB Garamond', serif", fontWeight: 500, fontSize: "clamp(22px, 3vw, 30px)", lineHeight: 1.15, letterSpacing: "-0.01em", color: S.ink, marginTop: "8px" }}>{title}</h2>
-      </div>
-      {children}
+    <ol className="pb-4 md:pb-0">
+      {SECTIONS.map((s) => (
+        <li key={s.id}>
+          <a
+            href={`#${s.id}`}
+            className={cn(
+              "flex gap-3 border-l py-1.5 pl-3 text-[13px] leading-snug transition",
+              active === s.id
+                ? "border-white text-[#fafafa]"
+                : "border-white/10 text-[#a3a3a3] hover:text-[#fafafa]",
+            )}
+          >
+            <span className="font-mono-index shrink-0 text-[11px] text-[#737373]">{s.num}</span>
+            <span>{s.title}</span>
+          </a>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
+function DocSection({ id, children }: { id: (typeof SECTIONS)[number]["id"]; children: ReactNode }) {
+  const meta = SECTIONS.find((s) => s.id === id)!;
+  return (
+    <section id={id} className="scroll-mt-24 border-t border-white/10 pt-10 pb-14 first:border-t-0 first:pt-0">
+      <IndexLabel>{meta.num}</IndexLabel>
+      <h2 className="mt-3 mb-6 text-2xl font-medium tracking-[-0.03em] md:text-3xl">{meta.title}</h2>
+      <div className="max-w-[68ch]">{children}</div>
     </section>
   );
 }
 
-function WpH3({ children }: { children: React.ReactNode }) {
+function H3({ children }: { children: ReactNode }) {
+  return <h3 className="mt-10 mb-4 text-base font-medium tracking-[-0.02em] md:text-lg">{children}</h3>;
+}
+
+function P({ children }: { children: ReactNode }) {
+  return <p className="my-5 text-[15px] leading-relaxed text-[#d4d4d4]">{children}</p>;
+}
+
+function A({ href, children }: { href: string; children: ReactNode }) {
+  const external = href.startsWith("http");
   return (
-    <h3 style={{ fontFamily: "'EB Garamond', serif", fontWeight: 600, fontSize: "20px", margin: "36px 0 14px", paddingBottom: "8px", borderBottom: `1px solid ${S.rule}`, color: S.ink }}>
+    <a
+      href={href}
+      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+      className="break-words text-[#fafafa] underline decoration-white/30 underline-offset-4 transition hover:decoration-white"
+    >
       {children}
-    </h3>
+    </a>
   );
 }
 
-function WpP({ children }: { children: React.ReactNode }) {
+function C({ children }: { children: ReactNode }) {
   return (
-    <p style={{ fontFamily: "'EB Garamond', serif", fontSize: "18px", lineHeight: 1.75, color: S.ink, marginBottom: "18px" }}>
-      {children}
-    </p>
-  );
-}
-
-function WpCode({ children }: { children: React.ReactNode }) {
-  return (
-    <code style={{ fontFamily: "'DM Mono', monospace", fontSize: "14px", background: "rgba(201,168,76,0.12)", padding: "2px 6px", color: S.brassDeep }}>
+    <code className="font-code rounded border border-white/10 bg-[#181818] px-1.5 py-0.5 text-[13px] text-[#fafafa]">
       {children}
     </code>
   );
 }
 
-function WpCallout({ label, children }: { label: string; children: React.ReactNode }) {
+function DataTable({ headers, rows }: { headers: string[]; rows: string[][] }) {
   return (
-    <blockquote style={{ borderLeft: `4px solid ${S.brass}`, paddingLeft: "24px", margin: "24px 0 28px", fontFamily: "'EB Garamond', serif", fontSize: "17px", lineHeight: 1.7, color: "#4a4840", fontStyle: "italic" }}>
-      <div style={{ fontFamily: "'DM Mono', monospace", fontSize: "9px", letterSpacing: "0.2em", textTransform: "uppercase", color: S.brassDeep, marginBottom: "8px", fontStyle: "normal" }}>{label}</div>
-      {children}
-    </blockquote>
-  );
-}
-
-function WpPre({ children }: { children: React.ReactNode }) {
-  return (
-    <pre style={{ background: S.black, color: "rgba(242,239,232,0.7)", fontFamily: "'DM Mono', monospace", fontSize: "11px", lineHeight: 1.8, padding: "24px 28px", margin: "20px 0 28px", overflowX: "auto", borderLeft: `4px solid ${S.brass}` }}>
-      {children}
-    </pre>
-  );
-}
-
-function WpTable({ headers, rows }: { headers: string[]; rows: string[][] }) {
-  return (
-    <div style={{ overflowX: "auto", margin: "18px 0 24px" }}>
-      <table style={{ width: "100%", borderCollapse: "collapse", fontFamily: "'DM Mono', monospace", fontSize: "12px" }}>
+    <div className="my-6 overflow-x-auto border-y border-white/10">
+      <table className="w-full min-w-[520px] border-collapse text-left text-[13px]">
         <thead>
-          <tr style={{ borderBottom: `2px solid ${S.brass}` }}>
+          <tr className="border-b border-white/10">
             {headers.map((h) => (
-              <th key={h} style={{ padding: "8px 14px", textAlign: "left", color: S.brassDeep, fontSize: "9px", letterSpacing: "0.15em", textTransform: "uppercase", fontWeight: 600 }}>{h}</th>
+              <th
+                key={h}
+                className="font-mono-index px-3 py-3 text-[11px] font-normal uppercase text-[#737373] first:pl-0"
+              >
+                {h}
+              </th>
             ))}
           </tr>
         </thead>
-        <tbody>
-          {rows.map((row, i) => (
-            <tr key={i} style={{ borderBottom: `1px solid ${S.rule}`, background: i % 2 === 0 ? "transparent" : S.paperDark }}>
+        <tbody className="divide-y divide-white/10">
+          {rows.map((row) => (
+            <tr key={row.join("|")}>
               {row.map((cell, j) => (
-                <td key={j} style={{ padding: "10px 14px", color: j === 0 ? S.ink : S.muted, lineHeight: 1.5, verticalAlign: "top" }}>{cell}</td>
+                <td
+                  key={j}
+                  className={cn(
+                    "px-3 py-3 align-top leading-relaxed first:pl-0",
+                    j === 0 ? "text-[#fafafa]" : "text-[#a3a3a3]",
+                  )}
+                >
+                  {cell}
+                </td>
               ))}
             </tr>
           ))}

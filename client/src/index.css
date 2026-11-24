@@ -6,7 +6,7 @@
 /* ============================================================
    AGENTCORP DESIGN SYSTEM
    Philosophy: Industrial Legal Modernism
-   - Near-black canvas with brass/gold as the sole accent
+   - Monochrome editorial: obsidian canvas, hairline rules (legacy brass tokens remapped)
    - Monospace + serif type pairing
    - Grid overlay as structural metaphor
    ============================================================ */
@@ -42,39 +42,51 @@
 }
 
 :root {
-  /* AgentCorp Brand Tokens */
-  --black: #080808;
-  --white: #f2efe8;
-  --cream: #e8e3d5;
-  --brass: #c9a84c;
-  --brass-dim: #8a6f2e;
-  --steel: #3a3a3a;
-  --steel-light: #5a5a5a;
-  --red: #c23b22;
-  --grid: rgba(201, 168, 76, 0.07);
+  /* AgentCorp editorial tokens (monochrome, hairline) */
+  --bg-primary: #000000;
+  --bg-elevated: #181818;
+  --border-hairline: rgba(255, 255, 255, 0.10);
+  --text-primary: #fafafa;
+  --text-secondary: #a3a3a3;
+  --text-muted: #737373;
+  --accent-mono: #e5e5e5;
+  --mint: #6ee7b7;
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Legacy brand tokens, remapped to the monochrome system so older
+     components (Admin, showcase) inherit the new palette. */
+  --black: #000000;
+  --white: #f4f4f6;
+  --cream: #e4e4e7;
+  --brass: #e4e4e7;
+  --brass-dim: #8e8e98;
+  --steel: #1c1c21;
+  --steel-light: #5a5a64;
+  --red: #f87171;
+  --grid: transparent;
   --base-blue: #0052ff;
 
-  /* Shadcn tokens mapped to AgentCorp palette */
-  --radius: 0px;
-  --background: oklch(0.05 0 0);
-  --foreground: oklch(0.95 0.01 80);
-  --card: oklch(0.08 0 0);
-  --card-foreground: oklch(0.95 0.01 80);
-  --popover: oklch(0.08 0 0);
-  --popover-foreground: oklch(0.95 0.01 80);
-  --primary: oklch(0.72 0.09 75);
-  --primary-foreground: oklch(0.05 0 0);
-  --secondary: oklch(0.12 0 0);
-  --secondary-foreground: oklch(0.72 0.09 75);
-  --muted: oklch(0.15 0 0);
-  --muted-foreground: oklch(0.55 0.01 80);
-  --accent: oklch(0.12 0 0);
-  --accent-foreground: oklch(0.72 0.09 75);
-  --destructive: oklch(0.55 0.22 25);
-  --destructive-foreground: oklch(0.98 0 0);
-  --border: oklch(0.72 0.09 75 / 15%);
-  --input: oklch(0.72 0.09 75 / 20%);
-  --ring: oklch(0.72 0.09 75 / 50%);
+  /* Shadcn tokens */
+  --radius: 0.5rem;
+  --background: #000000;
+  --foreground: #f4f4f6;
+  --card: #181818;
+  --card-foreground: #f4f4f6;
+  --popover: #181818;
+  --popover-foreground: #f4f4f6;
+  --primary: #f4f4f6;
+  --primary-foreground: #000000;
+  --secondary: #18181b;
+  --secondary-foreground: #f4f4f6;
+  --muted: #18181b;
+  --muted-foreground: #8e8e98;
+  --accent: #18181b;
+  --accent-foreground: #f4f4f6;
+  --destructive: oklch(0.6 0.2 25);
+  --destructive-foreground: #fafafa;
+  --border: rgba(255, 255, 255, 0.10);
+  --input: rgba(255, 255, 255, 0.15);
+  --ring: rgba(255, 255, 255, 0.4);
 }
 
 @layer base {
@@ -88,26 +100,23 @@
   }
 
   body {
-    @apply bg-background text-foreground;
-    font-family: 'DM Mono', monospace;
-    font-size: 14px;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: "Geist", -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 15px;
     line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.015em;
     overflow-x: hidden;
-    background: var(--black);
-    color: var(--white);
   }
 
-  /* GRID OVERLAY */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(var(--grid) 1px, transparent 1px),
-      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-    background-size: 60px 60px;
-    pointer-events: none;
-    z-index: 0;
+  ::selection {
+    background: #ffffff;
+    color: #000000;
+  }
+
+  [id] {
+    scroll-margin-top: 80px;
   }
 
   button:not(:disabled),
@@ -119,6 +128,52 @@
   select:not(:disabled) {
     @apply cursor-pointer;
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+}
+
+.font-mono-index {
+  font-family: "Geist Mono", ui-monospace, SFMono-Regular, monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+}
+
+.text-hero-gradient {
+  background: linear-gradient(90deg, #ffffff 0%, #9b9b9b 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Scroll reveal: elements rise and fade in once (see useReveal). */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 700ms var(--ease-out-soft), transform 700ms var(--ease-out-soft);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee 40s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { transform: none; transition: opacity 300ms linear; }
+  .animate-marquee { animation: none; }
+}
+
+.font-code {
+  font-family: "Geist Mono", ui-monospace, SFMono-Regular, monospace;
+  letter-spacing: 0;
 }
 
 @layer components {

@@ -1,21 +1,20 @@
 import { useState } from "react";
 import { trpc } from "@/lib/trpc";
-
-const BRASS = "#c9a84c";
-const BLACK = "#080808";
-const MUTED = "rgba(242,239,232,0.45)";
-const BORDER = "rgba(201,168,76,0.12)";
+import { cn } from "@/lib/utils";
 
 interface WaitlistFormProps {
   entityType: string;
   source?: string;
   variant?: "default" | "hero";
+  className?: string;
 }
 
+/** Waitlist signup wired to trpc.waitlist.subscribe (Mailchimp). */
 export default function WaitlistForm({
   entityType,
   source = "entity-card",
   variant = "default",
+  className,
 }: WaitlistFormProps) {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
@@ -38,113 +37,59 @@ export default function WaitlistForm({
 
   if (submitted) {
     return (
-      <div
-        style={{
-          marginTop: isHero ? "0" : "16px",
-          padding: isHero ? "16px 20px" : "12px 16px",
-          border: "1px solid rgba(74,222,128,0.3)",
-          background: "rgba(74,222,128,0.05)",
-          display: "flex",
-          alignItems: "center",
-          gap: "10px",
-        }}
+      <p
+        role="status"
+        className={cn(
+          "flex items-center gap-2 rounded-lg border border-[#6ee7b7]/30 bg-[#6ee7b7]/5 px-4 py-3 text-sm text-[#e5e5e5]",
+          isHero ? "max-w-md" : "mt-3",
+          className,
+        )}
       >
-        <span style={{ color: "#4ade80", fontSize: isHero ? "16px" : "12px" }}>✓</span>
-        <span
-          style={{
-            fontSize: isHero ? "13px" : "11px",
-            color: "rgba(242,239,232,0.7)",
-            fontFamily: "'DM Mono', monospace",
-          }}
-        >
-          {alreadySubscribed
-            ? "You're already on the list — we'll be in touch."
-            : "You're on the waitlist. We'll notify you at launch."}
-        </span>
-      </div>
+        <span aria-hidden className="text-[#6ee7b7]">✓</span>
+        {alreadySubscribed
+          ? "You're already on the list. We'll be in touch."
+          : "You're on the list. We'll send launch updates."}
+      </p>
     );
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      style={{
-        marginTop: isHero ? "0" : "16px",
-        display: "flex",
-        flexDirection: "column",
-        gap: "8px",
-      }}
-    >
-      <div style={{ display: "flex", gap: "0" }}>
+    <form onSubmit={handleSubmit} className={cn(isHero ? "max-w-md" : "mt-3", className)}>
+      <div className="flex flex-col gap-3 sm:flex-row">
+        <label htmlFor={`wl-${source}`} className="sr-only">
+          Email address
+        </label>
         <input
+          id={`wl-${source}`}
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder={isHero ? "Enter your email address" : "your@email.com"}
+          placeholder={isHero ? "founder@company.com" : "you@company.com"}
           required
+          autoComplete="email"
           disabled={subscribe.isPending}
-          style={{
-            flex: 1,
-            background: "rgba(8,8,8,0.8)",
-            border: `1px solid ${BORDER}`,
-            borderRight: "none",
-            color: "rgba(242,239,232,0.85)",
-            fontFamily: "'DM Mono', monospace",
-            fontSize: isHero ? "13px" : "11px",
-            padding: isHero ? "14px 18px" : "10px 14px",
-            outline: "none",
-            minWidth: 0,
-          }}
-          onFocus={(e) => (e.target.style.borderColor = "rgba(201,168,76,0.4)")}
-          onBlur={(e) => (e.target.style.borderColor = BORDER)}
+          className={cn(
+            "min-w-0 flex-1 rounded-lg border border-white/15 bg-black text-sm text-white placeholder-[#737373] transition-colors duration-300 focus:border-[#6ee7b7]/60 focus:outline-none",
+            isHero ? "px-4 py-3" : "px-3 py-2",
+          )}
         />
         <button
           type="submit"
-          disabled={subscribe.isPending || !email.trim()}
-          style={{
-            background: subscribe.isPending ? "rgba(201,168,76,0.4)" : BRASS,
-            color: BLACK,
-            border: "none",
-            fontFamily: "'Syne', sans-serif",
-            fontWeight: 700,
-            fontSize: isHero ? "12px" : "10px",
-            letterSpacing: "0.08em",
-            textTransform: "uppercase",
-            padding: isHero ? "14px 28px" : "10px 16px",
-            cursor: subscribe.isPending ? "not-allowed" : "pointer",
-            whiteSpace: "nowrap",
-            transition: "opacity 0.2s",
-            flexShrink: 0,
-          }}
-          onMouseEnter={(e) => {
-            if (!subscribe.isPending) (e.currentTarget as HTMLElement).style.opacity = "0.85";
-          }}
-          onMouseLeave={(e) => {
-            (e.currentTarget as HTMLElement).style.opacity = "1";
-          }}
+          disabled={subscribe.isPending}
+          className={cn(
+            "shrink-0 rounded-lg bg-[#6ee7b7] text-sm font-semibold text-black transition duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-[#a7f3d0] active:scale-[0.98] disabled:opacity-60",
+            isHero ? "px-5 py-3" : "px-4 py-2",
+          )}
         >
-          {subscribe.isPending ? "..." : isHero ? "Get Early Access" : "Notify Me"}
+          {subscribe.isPending ? "Sending…" : isHero ? "Request access" : "Subscribe"}
         </button>
       </div>
-
       {subscribe.isError && (
-        <p
-          style={{
-            fontSize: "10px",
-            color: "#f87171",
-            fontFamily: "'DM Mono', monospace",
-            margin: 0,
-          }}
-        >
-          {subscribe.error?.message || "Something went wrong. Please try again."}
+        <p role="alert" className="mt-2 text-xs text-red-400">
+          {subscribe.error?.message || "We couldn't add your email. Please try again."}
         </p>
       )}
-
-      {!isHero && (
-        <p style={{ fontSize: "9px", color: MUTED, margin: 0, fontFamily: "'DM Mono', monospace" }}>
-          No spam. Launch notification only.
-        </p>
-      )}
+      <p className="mt-2 text-xs text-[#737373]">No spam. Unsubscribe anytime.</p>
     </form>
   );
 }

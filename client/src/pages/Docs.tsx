@@ -1,443 +1,134 @@
-/* ============================================================
-   AGENTCORP DOCS PAGE — Developer Documentation
-   Industrial Legal Modernism — dark, brass accents, monospace
-   ============================================================ */
-import { useState } from "react";
+/**
+ * /docs — Protocol reference.
+ * Editorial layout: sticky TOC on the left (desktop), numbered sections
+ * on the right. Content is kept in agreement with /skill.md.
+ */
+import type { ReactNode } from "react";
+import { Link } from "wouter";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import {
+  CodeFrame,
+  Container,
+  IndexLabel,
+  IndexedRows,
+  MetaStrip,
+  Note,
+  PageHeader,
+  SpecList,
+  StatusTag,
+  btnPrimary,
+  btnSecondary,
+} from "@/components/site/Primitives";
+import {
+  FEE_NOTE,
+  GITHUB_URL,
+  IN_PROGRESS,
+  LEGAL_DISCLAIMER,
+  LIVE_NOW,
+  SDK_SAMPLE,
+  SKILL_URL,
+  STATUS_LABEL,
+} from "@/lib/site";
 
-const sections = [
-  {
-    id: "overview",
-    label: "Overview",
-    content: "overview",
-  },
-  {
-    id: "quickstart",
-    label: "Quick Start",
-    content: "quickstart",
-  },
-  {
-    id: "contracts",
-    label: "Smart Contracts",
-    content: "contracts",
-  },
-  {
-    id: "entity-types",
-    label: "Entity Types",
-    content: "entity-types",
-  },
-  {
-    id: "document-storage",
-    label: "Document Storage",
-    content: "document-storage",
-  },
-  {
-    id: "governance",
-    label: "Governance Adapters",
-    content: "governance",
-  },
-  {
-    id: "kyc",
-    label: "KYC / Identity",
-    content: "kyc",
-  },
-  {
-    id: "fees",
-    label: "Fee Schedule",
-    content: "fees",
-  },
-];
+/* ------------------------------------------------------------------ */
+/* Table of contents                                                   */
+/* ------------------------------------------------------------------ */
 
-function CodeBlock({ children, lang = "solidity" }: { children: string; lang?: string }) {
-  const [copied, setCopied] = useState(false);
-  const handleCopy = () => {
-    navigator.clipboard.writeText(children);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
+const TOC = [
+  { id: "overview", label: "Overview" },
+  { id: "deployment", label: "Deployment state" },
+  { id: "sdk", label: "SDK preview" },
+  { id: "contracts", label: "Contract interface" },
+  { id: "examples", label: "Example calls" },
+  { id: "entity-types", label: "Entity types" },
+  { id: "documents", label: "Documents & manifest" },
+  { id: "verification", label: "Verification" },
+  { id: "avocado", label: "Gasless execution" },
+  { id: "governance", label: "Governance adapters" },
+  { id: "identity", label: "Identity / KYC" },
+  { id: "fees", label: "Fees" },
+  { id: "scope", label: "Scope & legal" },
+] as const;
+
+const tocIndex = (id: (typeof TOC)[number]["id"]) =>
+  String(TOC.findIndex((t) => t.id === id) + 1).padStart(2, "0");
+
+function DocSection({
+  id,
+  title,
+  intro,
+  children,
+}: {
+  id: (typeof TOC)[number]["id"];
+  title: ReactNode;
+  intro?: ReactNode;
+  children: ReactNode;
+}) {
   return (
-    <div style={{ position: "relative", margin: "24px 0" }}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          background: "rgba(201,168,76,0.08)",
-          borderTop: "1px solid rgba(201,168,76,0.2)",
-          borderLeft: "1px solid rgba(201,168,76,0.2)",
-          borderRight: "1px solid rgba(201,168,76,0.2)",
-          padding: "6px 16px",
-        }}
-      >
-        <span style={{ fontSize: "9px", letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "var(--brass)", opacity: 0.7, fontFamily: "'DM Mono', monospace" }}>
-          {lang}
-        </span>
-        <button
-          onClick={handleCopy}
-          style={{
-            background: "none",
-            border: "1px solid rgba(201,168,76,0.2)",
-            color: copied ? "#4caf50" : "rgba(242,239,232,0.4)",
-            padding: "3px 10px",
-            fontSize: "9px",
-            letterSpacing: "0.1em",
-            textTransform: "uppercase" as const,
-            cursor: "pointer",
-            fontFamily: "'DM Mono', monospace",
-            transition: "all 0.2s",
-          }}
-        >
-          {copied ? "Copied!" : "Copy"}
-        </button>
-      </div>
-      <pre
-        style={{
-          background: "#0d0d0d",
-          color: "#f2efe8",
-          fontFamily: "'DM Mono', monospace",
-          fontSize: "13px",
-          padding: "24px 28px",
-          margin: 0,
-          border: "1px solid rgba(201,168,76,0.15)",
-          borderLeft: "4px solid var(--brass)",
-        }}
-      >
-        {children}
-      </pre>
-    </div>
+    <section id={id} className="scroll-mt-24 border-t border-white/10 py-16 md:py-20">
+      <IndexLabel>
+        {tocIndex(id)} / {TOC.find((t) => t.id === id)?.label}
+      </IndexLabel>
+      <h2 className="mt-3 text-2xl font-medium tracking-[-0.03em] md:text-3xl">{title}</h2>
+      {intro && <div className="mt-4 max-w-2xl text-sm leading-relaxed text-[#a3a3a3]">{intro}</div>}
+      <div className="mt-10 space-y-10">{children}</div>
+    </section>
   );
 }
 
-function DocSection({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <div style={{ marginBottom: "60px" }}>
-      <h3
-        style={{
-          fontFamily: "'Syne', sans-serif",
-          fontWeight: 700,
-          fontSize: "20px",
-          letterSpacing: "-0.01em",
-          marginBottom: "20px",
-          paddingBottom: "12px",
-          borderBottom: "1px solid rgba(201,168,76,0.12)",
-          color: "var(--white)",
-        }}
-      >
-        {title}
-      </h3>
-      {children}
-    </div>
-  );
+function SubHead({ children }: { children: ReactNode }) {
+  return <h3 className="mb-4 text-base font-medium tracking-[-0.02em]">{children}</h3>;
 }
 
-function Param({ name, type, desc }: { name: string; type: string; desc: string }) {
-  return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "160px 120px 1fr",
-        gap: "16px",
-        padding: "10px 0",
-        borderBottom: "1px solid rgba(201,168,76,0.07)",
-        alignItems: "start",
-      }}
-    >
-      <code style={{ fontFamily: "'DM Mono', monospace", fontSize: "12px", color: "var(--brass)" }}>{name}</code>
-      <code style={{ fontFamily: "'DM Mono', monospace", fontSize: "11px", color: "rgba(242,239,232,0.4)" }}>{type}</code>
-      <span style={{ fontSize: "12px", color: "rgba(242,239,232,0.5)", fontFamily: "'DM Mono', monospace", lineHeight: 1.5 }}>{desc}</span>
-    </div>
-  );
+function Code({ children }: { children: ReactNode }) {
+  return <code className="font-code text-[0.92em] text-[#fafafa]">{children}</code>;
 }
 
-export default function Docs() {
-  const [activeSection, setActiveSection] = useState("overview");
-
+/** Hairline table that scrolls inside its own container on narrow screens. */
+function Table({ head, rows }: { head: string[]; rows: ReactNode[][] }) {
   return (
-    <div style={{ background: "var(--black)", minHeight: "100vh" }}>
-      <Nav />
-
-      {/* Header */}
-      <div
-        style={{
-          paddingTop: "80px",
-          borderBottom: "1px solid rgba(201,168,76,0.12)",
-          position: "relative",
-          zIndex: 1,
-        }}
-      >
-        <div style={{ padding: "48px 48px 32px" }}>
-          <div className="eyebrow" style={{ marginBottom: "16px" }}>Developer Documentation</div>
-          <h1
-            style={{
-              fontFamily: "'Syne', sans-serif",
-              fontWeight: 800,
-              fontSize: "clamp(32px, 4vw, 52px)",
-              letterSpacing: "-0.02em",
-              color: "var(--white)",
-              marginBottom: "12px",
-            }}
-          >
-            AGENTCORP{" "}
-            <em style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic", fontWeight: 400, color: "var(--brass)" }}>
-              Protocol Docs
-            </em>
-          </h1>
-          <p style={{ color: "rgba(242,239,232,0.4)", fontSize: "13px", fontFamily: "'DM Mono', monospace", maxWidth: "500px" }}>
-            Smart contract interface, entity types, document storage, and governance adapters for the AGENTCORP on-chain legal infrastructure protocol.
-          </p>
-        </div>
-      </div>
-
-      {/* Two-column layout */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "240px 1fr",
-          minHeight: "calc(100vh - 200px)",
-          position: "relative",
-          zIndex: 1,
-        }}
-      >
-        {/* Sidebar */}
-        <div
-          style={{
-            borderRight: "1px solid rgba(201,168,76,0.12)",
-            padding: "40px 0",
-            position: "sticky",
-            top: "80px",
-            height: "calc(100vh - 80px)",
-            overflowY: "auto",
-          }}
-        >
-          <div style={{ padding: "0 24px", marginBottom: "8px" }}>
-            <span style={{ fontSize: "9px", letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "var(--brass)", opacity: 0.5, fontFamily: "'DM Mono', monospace" }}>
-              Contents
-            </span>
-          </div>
-          {sections.map((s) => (
-            <button
-              key={s.id}
-              onClick={() => setActiveSection(s.id)}
-              style={{
-                display: "block",
-                width: "100%",
-                textAlign: "left",
-                padding: "10px 24px",
-                background: activeSection === s.id ? "rgba(201,168,76,0.08)" : "none",
-                border: "none",
-                borderLeft: activeSection === s.id ? "2px solid var(--brass)" : "2px solid transparent",
-                color: activeSection === s.id ? "var(--brass)" : "rgba(242,239,232,0.4)",
-                fontSize: "12px",
-                letterSpacing: "0.05em",
-                fontFamily: "'DM Mono', monospace",
-                cursor: "pointer",
-                transition: "all 0.2s",
-              }}
-            >
-              {s.label}
-            </button>
+    <div className="overflow-x-auto border-y border-white/10">
+      <table className="w-full min-w-[520px] text-left text-xs">
+        <thead>
+          <tr className="border-b border-white/10">
+            {head.map((h) => (
+              <th key={h} className="font-mono-index py-3 pr-4 text-[11px] font-normal uppercase text-[#737373]">
+                {h}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-white/10">
+          {rows.map((r, i) => (
+            <tr key={i}>
+              {r.map((c, j) => (
+                <td key={j} className={j === 0 ? "py-3 pr-4 text-[#fafafa]" : "py-3 pr-4 text-[#a3a3a3]"}>
+                  {c}
+                </td>
+              ))}
+            </tr>
           ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
 
-          <div style={{ padding: "24px 24px 0", marginTop: "24px", borderTop: "1px solid rgba(201,168,76,0.1)" }}>
-            <a
-              href="https://www.agentscorp.xyz/docs"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: "block",
-                fontSize: "11px",
-                color: "rgba(242,239,232,0.3)",
-                textDecoration: "none",
-                fontFamily: "'DM Mono', monospace",
-                letterSpacing: "0.05em",
-                marginBottom: "8px",
-              }}
-            >
-              Full Docs ↗
-            </a>
-            <a
-              href="https://github.com/tylermalin/agentcorp1"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: "block",
-                fontSize: "11px",
-                color: "rgba(242,239,232,0.3)",
-                textDecoration: "none",
-                fontFamily: "'DM Mono', monospace",
-                letterSpacing: "0.05em",
-              }}
-            >
-              GitHub ↗
-            </a>
-          </div>
-        </div>
+/* ------------------------------------------------------------------ */
+/* Code samples (kept in sync with /skill.md)                          */
+/* ------------------------------------------------------------------ */
 
-        {/* Main content */}
-        <div style={{ padding: "48px 60px", maxWidth: "860px" }}>
-
-          {activeSection === "overview" && (
-            <div>
-              <h2 style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: "32px", letterSpacing: "-0.02em", marginBottom: "24px", color: "var(--white)" }}>
-                Overview
-              </h2>
-              <p style={{ color: "rgba(242,239,232,0.6)", fontSize: "14px", lineHeight: 1.7, fontFamily: "'DM Mono', monospace", marginBottom: "24px" }}>
-                AGENTCORP is an NFT-native legal entity formation protocol deployed on Base (Chain ID 8453). It enables any wallet to mint legally-recognized entities as ERC-721 tokens with governing documents stored permanently on Arweave and IPFS.
-              </p>
-              <div
-                style={{
-                  background: "rgba(201,168,76,0.05)",
-                  border: "1px solid rgba(201,168,76,0.15)",
-                  borderLeft: "4px solid var(--brass)",
-                  padding: "20px 24px",
-                  marginBottom: "32px",
-                }}
-              >
-                <div style={{ fontSize: "9px", letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "var(--brass)", marginBottom: "8px", fontFamily: "'DM Mono', monospace" }}>
-                  Core Principle
-                </div>
-                <p style={{ fontSize: "15px", color: "var(--white)", fontFamily: "'DM Mono', monospace", lineHeight: 1.6 }}>
-                  The NFT IS the legal entity. Mint = Incorporate. Transfer = Assign. Burn = Dissolve.
-                </p>
-              </div>
-              <DocSection title="Network">
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2px" }}>
-                  {[
-                    { label: "Network", value: "Base Mainnet" },
-                    { label: "Chain ID", value: "8453" },
-                    { label: "Native Token", value: "ETH" },
-                    { label: "Block Time", value: "~2 seconds" },
-                    { label: "EVM Compatible", value: "Yes" },
-                    { label: "L2 Stack", value: "OP Stack (Coinbase)" },
-                  ].map((item) => (
-                    <div
-                      key={item.label}
-                      style={{
-                        border: "1px solid rgba(201,168,76,0.1)",
-                        padding: "16px 20px",
-                        background: "rgba(201,168,76,0.02)",
-                      }}
-                    >
-                      <div style={{ fontSize: "9px", letterSpacing: "0.15em", textTransform: "uppercase" as const, color: "rgba(242,239,232,0.3)", marginBottom: "4px", fontFamily: "'DM Mono', monospace" }}>
-                        {item.label}
-                      </div>
-                      <div style={{ fontSize: "14px", color: "var(--brass)", fontFamily: "'DM Mono', monospace" }}>
-                        {item.value}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </DocSection>
-              <DocSection title="Key Actions">
-                <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
-                  {[
-                    { fn: "mintEntity()", legal: "Incorporate" },
-                    { fn: "transfer()", legal: "Assign / sell entity" },
-                    { fn: "burn()", legal: "Dissolve" },
-                    { fn: "amendEntity()", legal: "Amend operating agreement" },
-                    { fn: "NFT metadata", legal: "Living legal record" },
-                  ].map((row) => (
-                    <div
-                      key={row.fn}
-                      style={{
-                        display: "grid",
-                        gridTemplateColumns: "1fr 1fr",
-                        border: "1px solid rgba(201,168,76,0.08)",
-                        padding: "14px 20px",
-                        background: "rgba(201,168,76,0.01)",
-                      }}
-                    >
-                      <code style={{ fontFamily: "'DM Mono', monospace", fontSize: "13px", color: "var(--brass)" }}>{row.fn}</code>
-                      <span style={{ fontSize: "13px", color: "rgba(242,239,232,0.5)", fontFamily: "'DM Mono', monospace" }}>{row.legal}</span>
-                    </div>
-                  ))}
-                </div>
-              </DocSection>
-            </div>
-          )}
-
-          {activeSection === "quickstart" && (
-            <div>
-              <h2 style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: "32px", letterSpacing: "-0.02em", marginBottom: "24px", color: "var(--white)" }}>
-                Quick Start
-              </h2>
-              <p style={{ color: "rgba(242,239,232,0.6)", fontSize: "14px", lineHeight: 1.7, fontFamily: "'DM Mono', monospace", marginBottom: "32px" }}>
-                Mint your first legal entity in under 5 minutes.
-              </p>
-              <DocSection title="1. Connect to Base">
-                <CodeBlock lang="javascript">{`// Add Base to your wallet
-const BASE_CHAIN = {
-  chainId: '0x2105', // 8453 in hex
-  chainName: 'Base',
-  nativeCurrency: { name: 'ETH', symbol: 'ETH', decimals: 18 },
-  rpcUrls: ['https://mainnet.base.org'],
-  blockExplorerUrls: ['https://basescan.org']
-};
-
-await window.ethereum.request({
-  method: 'wallet_addEthereumChain',
-  params: [BASE_CHAIN]
-});`}</CodeBlock>
-              </DocSection>
-              <DocSection title="2. Mint a Delaware Series LLC">
-                <CodeBlock lang="solidity">{`// AGENTCORP Factory Interface
-// Factory Address: NOT YET DEPLOYED — mainnet target Q1 2027
-
-IAgentCorpFactory factory = IAgentCorpFactory(FACTORY_ADDRESS);
-
-uint256 tokenId = factory.mintEntity{value: 0.05 ether}(
-    EntityType.DELAWARE_SERIES_LLC,
-    "Acme Holdings LLC",
-    arweaveTxHash,      // bytes32 — Arweave TX ID of governing docs
-    safeAddress,        // address — Gnosis Safe or EOA
-    kycAttestation      // bytes — optional KYC attestation
-);
-
-// tokenId is your entity NFT — you are now incorporated`}</CodeBlock>
-              </DocSection>
-              <DocSection title="3. Mint a Series under your LLC">
-                <CodeBlock lang="solidity">{`// Requires ownership of parent LLC token
-uint256 seriesTokenId = factory.mintSeries(
-    tokenId,                    // parentTokenId — your LLC NFT
-    "Acme Carbon Credits LLC",  // seriesName
-    seriesDocHash,              // bytes32 — Arweave TX ID
-    seriesTreasuryAddress       // address — Series treasury
-);
-
-// seriesTokenId is your Series NFT
-// Full liability isolation from parent LLC and other Series`}</CodeBlock>
-              </DocSection>
-              <DocSection title="4. Amend your entity">
-                <CodeBlock lang="solidity">{`// Only callable by current NFT holder
-factory.amendEntity(
-    tokenId,
-    newDocHash,                 // bytes32 — new Arweave TX ID
-    "Added new member: 0x..."   // amendmentDescription
-);
-
-// Amendment hash is appended to on-chain amendment history
-// Previous documents remain accessible on Arweave`}</CodeBlock>
-              </DocSection>
-            </div>
-          )}
-
-          {activeSection === "contracts" && (
-            <div>
-              <h2 style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: "32px", letterSpacing: "-0.02em", marginBottom: "24px", color: "var(--white)" }}>
-                Smart Contract Interface
-              </h2>
-              <DocSection title="Core Functions">
-                <CodeBlock lang="solidity">{`// Mint a new legal entity
+const CONTRACT_FUNCTIONS = `// Register a new entity record
 function mintEntity(
     EntityType entityType,
     string calldata name,
-    bytes32 docHash,           // Arweave TX ID of governing documents
-    address treasury,          // Safe multisig or EOA
-    bytes calldata kycAttestation
+    bytes32 docHash,              // Arweave TX ID of the document manifest
+    address treasury,             // Safe multisig or EOA
+    bytes calldata kycAttestation // wire encoding NOT SPECIFIED
 ) external payable returns (uint256 tokenId);
 
-// Mint a Series under an existing parent LLC
+// Register a series record under an existing parent record
 function mintSeries(
     uint256 parentTokenId,
     string calldata seriesName,
@@ -445,174 +136,98 @@ function mintSeries(
     address seriesTreasury
 ) external returns (uint256 seriesTokenId);
 
-// Amend entity documents (token holder only)
+// Append an amendment to the record (token holder only)
 function amendEntity(
     uint256 tokenId,
     bytes32 newDocHash,
     string calldata amendmentDescription
 ) external;
 
-// Dissolve an entity (token holder only)
+// Record dissolution documents (token holder only)
 function dissolveEntity(
     uint256 tokenId,
     bytes32 dissolutionDocHash
 ) external;
 
-// Read entity state
-function getEntityState(uint256 tokenId) 
+// Reads
+function getEntityState(uint256 tokenId)
     external view returns (EntityState memory);
 
-// Get all Series for a parent LLC
-function getSeriesTokens(uint256 parentTokenId) 
-    external view returns (uint256[] memory);`}</CodeBlock>
-              </DocSection>
-              <DocSection title="EntityState Struct">
-                <CodeBlock lang="solidity">{`struct EntityState {
+function getSeriesTokens(uint256 parentTokenId)
+    external view returns (uint256[] memory);`;
+
+const ENTITY_ENUM = `enum EntityType {
+    DELAWARE_LLC,           // 0
+    DELAWARE_SERIES_LLC,    // 1  parent
+    SERIES_DESIGNATION,     // 2  child series
+    DAO_CHARTER,            // 3
+    NONPROFIT,              // 4  not deployed
+    IP_LICENSE,             // 5  not deployed
+    IP_ASSIGNMENT           // 6  not deployed
+}`;
+
+const ENTITY_STATE = `struct EntityState {
     EntityType entityType;
     uint256 formationTimestamp;
     string jurisdictionCode;       // "DE-LLC", "DE-SERIES", "DE-DAO"
-    bytes32 primaryDocArweaveTx;   // Primary governing document TX
-    bytes32[] amendmentHashes;     // Amendment history
-    address treasury;              // Entity asset wallet
-    uint256 parentTokenId;         // For Series: parent LLC token (0 if none)
+    bytes32 primaryDocArweaveTx;   // manifest pointer, NOT a content digest
+    bytes32[] amendmentHashes;     // amendment history, in order
+    address treasury;              // entity asset wallet
+    uint256 parentTokenId;         // 0 if not a Series
     bool dissolved;
-}`}</CodeBlock>
-              </DocSection>
-              <DocSection title="EntityType Enum">
-                <CodeBlock lang="solidity">{`enum EntityType {
-    DELAWARE_LLC,           // 0
-    DELAWARE_SERIES_LLC,    // 1 — parent
-    SERIES_DESIGNATION,     // 2 — child series
-    DAO_CHARTER,            // 3
-    NONPROFIT,              // 4 (Q2 2027)
-    IP_LICENSE,             // 5 (Q1 2027)
-    IP_ASSIGNMENT           // 6 (Q1 2027)
-}`}</CodeBlock>
-              </DocSection>
-              <DocSection title="mintEntity Parameters">
-                <Param name="entityType" type="EntityType" desc="The type of entity to mint (see EntityType enum)" />
-                <Param name="name" type="string" desc="Legal name of the entity (e.g., 'Acme Holdings LLC')" />
-                <Param name="docHash" type="bytes32" desc="Arweave Transaction ID of the governing documents package" />
-                <Param name="treasury" type="address" desc="Gnosis Safe address or EOA that will hold entity assets" />
-                <Param name="kycAttestation" type="bytes" desc="Optional KYC attestation bytes from supported provider" />
-              </DocSection>
-            </div>
-          )}
+}`;
 
-          {activeSection === "entity-types" && (
-            <div>
-              <h2 style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: "32px", letterSpacing: "-0.02em", marginBottom: "24px", color: "var(--white)" }}>
-                Entity Types
-              </h2>
-              {[
-                {
-                  name: "DELAWARE_SERIES_LLC",
-                  status: "Live",
-                  price: "0.05 ETH",
-                  desc: "A Delaware Limited Liability Company authorized under 6 Del. C. § 18-215 with unlimited legally-segregated Series capability.",
-                  docs: ["Certificate of Formation", "LLC Operating Agreement", "Member Register"],
-                  uses: ["Master holding company", "DAO entity wrapper", "RWA portfolio parent"],
-                },
-                {
-                  name: "SERIES_DESIGNATION",
-                  status: "Live",
-                  price: "0.02 ETH",
-                  desc: "A legally-isolated Series under a parent Delaware Series LLC. Requires parent LLC token ownership.",
-                  docs: ["Series Designation Certificate", "Series Operating Addendum"],
-                  uses: ["Project-level entity", "Carbon credit batch", "RWA holding", "IP isolation"],
-                },
-                {
-                  name: "DAO_CHARTER",
-                  status: "Live",
-                  price: "0.05 ETH",
-                  desc: "A Delaware LLC with full blockchain governance provisions: designated smart contract authority, token-weighted voting, delegate disclosure.",
-                  docs: ["DAO Operating Agreement", "Vote Delegate Disclosure", "Subscription Agreement"],
-                  uses: ["Protocol DAOs", "Investment clubs", "Onchain organizations"],
-                },
-                {
-                  name: "IP_LICENSE",
-                  status: "Q1 2027",
-                  price: "TBD",
-                  desc: "Software license NFT with royalty hooks and sublicense controls.",
-                  docs: ["Software License Agreement", "Royalty Schedule"],
-                  uses: ["Software licensing", "IP monetization", "Open source with revenue"],
-                },
-                {
-                  name: "NONPROFIT",
-                  status: "Q2 2027",
-                  price: "0.05 ETH",
-                  desc: "Delaware non-profit with 501(c) pathway documentation.",
-                  docs: ["Non-Profit Charter", "Foundation Operating Agreement"],
-                  uses: ["Protocol foundations", "Grant programs", "Public goods"],
-                },
-              ].map((entity) => (
-                <div
-                  key={entity.name}
-                  style={{
-                    border: "1px solid rgba(201,168,76,0.1)",
-                    padding: "32px",
-                    marginBottom: "2px",
-                    background: "rgba(201,168,76,0.02)",
-                  }}
-                >
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "16px", flexWrap: "wrap", gap: "12px" }}>
-                    <div>
-                      <code style={{ fontFamily: "'DM Mono', monospace", fontSize: "14px", color: "var(--brass)", display: "block", marginBottom: "6px" }}>
-                        {entity.name}
-                      </code>
-                      <span className={entity.status === "Live" ? "badge-live" : "badge-soon"}>
-                        {entity.status}
-                      </span>
-                    </div>
-                    <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: "20px", color: "var(--brass)" }}>
-                      {entity.price}
-                    </span>
-                  </div>
-                  <p style={{ color: "rgba(242,239,232,0.5)", fontSize: "13px", lineHeight: 1.6, fontFamily: "'DM Mono', monospace", marginBottom: "20px" }}>
-                    {entity.desc}
-                  </p>
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
-                    <div>
-                      <div style={{ fontSize: "9px", letterSpacing: "0.15em", textTransform: "uppercase" as const, color: "var(--brass)", opacity: 0.6, marginBottom: "8px", fontFamily: "'DM Mono', monospace" }}>Documents Included</div>
-                      {entity.docs.map((d) => (
-                        <div key={d} style={{ fontSize: "11px", color: "rgba(242,239,232,0.4)", fontFamily: "'DM Mono', monospace", marginBottom: "4px" }}>→ {d}</div>
-                      ))}
-                    </div>
-                    <div>
-                      <div style={{ fontSize: "9px", letterSpacing: "0.15em", textTransform: "uppercase" as const, color: "var(--brass)", opacity: 0.6, marginBottom: "8px", fontFamily: "'DM Mono', monospace" }}>Use Cases</div>
-                      {entity.uses.map((u) => (
-                        <div key={u} style={{ fontSize: "11px", color: "rgba(242,239,232,0.4)", fontFamily: "'DM Mono', monospace", marginBottom: "4px" }}>→ {u}</div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+const EXAMPLE_NETWORK = `// Base Sepolia testnet (examples only; mainnet target is Base 8453)
+const BASE_SEPOLIA = {
+  chainId: "0x14a34", // 84532
+  chainName: "Base Sepolia",
+  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: ["https://sepolia.base.org"],
+  blockExplorerUrls: ["https://sepolia.basescan.org"],
+};
 
-          {activeSection === "document-storage" && (
-            <div>
-              <h2 style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: "32px", letterSpacing: "-0.02em", marginBottom: "24px", color: "var(--white)" }}>
-                Document Storage
-              </h2>
-              <p style={{ color: "rgba(242,239,232,0.6)", fontSize: "14px", lineHeight: 1.7, fontFamily: "'DM Mono', monospace", marginBottom: "32px" }}>
-                All legal documents use dual-storage for permanence and accessibility.
-              </p>
-              <DocSection title="Storage Architecture">
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2px", marginBottom: "32px" }}>
-                  {[
-                    { name: "Arweave", desc: "Permanent, pay-once storage. Documents cannot be deleted. Minimum 200-year persistence guarantee.", color: "#c9a84c" },
-                    { name: "IPFS", desc: "Distributed content-addressed retrieval for real-time access. CID stored on-chain alongside Arweave TX ID.", color: "#4caf50" },
-                  ].map((s) => (
-                    <div key={s.name} style={{ border: "1px solid rgba(201,168,76,0.1)", padding: "24px", background: "rgba(201,168,76,0.02)" }}>
-                      <div style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: "16px", color: s.color, marginBottom: "8px" }}>{s.name}</div>
-                      <p style={{ fontSize: "12px", color: "rgba(242,239,232,0.5)", fontFamily: "'DM Mono', monospace", lineHeight: 1.6 }}>{s.desc}</p>
-                    </div>
-                  ))}
-                </div>
-              </DocSection>
-              <DocSection title="Document Manifest Schema">
-                <CodeBlock lang="json">{`{
+await window.ethereum.request({
+  method: "wallet_addEthereumChain",
+  params: [BASE_SEPOLIA],
+});`;
+
+const EXAMPLE_MINT = `// Factory address: NOT PUBLISHED (Sepolia) / NOT DEPLOYED (mainnet)
+IAgentCorpFactory factory = IAgentCorpFactory(FACTORY_ADDRESS);
+
+// Registers an on-chain record that points at the governing documents.
+// It does not file a Certificate of Formation with Delaware.
+uint256 tokenId = factory.mintEntity{value: MINT_FEE}(
+    EntityType.DELAWARE_SERIES_LLC,
+    "Acme Holdings LLC",
+    manifestTx,         // bytes32: Arweave TX ID of the manifest
+    safeAddress,        // address: Safe multisig or EOA
+    kycAttestation      // bytes: encoding not yet specified
+);`;
+
+const EXAMPLE_SERIES = `// Caller must hold the parent record token
+uint256 seriesTokenId = factory.mintSeries(
+    tokenId,                    // parentTokenId
+    "Acme Carbon Credits",      // seriesName
+    seriesManifestTx,           // bytes32: Arweave TX ID
+    seriesTreasuryAddress       // address: series treasury
+);
+// Liability isolation between series depends on the series being
+// properly designated and its records and assets kept separate
+// (6 Del. C. § 18-215), not on the token itself.`;
+
+const EXAMPLE_AMEND = `// Check state first: caller holds the token and dissolved == false
+EntityState memory s = factory.getEntityState(tokenId);
+require(!s.dissolved, "entity record dissolved");
+
+factory.amendEntity(
+    tokenId,
+    newManifestTx,              // bytes32: new Arweave TX ID
+    "Added new member: 0x..."   // amendmentDescription
+);
+// The amendment hash is appended to amendmentHashes.
+// Prior documents remain retrievable on Arweave.`;
+
+const MANIFEST = `{
   "agentcorp_version": "1.0",
   "entity_type": "DELAWARE_SERIES_LLC",
   "entity_name": "[[ENTITY_NAME]]",
@@ -646,16 +261,12 @@ function getSeriesTokens(uint256 parentTokenId)
       "joined_timestamp": "[[TIMESTAMP]]"
     }
   ]
-}`}</CodeBlock>
-              </DocSection>
-              <DocSection title="Verification Protocol">
-                <CodeBlock lang="javascript">{`// Verify document authenticity.
-//
-// The chain anchors the MANIFEST, not each document. primaryDocArweaveTx is a
-// storage pointer, not a digest of the file, so verification takes two steps:
-// resolve the manifest from the pointer, then check each document against the
-// sha256 recorded inside it. Arweave transactions are immutable, which is what
-// makes the pointer sufficient on its own.
+}`;
+
+const VERIFY = `// The chain anchors the MANIFEST, not each document.
+// primaryDocArweaveTx is a storage pointer, not a digest, so
+// verification takes two steps: resolve the manifest, then check each
+// document against the sha256 recorded inside it.
 async function verifyDocument(tokenId, documentType) {
   // 1. Resolve the manifest pointer from on-chain state
   const entityState = await factory.getEntityState(tokenId);
@@ -665,65 +276,24 @@ async function verifyDocument(tokenId, documentType) {
   const res = await fetch(\`https://arweave.net/\${manifestTx}\`);
   const manifest = await res.json();
 
-  // 3. Locate the entry for the document you are verifying
+  // 3. Locate the entry for the document being verified
   const entry = manifest.documents.find((d) => d.type === documentType);
   if (!entry) throw new Error(\`No \${documentType} in manifest \${manifestTx}\`);
 
   // 4. Fetch that document and hash its bytes
   const docRes = await fetch(\`https://arweave.net/\${entry.arweave_tx}\`);
   const docBytes = await docRes.arrayBuffer();
-  const digest = await crypto.subtle.digest('SHA-256', docBytes);
+  const digest = await crypto.subtle.digest("SHA-256", docBytes);
   const hashHex = [...new Uint8Array(digest)]
-    .map((b) => b.toString(16).padStart(2, '0'))
-    .join('');
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
 
   // 5. Compare against the sha256 recorded in the manifest
-  return hashHex === entry.sha256.replace(/^0x/, '').toLowerCase();
-}`}</CodeBlock>
-              </DocSection>
-            </div>
-          )}
+  return hashHex === entry.sha256.replace(/^0x/, "").toLowerCase();
+}`;
 
-          {activeSection === "governance" && (
-            <div>
-              <h2 style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: "32px", letterSpacing: "-0.02em", marginBottom: "24px", color: "var(--white)" }}>
-                Governance Adapters
-              </h2>
-              <p style={{ color: "rgba(242,239,232,0.6)", fontSize: "14px", lineHeight: 1.7, fontFamily: "'DM Mono', monospace", marginBottom: "32px" }}>
-                AGENTCORP entities can connect to existing governance frameworks via adapters.
-              </p>
-              <DocSection title="Gnosis Safe (Multisig)">
-                <CodeBlock lang="solidity">{`// GnosisSafeAdapter.sol
-// Threshold: Configurable (e.g., 2-of-3, 3-of-5)
-// Use case: Small teams, investment vehicles
-
-// Setup: Pass Safe address as treasury + designated contract
-factory.mintEntity{value: 0.05 ether}(
-    EntityType.DELAWARE_SERIES_LLC,
-    "My Holdings LLC",
-    docHash,
-    GNOSIS_SAFE_ADDRESS,  // treasury = Safe
-    kycAttestation
-);`}</CodeBlock>
-              </DocSection>
-              <DocSection title="Compound Governor">
-                <CodeBlock lang="solidity">{`// CompoundGovernorAdapter.sol
-// Voting: Token-weighted with configurable quorum
-// Timelock: Configurable delay (default: 48 hours)
-// Use case: DAOs with governance tokens
-
-factory.mintEntity{value: 0.05 ether}(
-    EntityType.DAO_CHARTER,
-    "Protocol DAO LLC",
-    docHash,
-    GOVERNOR_ADDRESS,     // treasury = Governor contract
-    kycAttestation
-);`}</CodeBlock>
-              </DocSection>
-              <DocSection title="Custom Governance Interface">
-                <CodeBlock lang="solidity">{`// IAgentCorpGovernance — implement this interface
-// to use any custom governance system
-
+const GOVERNANCE_INTERFACE = `// IAgentCorpGovernance (draft): implement to use a custom
+// governance system as the designated controller of a treasury.
 interface IAgentCorpGovernance {
     function propose(
         address[] memory targets,
@@ -731,120 +301,577 @@ interface IAgentCorpGovernance {
         bytes[] memory calldatas,
         string memory description
     ) external returns (uint256 proposalId);
-    
+
     function vote(uint256 proposalId, uint8 support) external;
-    
+
     function execute(
         address[] memory targets,
         uint256[] memory values,
         bytes[] memory calldatas,
         bytes32 descriptionHash
     ) external payable returns (uint256);
-    
-    function cancel(uint256 proposalId) external;
-}`}</CodeBlock>
-              </DocSection>
-            </div>
-          )}
 
-          {activeSection === "kyc" && (
-            <div>
-              <h2 style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: "32px", letterSpacing: "-0.02em", marginBottom: "24px", color: "var(--white)" }}>
-                KYC / Identity Integration
-              </h2>
-              <p style={{ color: "rgba(242,239,232,0.6)", fontSize: "14px", lineHeight: 1.7, fontFamily: "'DM Mono', monospace", marginBottom: "32px" }}>
-                KYC is optional for entity minting but required for subscription agreement compliance.
-              </p>
-              <DocSection title="Supported Providers">
-                <div style={{ display: "flex", flexDirection: "column", gap: "2px", marginBottom: "32px" }}>
-                  {[
-                    { name: "Persona", desc: "Onchain attestation via EAS (Ethereum Attestation Service)", level: "Full KYC" },
-                    { name: "Synaps", desc: "KYC attestation with on-chain proof", level: "Full KYC" },
-                    { name: "Worldcoin", desc: "Proof of personhood (no identity disclosure)", level: "Personhood" },
-                    { name: "Coinbase Verification", desc: "Coinbase KYB/KYC attestation (native Base integration)", level: "KYB/KYC" },
-                  ].map((p) => (
-                    <div key={p.name} style={{ border: "1px solid rgba(201,168,76,0.1)", padding: "20px 24px", background: "rgba(201,168,76,0.02)", display: "flex", justifyContent: "space-between", alignItems: "center", gap: "20px" }}>
-                      <div>
-                        <div style={{ fontFamily: "'Syne', sans-serif", fontWeight: 600, fontSize: "14px", color: "var(--white)", marginBottom: "4px" }}>{p.name}</div>
-                        <div style={{ fontSize: "11px", color: "rgba(242,239,232,0.4)", fontFamily: "'DM Mono', monospace" }}>{p.desc}</div>
-                      </div>
-                      <span className="badge-brass">{p.level}</span>
-                    </div>
-                  ))}
-                </div>
-              </DocSection>
-              <DocSection title="Attestation Schema">
-                <CodeBlock lang="json">{`{
+    function cancel(uint256 proposalId) external;
+}`;
+
+const ATTESTATION = `{
   "schema": "agentcorp-kyc-v1",
-  "provider": "persona",
-  "level": "ACCREDITED_INVESTOR",
+  "provider": "[[PROVIDER]]",
+  "level": "[[LEVEL]]",
   "attestation_hash": "0x...",
   "expiry": 1800000000,
   "jurisdiction": "US"
-}`}</CodeBlock>
+}`;
+
+/* ------------------------------------------------------------------ */
+/* Page                                                                */
+/* ------------------------------------------------------------------ */
+
+const linkCls = "text-[#fafafa] underline decoration-white/20 underline-offset-4 transition hover:decoration-white";
+
+export default function Docs() {
+  return (
+    <div className="min-h-screen bg-[#000000] text-[#fafafa]">
+      <Nav />
+      <main id="main">
+        <Container>
+          <PageHeader
+            index={`Docs · ${STATUS_LABEL}`}
+            title="Protocol documentation."
+            lede="Contract interface, entity types, document manifest, verification, and gasless execution for the AgentCorp protocol. This reference matches the agent specification published at /skill.md."
+          >
+            <div className="mt-10 flex flex-wrap gap-3">
+              <a href={SKILL_URL} className={btnPrimary}>
+                Read skill.md
+              </a>
+              <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className={btnSecondary}>
+                GitHub
+              </a>
+            </div>
+          </PageHeader>
+
+          {/* Status block */}
+          <section className="border-t border-white/10 py-12 md:py-16">
+            <div className="grid gap-10 md:grid-cols-2 md:gap-0">
+              <div className="md:pr-10">
+                <StatusTag tone="live">Live today</StatusTag>
+                <ul className="mt-5 divide-y divide-white/10 border-y border-white/10 text-sm">
+                  {LIVE_NOW.map((item) => (
+                    <li key={item} className="py-3 text-[#fafafa]">
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="md:border-l md:border-white/10 md:pl-10">
+                <StatusTag tone="planned">In development · target Q1 2027</StatusTag>
+                <ul className="mt-5 divide-y divide-white/10 border-y border-white/10 text-sm">
+                  {IN_PROGRESS.map((item) => (
+                    <li key={item} className="py-3 text-[#a3a3a3]">
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            <Note className="mt-10 max-w-2xl">
+              Contracts are not deployed to mainnet. There is no factory address to call today. Code
+              examples on this page target Base Sepolia for integration work; Base (8453) is the
+              mainnet target.
+            </Note>
+          </section>
+
+          <div className="grid gap-10 md:grid-cols-12">
+            {/* Sidebar TOC */}
+            <aside className="border-t border-white/10 pt-8 md:col-span-3 md:pt-16">
+              <nav aria-label="Contents" className="md:sticky md:top-24">
+                <IndexLabel>Contents</IndexLabel>
+                <ol className="mt-4 grid grid-cols-2 gap-x-4 md:grid-cols-1">
+                  {TOC.map((t, i) => (
+                    <li key={t.id}>
+                      <a
+                        href={`#${t.id}`}
+                        className="flex gap-3 py-1.5 text-xs text-[#a3a3a3] transition hover:text-white"
+                      >
+                        <span className="font-mono-index text-[#737373]">{String(i + 1).padStart(2, "0")}</span>
+                        <span>{t.label}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ol>
+              </nav>
+            </aside>
+
+            {/* Content */}
+            <div className="min-w-0 md:col-span-9">
+              <DocSection
+                id="overview"
+                title="Overview"
+                intro={
+                  <>
+                    AgentCorp is a protocol for linking legal-entity records to on-chain state. Each
+                    entity record is an ERC-721 token on Base that points at a manifest of governing
+                    documents stored on Arweave, with sha256 hashes for verification and an ordered
+                    amendment history.
+                  </>
+                }
+              >
+                <Note>
+                  A token represents and tracks entity records; it does not itself create the entity.
+                  Statutory formation (a Delaware Certificate of Formation filed through a registered
+                  agent, an EIN, and authorized signatories) and banking depend on real-world filings
+                  and counterparties.
+                </Note>
+
+                <MetaStrip
+                  items={[
+                    { label: "Mainnet target", value: "Base · 8453" },
+                    { label: "Testnet", value: "Base Sepolia · 84532" },
+                    { label: "Token standard", value: "ERC-721" },
+                    { label: "Gas", value: "USDC via Avocado" },
+                  ]}
+                />
+
+                <div>
+                  <SubHead>Actions and what they record</SubHead>
+                  <IndexedRows
+                    rows={[
+                      {
+                        idx: "0.1",
+                        title: <Code>mintEntity()</Code>,
+                        body: "Registers an entity record and anchors its document manifest. Pairs with, and does not replace, the statutory filing.",
+                      },
+                      {
+                        idx: "0.2",
+                        title: <Code>mintSeries()</Code>,
+                        body: "Registers a series record under a parent Delaware Series LLC record held by the caller.",
+                      },
+                      {
+                        idx: "0.3",
+                        title: <Code>amendEntity()</Code>,
+                        body: "Appends a new manifest hash to the amendment history. Prior versions stay retrievable on Arweave.",
+                      },
+                      {
+                        idx: "0.4",
+                        title: <Code>dissolveEntity()</Code>,
+                        body: "Records dissolution documents and marks the record dissolved. Statutory dissolution still requires a Certificate of Cancellation filing.",
+                      },
+                      {
+                        idx: "0.5",
+                        title: <Code>transfer()</Code>,
+                        body: "Standard ERC-721 transfer of the record token. Whether membership interests move with it is governed by the operating agreement, not by the transfer alone.",
+                      },
+                    ]}
+                  />
+                </div>
+              </DocSection>
+
+              <DocSection
+                id="deployment"
+                title="Deployment state"
+                intro="Values that are still unresolved. Agents and integrators should treat these as absent, not guess them."
+              >
+                <SpecList
+                  className="text-sm"
+                  items={[
+                    { k: "Factory address, mainnet", v: "NOT DEPLOYED" },
+                    { k: "Factory address, Base Sepolia", v: "NOT PUBLISHED" },
+                    { k: "kycAttestation wire encoding", v: "NOT SPECIFIED" },
+                    { k: "Document templates", v: "NOT PUBLISHED" },
+                    { k: "Fee mechanism for non-payable calls", v: "UNRESOLVED" },
+                  ]}
+                />
+                <Note>
+                  If a user asks to mint on mainnet today, the correct answer is that the contract does
+                  not exist yet. Do not construct a transaction or substitute an address from another
+                  source.
+                </Note>
+              </DocSection>
+
+              <DocSection
+                id="sdk"
+                title="SDK preview"
+                intro="The TypeScript SDK is in development. The shape below is a preview of the planned interface and may change before release."
+              >
+                <CodeFrame title="quickstart.ts" meta="SDK preview · Base Sepolia" code={SDK_SAMPLE} />
+                <Note>
+                  <Code>@agentcorp/sdk</Code> is not yet published. API keys are issued to design
+                  partners; join the waitlist on the{" "}
+                  <Link href="/mint" className={linkCls}>
+                    entity setup page
+                  </Link>{" "}
+                  for access.
+                </Note>
+              </DocSection>
+
+              <DocSection
+                id="contracts"
+                title="Contract interface"
+                intro="The factory interface as specified in /skill.md. Function signatures and enums are stable for integration work; addresses are not yet published."
+              >
+                <CodeFrame title="IAgentCorpFactory.sol" meta="functions" code={CONTRACT_FUNCTIONS} />
+                <div className="grid gap-6 lg:grid-cols-2">
+                  <CodeFrame title="EntityType" meta="enum" code={ENTITY_ENUM} />
+                  <CodeFrame title="EntityState" meta="struct" code={ENTITY_STATE} />
+                </div>
+                <div>
+                  <SubHead>mintEntity parameters</SubHead>
+                  <Table
+                    head={["Parameter", "Type", "Description"]}
+                    rows={[
+                      [<Code>entityType</Code>, "EntityType", "Type of entity record (see enum)"],
+                      [<Code>name</Code>, "string", "Exact legal name as filed, e.g. \"Acme Holdings LLC\""],
+                      [<Code>docHash</Code>, "bytes32", "Arweave transaction ID of the document manifest"],
+                      [<Code>treasury</Code>, "address", "Safe multisig or EOA designated to hold entity assets"],
+                      [<Code>kycAttestation</Code>, "bytes", "Identity attestation; encoding not yet specified"],
+                    ]}
+                  />
+                </div>
+                <IndexedRows
+                  rows={[
+                    {
+                      idx: "0.1",
+                      title: "Read before you write",
+                      body: (
+                        <>
+                          Call <Code>getEntityState</Code> before any write and confirm the caller holds
+                          the token and <Code>dissolved</Code> is false. It is free and turns a revert
+                          into a sentence you can say to the user.
+                        </>
+                      ),
+                    },
+                    {
+                      idx: "0.2",
+                      title: "Only mintEntity is payable",
+                      body: (
+                        <>
+                          <Code>mintSeries</Code>, <Code>amendEntity</Code>, and{" "}
+                          <Code>dissolveEntity</Code> cannot receive ETH as declared; attaching value
+                          reverts. The fee mechanism for those three is unresolved.
+                        </>
+                      ),
+                    },
+                    {
+                      idx: "0.3",
+                      title: "Confirmation gate",
+                      body: "Once live, agents must print a summary (action, entity type, legal name, jurisdiction, parent, treasury, members, doc hash, fee, what is irreversible) and receive an explicit yes before every state-changing call. A prior yes covers one action.",
+                    },
+                  ]}
+                />
+              </DocSection>
+
+              <DocSection
+                id="examples"
+                title="Example calls"
+                intro="Illustrative calls for integration testing on Base Sepolia. FACTORY_ADDRESS and MINT_FEE are placeholders until the testnet deployment is published."
+              >
+                <CodeFrame title="network.js" meta="Base Sepolia" code={EXAMPLE_NETWORK} />
+                <CodeFrame title="mint-entity.sol" meta="Base Sepolia" code={EXAMPLE_MINT} />
+                <CodeFrame title="mint-series.sol" meta="Base Sepolia" code={EXAMPLE_SERIES} />
+                <CodeFrame title="amend-entity.sol" meta="Base Sepolia" code={EXAMPLE_AMEND} />
+              </DocSection>
+
+              <DocSection
+                id="entity-types"
+                title="Entity types"
+                intro="Selection rules from /skill.md, applied in order. First match wins."
+              >
+                <IndexedRows
+                  rows={[
+                    {
+                      idx: "0.1",
+                      title: <Code>SERIES_DESIGNATION</Code>,
+                      body: "The user already holds a parent Series LLC record and the new thing is a project, deal, asset batch, or client matter under it.",
+                    },
+                    {
+                      idx: "0.2",
+                      title: <Code>DAO_CHARTER</Code>,
+                      body: "Governance runs on-chain through token voting or a Governor contract, or the member set is open and pseudonymous.",
+                    },
+                    {
+                      idx: "0.3",
+                      title: <Code>DELAWARE_SERIES_LLC</Code>,
+                      body: "The user expects more than one isolated venture, asset, or matter over time. Use as parent, then add series under it.",
+                    },
+                    {
+                      idx: "0.4",
+                      title: <Code>DELAWARE_LLC</Code>,
+                      body: "Exactly one entity, fixed known member set, no on-chain governance.",
+                    },
+                    {
+                      idx: "0.5",
+                      title: "Anything else",
+                      body: "Nonprofits, IP licenses, IP assignments, and RWA holding agreements are not deployed. Say so and stop.",
+                    },
+                  ]}
+                />
+                <Note>
+                  If 0.3 and 0.4 are both plausible, ask how many entities the user expects. That is the
+                  only input that changes the answer.
+                </Note>
+
+                <div>
+                  <SubHead>Reference</SubHead>
+                  <Table
+                    head={["Type", "Code", "Documents", "Typical use", "Status"]}
+                    rows={[
+                      [
+                        <Code>DELAWARE_SERIES_LLC</Code>,
+                        "DE-SERIES",
+                        "Certificate of Formation, LLC Operating Agreement, Member Register",
+                        "Holding company, DAO wrapper, RWA portfolio parent",
+                        "In development",
+                      ],
+                      [
+                        <Code>SERIES_DESIGNATION</Code>,
+                        "DE-SERIES",
+                        "Series Designation, Series Operating Addendum",
+                        "Project, asset batch, or agent series under a parent",
+                        "In development",
+                      ],
+                      [
+                        <Code>DELAWARE_LLC</Code>,
+                        "DE-LLC",
+                        "Certificate of Formation, LLC Operating Agreement",
+                        "Single operating entity, fixed members",
+                        "In development",
+                      ],
+                      [
+                        <Code>DAO_CHARTER</Code>,
+                        "DE-DAO",
+                        "DAO Operating Agreement, Vote Delegate Disclosure, Subscription Agreement",
+                        "Protocol DAOs, investment clubs, on-chain organizations",
+                        "Planned",
+                      ],
+                      [
+                        <Code>IP_LICENSE</Code>,
+                        "—",
+                        "Software License Agreement, Royalty Schedule",
+                        "Software licensing, IP monetization",
+                        "Not deployed",
+                      ],
+                      [
+                        <Code>NONPROFIT</Code>,
+                        "—",
+                        "Non-Profit Charter, Foundation Operating Agreement",
+                        "Protocol foundations, grant programs",
+                        "Not deployed",
+                      ],
+                      [
+                        <Code>IP_ASSIGNMENT</Code>,
+                        "—",
+                        "—",
+                        "—",
+                        "Not deployed",
+                      ],
+                    ]}
+                  />
+                </div>
+              </DocSection>
+
+              <DocSection
+                id="documents"
+                title="Documents & manifest"
+                intro="mintEntity requires docHash: the Arweave transaction ID of a manifest whose documents exist before the call."
+              >
+                <div>
+                  <SubHead>Producing the governing documents</SubHead>
+                  <IndexedRows
+                    rows={[
+                      { idx: "0.1", title: "Load the template", body: "Use the published template for the entity type. If it is not available, stop. Do not draft a Delaware operating agreement from memory." },
+                      { idx: "0.2", title: "Fill every variable", body: <>Fill every <Code>[[VARIABLE]]</Code> and verify no <Code>[[</Code> remains. An unfilled variable in a filed document is a defect in the legal record.</> },
+                      { idx: "0.3", title: "Hash and store", body: "Compute sha256 of each document. Upload to Arweave, pin to IPFS, and record the transaction ID and CID." },
+                      { idx: "0.4", title: "Round-trip check", body: "Retrieve from Arweave and rehash. If it does not match what you uploaded, stop." },
+                      { idx: "0.5", title: "Build the manifest", body: "Assemble the manifest below and upload it. Its Arweave transaction ID is the docHash." },
+                    ]}
+                  />
+                </div>
+                <div className="grid gap-px overflow-hidden rounded-xl border border-white/10 bg-white/10 sm:grid-cols-2">
+                  <div className="bg-[#000000] p-6">
+                    <IndexLabel>Arweave</IndexLabel>
+                    <p className="mt-3 text-sm leading-relaxed text-[#a3a3a3]">
+                      Pay-once permanent storage. Transactions are immutable, which is what makes a
+                      transaction ID sufficient as a pointer.
+                    </p>
+                  </div>
+                  <div className="bg-[#000000] p-6">
+                    <IndexLabel>IPFS</IndexLabel>
+                    <p className="mt-3 text-sm leading-relaxed text-[#a3a3a3]">
+                      Content-addressed retrieval for fast access. The CID is recorded in the manifest
+                      alongside the Arweave transaction ID.
+                    </p>
+                  </div>
+                </div>
+                <CodeFrame title="manifest.json" meta="agentcorp_version 1.0" code={MANIFEST} />
+                <Note>
+                  <Code>chain_id</Code> is 8453 for mainnet records. Use 84532 for Base Sepolia test
+                  manifests.
+                </Note>
+              </DocSection>
+
+              <DocSection
+                id="verification"
+                title="Verification"
+                intro="The chain anchors the manifest, not each document. primaryDocArweaveTx is a storage pointer, not a digest."
+              >
+                <IndexedRows
+                  rows={[
+                    { idx: "0.1", title: "Fetch the manifest", body: <>Resolve <Code>primaryDocArweaveTx</Code> from <Code>getEntityState</Code> and fetch it from Arweave.</> },
+                    { idx: "0.2", title: "Check each document", body: <>For each entry in <Code>documents</Code>, fetch by <Code>arweave_tx</Code>, compute sha256 of the bytes, and compare to the entry's <Code>sha256</Code>.</> },
+                    { idx: "0.3", title: "Walk amendments", body: <>A mismatch means a document was replaced after registration. Amendment history lives in <Code>amendmentHashes</Code>; walk it in order to reconstruct prior versions.</> },
+                  ]}
+                />
+                <CodeFrame title="verify.js" meta="browser or Node 18+" code={VERIFY} />
+              </DocSection>
+
+              <DocSection
+                id="avocado"
+                title="Gasless execution via Avocado"
+                intro="Agents are designed to transact through Avocado and never hold ETH; gas is paid in USDC. Four details account for most failures."
+              >
+                <IndexedRows
+                  rows={[
+                    { idx: "0.1", title: "EIP-712 chainId is 634", body: "Sign against the Avocado chain, not 8453. Signing against Base produces a well-formed signature the broadcaster rejects." },
+                    { idx: "0.2", title: "avoNonce is always -1", body: "Nonces are non-sequential by design." },
+                    { idx: "0.3", title: "Fresh salt per transaction", body: "salt must be fresh random 32 bytes. Reused salts collide." },
+                    { idx: "0.4", title: "Batch limit", body: "Up to 20 actions batch per transaction. Mints do not go in a batch." },
+                  ]}
+                />
+                <div>
+                  <SubHead>Sequence</SubHead>
+                  <ol className="space-y-2 text-sm text-[#a3a3a3]">
+                    {[
+                      <>Deposit USDC to the Avocado wallet on Base.</>,
+                      <><Code>POST /v1/deposit</Code> at <Code>api.avcd.io</Code>.</>,
+                      <>Sign the EIP-712 Cast message.</>,
+                      <><Code>POST /v1/broadcast</Code>.</>,
+                      <>Poll <Code>GET /v1/transaction/:hash</Code>. Do not report success before confirmation.</>,
+                    ].map((step, i) => (
+                      <li key={i} className="flex gap-4">
+                        <span className="font-mono-index text-xs text-[#737373]">0.{i + 1}</span>
+                        <span>{step}</span>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+                <div>
+                  <SubHead>Third-party contracts on Base (8453)</SubHead>
+                  <Table
+                    head={["Contract", "Address"]}
+                    rows={[
+                      ["AvocadoBroadcaster", <Code>0x0A6E5E7ae08896B0286441367843f4cA59D04dEf</Code>],
+                      ["AvoFactory", <Code>0xe981E50c7c47F0Df8826B5ce3F533f5E4440e687</Code>],
+                      ["USDC", <Code>0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913</Code>],
+                    ]}
+                  />
+                  <Note className="mt-4">
+                    These are Avocado and Circle contracts, not AgentCorp deployments. Reference:{" "}
+                    <a href="https://avcd.io/skill.md" target="_blank" rel="noopener noreferrer" className={linkCls}>
+                      avcd.io/skill.md
+                    </a>
+                  </Note>
+                </div>
+              </DocSection>
+
+              <DocSection
+                id="governance"
+                title="Governance adapters"
+                intro="Entity records designate a treasury address. Planned adapters let that address be an existing governance system."
+              >
+                <IndexedRows
+                  rows={[
+                    {
+                      idx: "0.1",
+                      title: "Safe multisig",
+                      body: "Pass a Safe address as treasury. Configurable thresholds (for example 2-of-3 or 3-of-5) for small teams, operators, and investment vehicles.",
+                    },
+                    {
+                      idx: "0.2",
+                      title: "Governor contract",
+                      body: "Pass a Governor address as treasury for DAO_CHARTER records. Token-weighted voting with configurable quorum and timelock.",
+                    },
+                    {
+                      idx: "0.3",
+                      title: "Custom governance",
+                      body: "Implement the draft interface below to use any other governance system as the designated controller.",
+                    },
+                  ]}
+                />
+                <CodeFrame title="IAgentCorpGovernance.sol" meta="draft" code={GOVERNANCE_INTERFACE} />
+              </DocSection>
+
+              <DocSection
+                id="identity"
+                title="Identity / KYC"
+                intro="mintEntity accepts a kycAttestation argument. Its wire encoding is not yet specified, and provider integrations are under evaluation."
+              >
+                <Table
+                  head={["Candidate provider", "Mechanism", "Level"]}
+                  rows={[
+                    ["Coinbase Verification", "KYB/KYC attestation, native to Base", "KYB / KYC"],
+                    ["Persona", "On-chain attestation via EAS", "KYC"],
+                    ["Synaps", "KYC attestation with on-chain proof", "KYC"],
+                    ["Worldcoin", "Proof of personhood, no identity disclosure", "Personhood"],
+                  ]}
+                />
+                <CodeFrame title="attestation.json" meta="draft schema" code={ATTESTATION} />
+                <Note>
+                  Statutory filings, EIN applications, and bank onboarding carry their own identity
+                  requirements for the humans and organizations behind an entity, independent of any
+                  on-chain attestation.
+                </Note>
+              </DocSection>
+
+              <DocSection id="fees" title="Fees" intro="Planned protocol parameters, subject to mainnet deployment.">
+                <Table
+                  head={["Action", "Planned fee"]}
+                  rows={[
+                    ["Register Delaware LLC", "0.05 ETH"],
+                    ["Register Series LLC (parent)", "0.05 ETH"],
+                    ["Register Series Designation", "0.02 ETH"],
+                    ["Register DAO Charter", "0.05 ETH"],
+                    ["Amendment", "0.01 ETH"],
+                    ["Transfer", "Gas only"],
+                    ["Dissolution", "0.005 ETH"],
+                  ]}
+                />
+                <Note>
+                  {FEE_NOTE} Planned split: 20% of protocol fees to the protocol treasury for legal
+                  template maintenance. Protocol fees do not include state filing fees, registered
+                  agent fees, or counsel.
+                </Note>
+              </DocSection>
+
+              <DocSection id="scope" title="Scope & legal">
+                <IndexedRows
+                  rows={[
+                    {
+                      idx: "0.1",
+                      title: "What the protocol does",
+                      body: "Records entity state, anchors governing documents, and coordinates treasury controls for entities whose statutory formation happens through the normal filing process.",
+                    },
+                    {
+                      idx: "0.2",
+                      title: "What it does not do",
+                      body: "Give legal advice, opine on tax treatment or securities characterization, or decide whether an arrangement should be an entity at all. When the question is whether rather than how, route to counsel.",
+                    },
+                  ]}
+                />
+                <Note>{LEGAL_DISCLAIMER}</Note>
+                <div className="flex flex-wrap gap-3">
+                  <a href={SKILL_URL} className={btnPrimary}>
+                    Read skill.md
+                  </a>
+                  <Link href="/mint" className={btnSecondary}>
+                    Entity setup preview
+                  </Link>
+                </div>
               </DocSection>
             </div>
-          )}
-
-          {activeSection === "fees" && (
-            <div>
-              <h2 style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: "32px", letterSpacing: "-0.02em", marginBottom: "24px", color: "var(--white)" }}>
-                Fee Schedule
-              </h2>
-              <div style={{ display: "flex", flexDirection: "column", gap: "2px", marginBottom: "24px" }}>
-                {[
-                  { action: "mintEntity(DELAWARE_SERIES_LLC)", eth: "0.05 ETH", note: "~$150 at $3k/ETH" },
-                  { action: "mintSeries()", eth: "0.02 ETH", note: "Per series under parent" },
-                  { action: "mintEntity(DAO_CHARTER)", eth: "0.05 ETH", note: "Governance adapter included" },
-                  { action: "mintEntity(NONPROFIT)", eth: "0.05 ETH", note: "Q2 2027" },
-                  { action: "amendEntity()", eth: "0.01 ETH", note: "Per amendment event" },
-                  { action: "transfer()", eth: "Gas only", note: "Standard ERC-721" },
-                  { action: "dissolveEntity()", eth: "0.005 ETH", note: "Burns token, creates record" },
-                ].map((fee) => (
-                  <div
-                    key={fee.action}
-                    style={{
-                      border: "1px solid rgba(201,168,76,0.1)",
-                      padding: "16px 24px",
-                      background: "rgba(201,168,76,0.02)",
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      gap: "20px",
-                    }}
-                  >
-                    <code style={{ fontFamily: "'DM Mono', monospace", fontSize: "12px", color: "rgba(242,239,232,0.6)" }}>{fee.action}</code>
-                    <div style={{ textAlign: "right", flexShrink: 0 }}>
-                      <div style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: "16px", color: "var(--brass)" }}>{fee.eth}</div>
-                      <div style={{ fontSize: "10px", color: "rgba(242,239,232,0.3)", fontFamily: "'DM Mono', monospace" }}>{fee.note}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <p style={{ fontSize: "11px", color: "rgba(242,239,232,0.3)", fontFamily: "'DM Mono', monospace", letterSpacing: "0.05em" }}>
-                * 20% of all fees flow to protocol treasury for legal template maintenance.
-              </p>
-            </div>
-          )}
-        </div>
-      </div>
-
+          </div>
+        </Container>
+      </main>
       <Footer />
-
-      <style>{`
-        @media (max-width: 900px) {
-          [style*="grid-template-columns: 240px 1fr"] { grid-template-columns: 1fr !important; }
-          [style*="padding: 48px 60px"] { padding: 24px 20px !important; }
-          [style*="padding: 48px 48px 32px"] { padding: 24px 20px 16px !important; }
-          [style*="position: sticky"] { position: relative !important; height: auto !important; border-right: none !important; border-bottom: 1px solid rgba(201,168,76,0.12) !important; overflow-y: visible !important; }
-          pre { font-size: 10px !important; }
-        }
-        @media (max-width: 600px) {
-          [style*="padding: 48px 60px"] { padding: 16px !important; }
-          [style*="padding: 48px 48px 32px"] { padding: 16px !important; }
-          pre { font-size: 9px !important; overflow-x: auto; }
-        }
-      `}</style>
     </div>
   );
 }

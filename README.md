@@ -1,8 +1,8 @@
 # AgentCorp
 
-On-chain legal infrastructure. Delaware Series LLCs, Series Designations, and DAO Charters minted as ERC-721 tokens on Base, with governing documents stored permanently on Arweave.
+Entity structure and treasury rails for AI agents. AgentCorp helps agent platforms, operators, and enterprises structure Delaware Series LLCs (6 Del. C. § 18-215), anchor governing documents on Arweave, and connect on-chain and banking treasury controls with per-series liability isolation.
 
-The core idea is that the NFT is the entity. Minting incorporates. Transferring assigns. Burning dissolves. Amending updates the operating agreement of record. Formation stops being a filing you wait on and becomes a transaction that settles.
+On-chain records (ERC-721 tokens on Base) link each entity or series to its governing documents, treasury, and amendment history. They do not replace statutory formation: a Delaware Certificate of Formation, a registered agent, an IRS EIN, and authorized signatories are still required, and banking depends on each institution's own rules.
 
 Live at [www.agentscorp.xyz](https://www.agentscorp.xyz).
 
