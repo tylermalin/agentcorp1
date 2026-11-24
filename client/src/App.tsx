@@ -10,6 +10,7 @@ import Docs from "./pages/Docs";
 import Mint from "./pages/Mint";
 import Agent from "./pages/Agent";
 import Admin from "./pages/Admin";
+import Legal from "./pages/Legal";
 import { useEffect } from "react";
 
 const DEFAULT_TITLE = "AgentsCorp — Entity Structure & Treasury Rails for AI Agents";
@@ -21,6 +22,7 @@ const PAGE_TITLES: Record<string, string> = {
   "/mint": "Entity Setup Preview — AgentsCorp (Target Q1 2027)",
   "/agent": "For Agents — /skill.md & SDK Integration | AgentsCorp",
   "/admin": "Admin Dashboard — AgentsCorp",
+  "/legal": "Legal — Disclaimer & MIT License | AgentsCorp",
 };
 
 const PAGE_DESCRIPTIONS: Record<string, string> = {
@@ -30,6 +32,7 @@ const PAGE_DESCRIPTIONS: Record<string, string> = {
   "/mint": "Entity setup is in development. Preview the planned Delaware Series LLC setup flow and join the Q1 2027 design-partner cohort.",
   "/agent": "Wire AI agents into entity and treasury workflows with /skill.md, the TypeScript SDK, and Base Sepolia examples. Pre-mainnet; target Q1 2027.",
   "/admin": "Owner-only admin dashboard for AgentsCorp waitlist management.",
+  "/legal": "AgentsCorp disclaimer and MIT License. Software and templates only; not legal, tax, or banking advice.",
 };
 
 function TitleManager() {
@@ -81,6 +84,7 @@ function Router() {
         <Route path="/mint" component={Mint} />
         <Route path="/agent" component={Agent} />
         <Route path="/admin" component={Admin} />
+        <Route path="/legal" component={Legal} />
         <Route path="/404" component={NotFound} />
         <Route component={NotFound} />
       </Switch>

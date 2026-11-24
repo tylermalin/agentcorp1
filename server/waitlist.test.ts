@@ -40,9 +40,7 @@ describe("waitlist.subscribe", () => {
     process.env.MAILCHIMP_API_KEY = "test-api-key-us3";
     process.env.MAILCHIMP_AUDIENCE_ID = "test-audience-id";
     process.env.MAILCHIMP_DC = "us3";
-    // notifyOwner requires these env vars
-    process.env.BUILT_IN_FORGE_API_URL = "https://api.manus.im/";
-    process.env.BUILT_IN_FORGE_API_KEY = "test-forge-key";
+    // Forge (notifyOwner) env vars are set in vitest.config.ts so they exist at import time.
   });
 
   it("successfully subscribes a new email and sends owner notification", async () => {

@@ -47,12 +47,8 @@ export default function Footer() {
             <div>
               <div className="font-mono-index text-[11px] uppercase text-[#6ee7b7]">3.0 Legal</div>
               <ul className="mt-4 space-y-2.5">
-                <li><a href="#disclaimer" className={linkCls}>Disclaimer</a></li>
-                <li>
-                  <a href={`${GITHUB_URL}/blob/main/LICENSE`} target="_blank" rel="noopener noreferrer" className={linkCls}>
-                    MIT License
-                  </a>
-                </li>
+                <li><Link href="/legal#disclaimer" className={linkCls}>Disclaimer</Link></li>
+                <li><Link href="/legal#license" className={linkCls}>MIT License</Link></li>
               </ul>
             </div>
           </nav>
@@ -66,7 +62,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <p id="disclaimer" className="mt-14 border-t border-white/10 pt-6 text-xs leading-5 text-[#737373]">
+        <p className="mt-14 border-t border-white/10 pt-6 text-xs leading-5 text-[#737373]">
           <span className="text-[#a3a3a3]">Disclaimer.</span> {LEGAL_DISCLAIMER}
         </p>
 

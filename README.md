@@ -1,50 +1,60 @@
-# AgentsCorp
+<p align="center">
+  <img src="client/public/brand/agentscorp-lockup-black.png#gh-light-mode-only" alt="AgentsCorp" width="360" />
+  <img src="client/public/brand/agentscorp-lockup-white.png#gh-dark-mode-only" alt="AgentsCorp" width="360" />
+</p>
 
-Entity structure and treasury rails for AI agents. AgentsCorp helps agent platforms, operators, and enterprises structure Delaware Series LLCs (6 Del. C. § 18-215), anchor governing documents on Arweave, and connect on-chain and banking treasury controls with per-series liability isolation.
+<p align="center">
+  <strong>Entity structure and treasury rails for AI agents.</strong><br />
+  <a href="https://www.agentscorp.xyz">agentscorp.xyz</a> ·
+  <a href="https://www.agentscorp.xyz/whitepaper">Whitepaper</a> ·
+  <a href="https://www.agentscorp.xyz/docs">Docs</a> ·
+  <a href="https://www.agentscorp.xyz/skill.md">/skill.md</a>
+</p>
+
+---
+
+AgentsCorp helps agent platforms, operators, and enterprises structure Delaware Series LLCs (6 Del. C. § 18-215), anchor governing documents on Arweave, and connect on-chain and banking treasury controls with per-series liability isolation.
 
 On-chain records (ERC-721 tokens on Base) link each entity or series to its governing documents, treasury, and amendment history. They do not replace statutory formation: a Delaware Certificate of Formation, a registered agent, an IRS EIN, and authorized signatories are still required, and banking depends on each institution's own rules.
 
-Live at [www.agentscorp.xyz](https://www.agentscorp.xyz).
-
 ## Status
 
-**Pre-deployment. The factory contract is not live on mainnet. Target is Q1 2027.**
+**Pre-mainnet. Target Q1 2027.**
 
-This repository is the protocol site: the marketing pages, the whitepaper, the developer documentation, the agent-readable specification, and a waitlist. It is not the contracts. Nothing here will mint you an entity today, and the documented contract interface describes what is being built rather than what is deployed.
+| Live today | In development (target Q1 2027) |
+|---|---|
+| Website, whitepaper, developer docs | Base smart-contract audit and deployment |
+| Static `/skill.md` agent specification | Automated EIN and banking/treasury integrations |
+| Waitlist and design-partner signup | Design-partner onboarding |
+| Delaware Series LLC document templates | |
 
-Treat every address in the docs as unassigned until this section says otherwise.
+This repository is the protocol **site**: marketing pages, whitepaper, developer documentation, the agent-readable specification, and signup. It is not the contracts. The documented contract interface describes what is being built, not what is deployed, and every address in the docs should be treated as unassigned. Fee figures are planned protocol parameters, subject to mainnet deployment.
 
 ## Why it exists
 
-Entity formation is a coordination problem wearing the costume of a paperwork problem. The filing itself is trivial. What is expensive is everything around it: the wait, the intermediary, the fact that the governing documents live in someone's inbox with no verifiable link to the entity they govern, and the fact that a software agent cannot hold a legal identity at all.
+More and more work is done by software agents: they call paid APIs, settle with vendors, and act for clients. Running all of that through one company means one undifferentiated liability bucket, and the governing documents rarely have a verifiable link to the entity they govern.
 
-That last one matters more each quarter. Agents are increasingly the thing transacting, and the legal system has no primitive for an actor that is not a person and not a company someone remembered to form. AgentsCorp is an attempt at that primitive: an entity a wallet can hold, a treasury it can control, and documents anyone can verify against the chain.
-
-Delaware's Series LLC statute is what makes it work. Under 6 Del. C. § 18-215, one parent LLC can hold unlimited Series, each with its own assets, members, and liability isolation. One formation, then per-project entities at marginal cost.
+Delaware's Series LLC statute offers a better primitive. Under 6 Del. C. § 18-215, one parent LLC can hold many series, each with its own assets, members, and liability isolation. AgentsCorp pairs that structure with standardized templates, Arweave-anchored records, and per-series treasury guardrails (spend caps, approval thresholds, human co-signers), so each agent or engagement gets its own ring-fenced, auditable container.
 
 ## Agent integration
 
 The machine-readable specification lives at [`/skill.md`](https://www.agentscorp.xyz/skill.md), served as static text so a fetcher gets the file rather than a JavaScript shell.
 
-It covers entity type selection rules, the document generation and Arweave upload sequence, the contract interface, gasless execution through Avocado, the fee schedule, and document verification. It leads with the deployment status so an agent reading it knows to stop rather than construct a transaction against a contract that does not exist.
-
-If you are wiring an agent to this protocol, start there rather than here.
+It covers entity type selection, the document generation and Arweave upload sequence, the planned contract interface, gasless execution through Avocado, planned fees, and document verification. It leads with deployment status so an agent knows to stop rather than construct a transaction against a contract that does not exist. If you are wiring an agent to this protocol, start there.
 
 ## Stack
 
-React 19 and Vite on the client, wouter for routing, Tailwind 4 with shadcn/ui components. Express and tRPC on the server, Drizzle over MySQL, Mailchimp for the waitlist. Deployed on Vercel with the API running as a serverless function.
+React 19 and Vite, wouter for routing, Tailwind 4 with shadcn/ui primitives, Phosphor icons, Geist type. Express and tRPC on the server, Drizzle over MySQL. Mailchimp for launch updates and a Youform embed for design-partner applications. Deployed on Vercel with the API as a serverless function.
 
 ## Running locally
 
-Requires Node 20 or later and pnpm.
+Requires Node 20+ and pnpm.
 
 ```bash
 pnpm install
-cp .env.example .env    # then fill in the values below
-pnpm dev
+cp .env.example .env    # fill in the values below
+pnpm dev                # Express + Vite middleware on :3000 (or next free port)
 ```
-
-The dev server runs Express with Vite in middleware mode on port 3000, or the next free port above it.
 
 ```bash
 pnpm check     # typecheck
@@ -67,47 +77,46 @@ pnpm build     # client to dist/public, server bundle to dist/index.js
 | `BUILT_IN_FORGE_API_URL` | Owner notification service |
 | `BUILT_IN_FORGE_API_KEY` | Owner notification auth |
 
-Never commit these. `.env` is gitignored.
+Never commit these; `.env*` is gitignored.
 
 ## Layout
 
 ```
-client/          React SPA
-  public/        Static files served as-is, including skill.md
-  src/pages/     Home, Whitepaper, Docs, Mint, Agent, Admin
-server/          Express, tRPC routers, Drizzle schema
-  _core/         OAuth, session handling, Vite middleware
-api/index.ts     Vercel serverless entry, API surface only
-shared/          Types and constants used by both sides
-drizzle/         Schema and migrations
+client/
+  public/            Static files served as-is: skill.md, og-image, brand/
+  src/pages/         Home, Agent, Whitepaper, Docs, Mint, Admin
+  src/components/    Nav, Footer, forms; site/ (layout + motion), brand/ (logo)
+  src/lib/site.ts    Shared copy: status, roadmap, entity types, disclaimer
+server/              Express, tRPC routers, Drizzle access
+  _core/             OAuth, sessions, env, notifications, Vite middleware
+  vercel-entry.ts    Serverless entry (API only)
+api/index.js         Bundle of server/vercel-entry.ts, built by Vercel
+shared/              Types and constants used by both sides
+drizzle/             Schema and migrations
 ```
 
-`server/_core/index.ts` is the long-lived server used in development and on a traditional host. `api/index.ts` is the same API without static serving or `listen()`, for Vercel. Both import the same routers, so the logic lives in one place.
+`server/_core/index.ts` is the long-lived server for development or a traditional host. `server/vercel-entry.ts` exposes the same routers without static serving or `listen()`.
 
 ## Deployment
 
-Vercel builds the client to `dist/public` and serves it statically. `/api/*` rewrites to the serverless function. Everything else falls through to `index.html` so client routes survive a direct load or refresh. Paths with a file extension pass through untouched, which is what keeps `skill.md` and `og-image.png` serving as real files.
-
-Configuration is in `vercel.json`. Environment variables are set in project settings, not in the repo.
-
-To check a deployment:
+Pushes to `main` deploy to production on Vercel. The client builds to `dist/public` and is served statically; `/api/*` rewrites to the serverless function; everything else falls through to `index.html` so client routes survive a refresh. Files with an extension (`skill.md`, `og-image.png`, `brand/*`) are served as real files. Configuration is in `vercel.json`; environment variables live in Vercel project settings.
 
 ```bash
-curl -s https://www.agentscorp.xyz/api/health
+curl -s https://www.agentscorp.xyz/api/health   # reports which env vars are present, never their values
 ```
 
-That reports which environment variables are present as booleans. It never returns their values.
+## Brand assets
+
+Logo files live in [`client/public/brand/`](client/public/brand) and are served at `https://www.agentscorp.xyz/brand/…`: square avatars (1024px), transparent marks and lockups (PNG), and vector marks (SVG). The mark is also a React component in `client/src/components/brand/Logo.tsx`.
 
 ## Contributing
 
-Issues and pull requests are welcome, particularly on the documentation and the agent specification. If you are proposing changes to the legal templates or the entity model, open an issue first so the discussion happens before the diff.
-
-Run `pnpm check` and `pnpm build` before opening a PR.
+Issues and pull requests are welcome, particularly on the documentation and the agent specification. For changes to the legal templates or the entity model, open an issue first so the discussion happens before the diff. Run `pnpm check`, `pnpm test`, and `pnpm build` before opening a PR.
 
 ## Disclaimer
 
-AgentsCorp is infrastructure, not legal advice. The document templates are starting points. Consult qualified counsel before relying on any of this for a material transaction, and do not treat anything in this repository as an opinion on tax treatment or securities characterization.
+AgentsCorp provides software tools, protocol specifications, and starting-point document templates. It does not provide legal advice, registered agent services, tax advice, or licensed banking or brokerage services. Forming a legally recognized LLC or series, obtaining an EIN, and opening financial accounts require statutory filings, compliance with applicable law, and approval by the relevant agencies and institutions. Consult qualified counsel before relying on templates or contracts for material transactions.
 
 ## License
 
-MIT.
+[MIT](LICENSE)
