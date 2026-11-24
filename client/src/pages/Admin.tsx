@@ -1,5 +1,5 @@
 /**
- * AGENTCORP ADMIN — Waitlist Dashboard
+ * AGENTSCORP ADMIN — Waitlist Dashboard
  * Owner-only protected page. Fetches live waitlist data from Mailchimp via tRPC.
  * Features: search, entity type filter, pagination, CSV export, real-time count.
  */
@@ -88,7 +88,7 @@ export default function Admin() {
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `agentcorp-waitlist-${new Date().toISOString().slice(0, 10)}.csv`;
+      a.download = `agentscorp-waitlist-${new Date().toISOString().slice(0, 10)}.csv`;
       a.click();
       URL.revokeObjectURL(url);
       setExportStatus("done");
@@ -394,7 +394,7 @@ export default function Admin() {
                     </td>
                     <td style={{ padding: "14px 16px" }}>
                       <div style={{ display: "flex", gap: "4px", flexWrap: "wrap" }}>
-                        {m.tags.filter((t) => t !== "agentcorp-waitlist").map((tag) => (
+                        {m.tags.filter((t) => t !== "agentscorp-waitlist").map((tag) => (
                           <span
                             key={tag}
                             style={{
@@ -511,7 +511,7 @@ export default function Admin() {
             Data sourced live from Mailchimp · Malama Foundation Audience · Auto-refreshes every 60s
           </span>
           <span style={{ fontSize: "10px", color: "rgba(242,239,232,0.2)" }}>
-            © 2026 AgentCorp Protocol · Admin Only
+            © 2026 AgentsCorp Protocol · Admin Only
           </span>
         </div>
       </main>

@@ -1,5 +1,5 @@
 /**
- * WalletConnect.tsx — AgentCorp Wallet Connection Component
+ * WalletConnect.tsx — AgentsCorp Wallet Connection Component
  * Design: Industrial Legal Modernism — brass/gold on near-black
  *
  * Provides a self-contained wallet connection modal with:
@@ -510,7 +510,7 @@ export function WalletConnect({ onConnect, onDisconnect, compact = false }: Wall
             >
               <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#0052ff", flexShrink: 0 }} />
               <div style={{ fontSize: "10px", color: MUTED, fontFamily: "'DM Mono', monospace", lineHeight: 1.5 }}>
-                AgentCorp runs on <span style={{ color: WHITE }}>Base</span> (Chain ID 8453). Your wallet will be prompted to switch networks after connecting.
+                AgentsCorp runs on <span style={{ color: WHITE }}>Base</span> (Chain ID 8453). Your wallet will be prompted to switch networks after connecting.
               </div>
             </div>
           </div>

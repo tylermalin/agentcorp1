@@ -1,5 +1,5 @@
 /**
- * AGENTCORP HOME
+ * AGENTSCORP HOME
  * Hero (halftone field) → agent stack marquee → framework numerals →
  * pillars → manifesto → use cases (interactive) → integration (simulated
  * run) → entities → access.
@@ -137,7 +137,7 @@ function Hero() {
               </a>
             </div>
             <p className="font-code mt-8 truncate text-xs text-[#737373]">
-              $ agentcorp init --type=delaware-series-llc --agent=0x4a9f…
+              $ agentscorp init --type=delaware-series-llc --agent=0x4a9f…
             </p>
           </div>
         </div>
@@ -296,7 +296,7 @@ function Manifesto() {
       </h2>
       <Reveal delay={200} className="relative mt-16 grid gap-6 text-sm text-[#a3a3a3] md:ml-auto md:w-1/2">
         <p>
-          At <span className="text-[#6ee7b7]">AgentCorp</span>, we think agent infrastructure has to hold up in front of
+          At <span className="text-[#6ee7b7]">AgentsCorp</span>, we think agent infrastructure has to hold up in front of
           a banker, an auditor, and a court, not just in a demo.
         </p>
         <p>
@@ -488,7 +488,7 @@ function Integration() {
           </div>
         </Reveal>
         <Reveal delay={120} className="min-w-0 md:col-span-7">
-          <CodeFrame title="agentcorp_series.ts" meta="SDK preview" code={SDK_SAMPLE} />
+          <CodeFrame title="agentscorp_series.ts" meta="SDK preview" code={SDK_SAMPLE} />
           <dl className="mt-4 grid gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 sm:grid-cols-2">
             {[
               ["Agent spec", "agentscorp.xyz/skill.md"],

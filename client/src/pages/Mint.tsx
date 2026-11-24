@@ -45,7 +45,7 @@ export default function Mint() {
           <PageHeader
             index={`Entity setup · ${STATUS_LABEL}`}
             title="Entity setup is in development."
-            lede="AgentCorp is building a guided flow to set up Delaware Series LLC records for agents and operators: governing documents, on-chain record anchors, and treasury guardrails in one place. Contracts are not yet deployed. Join early access to be notified when design-partner onboarding opens."
+            lede="AgentsCorp is building a guided flow to set up Delaware Series LLC records for agents and operators: governing documents, on-chain record anchors, and treasury guardrails in one place. Contracts are not yet deployed. Join early access to be notified when design-partner onboarding opens."
           >
             <div className="mt-10">
               <WaitlistForm entityType="DELAWARE_SERIES_LLC" source="mint-hero" variant="hero" />

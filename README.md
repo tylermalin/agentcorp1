@@ -1,6 +1,6 @@
-# AgentCorp
+# AgentsCorp
 
-Entity structure and treasury rails for AI agents. AgentCorp helps agent platforms, operators, and enterprises structure Delaware Series LLCs (6 Del. C. § 18-215), anchor governing documents on Arweave, and connect on-chain and banking treasury controls with per-series liability isolation.
+Entity structure and treasury rails for AI agents. AgentsCorp helps agent platforms, operators, and enterprises structure Delaware Series LLCs (6 Del. C. § 18-215), anchor governing documents on Arweave, and connect on-chain and banking treasury controls with per-series liability isolation.
 
 On-chain records (ERC-721 tokens on Base) link each entity or series to its governing documents, treasury, and amendment history. They do not replace statutory formation: a Delaware Certificate of Formation, a registered agent, an IRS EIN, and authorized signatories are still required, and banking depends on each institution's own rules.
 
@@ -18,7 +18,7 @@ Treat every address in the docs as unassigned until this section says otherwise.
 
 Entity formation is a coordination problem wearing the costume of a paperwork problem. The filing itself is trivial. What is expensive is everything around it: the wait, the intermediary, the fact that the governing documents live in someone's inbox with no verifiable link to the entity they govern, and the fact that a software agent cannot hold a legal identity at all.
 
-That last one matters more each quarter. Agents are increasingly the thing transacting, and the legal system has no primitive for an actor that is not a person and not a company someone remembered to form. AgentCorp is an attempt at that primitive: an entity a wallet can hold, a treasury it can control, and documents anyone can verify against the chain.
+That last one matters more each quarter. Agents are increasingly the thing transacting, and the legal system has no primitive for an actor that is not a person and not a company someone remembered to form. AgentsCorp is an attempt at that primitive: an entity a wallet can hold, a treasury it can control, and documents anyone can verify against the chain.
 
 Delaware's Series LLC statute is what makes it work. Under 6 Del. C. § 18-215, one parent LLC can hold unlimited Series, each with its own assets, members, and liability isolation. One formation, then per-project entities at marginal cost.
 
@@ -106,7 +106,7 @@ Run `pnpm check` and `pnpm build` before opening a PR.
 
 ## Disclaimer
 
-AgentCorp is infrastructure, not legal advice. The document templates are starting points. Consult qualified counsel before relying on any of this for a material transaction, and do not treat anything in this repository as an opinion on tax treatment or securities characterization.
+AgentsCorp is infrastructure, not legal advice. The document templates are starting points. Consult qualified counsel before relying on any of this for a material transaction, and do not treat anything in this repository as an opinion on tax treatment or securities characterization.
 
 ## License
 

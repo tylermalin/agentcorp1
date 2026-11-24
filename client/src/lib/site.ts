@@ -10,7 +10,7 @@ export const GITHUB_URL = "https://github.com/tylermalin/agentcorp1";
 export const STATUS_LABEL = "Q1 2027 Target · Pre-Mainnet";
 
 export const LEGAL_DISCLAIMER =
-  "AgentCorp provides software tools, protocol specifications, and starting-point document templates. AgentCorp does not provide legal advice, registered agent services, tax advice, or licensed banking/brokerage services. Creating a legally recognized LLC or series, obtaining an EIN, and opening financial accounts require statutory filings, compliance with applicable law, and approval by relevant agencies and financial institutions. Consult qualified legal counsel before relying on templates or contracts for material transactions.";
+  "AgentsCorp provides software tools, protocol specifications, and starting-point document templates. AgentsCorp does not provide legal advice, registered agent services, tax advice, or licensed banking/brokerage services. Creating a legally recognized LLC or series, obtaining an EIN, and opening financial accounts require statutory filings, compliance with applicable law, and approval by relevant agencies and financial institutions. Consult qualified legal counsel before relying on templates or contracts for material transactions.";
 
 export const FEE_NOTE =
   "Fee schedules and on-chain mint parameters are being finalized for Q1 2027 mainnet launch; statutory state filings, registered agent services, and EIN registration remain required for legal validity.";
@@ -92,10 +92,10 @@ export const ROADMAP = [
   },
 ];
 
-export const SDK_SAMPLE = `import { AgentCorpClient } from "@agentcorp/sdk";
+export const SDK_SAMPLE = `import { AgentsCorpClient } from "@agentscorp/sdk";
 
-const corp = new AgentCorpClient({
-  apiKey: process.env.AGENTCORP_API_KEY,
+const corp = new AgentsCorpClient({
+  apiKey: process.env.AGENTSCORP_API_KEY,
   network: "base-sepolia", // Pre-mainnet testnet target
 });
 

@@ -1,11 +1,11 @@
 /**
- * AGENTCORP FOOTER: brand statement + newsletter, numbered link columns,
+ * AGENTSCORP FOOTER: brand statement + newsletter, numbered link columns,
  * statutory disclaimer, oversized wordmark.
  */
 import { Link } from "wouter";
 import { GITHUB_URL, LEGAL_DISCLAIMER } from "@/lib/site";
 import WaitlistForm from "@/components/WaitlistForm";
-import { Mark } from "@/components/Nav";
+import { LogoMark } from "@/components/brand/Logo";
 
 const linkCls = "text-[#a3a3a3] transition-colors duration-300 hover:text-white";
 
@@ -15,7 +15,7 @@ export default function Footer() {
       <div className="mx-auto max-w-6xl overflow-hidden rounded-3xl border border-white/10 bg-[#0b0b0b] px-6 pt-14 sm:px-10">
         <div className="grid gap-12 md:grid-cols-12">
           <div className="md:col-span-5">
-            <Mark className="h-8 w-8 text-white" />
+            <LogoMark size="lg" className="h-14 w-14 text-white" />
             <p className="mt-6 max-w-sm text-2xl font-medium tracking-tight text-white text-balance">
               Filed. Signed. Verifiable. Structure for the agent economy.
             </p>
@@ -71,15 +71,15 @@ export default function Footer() {
         </p>
 
         <div className="mt-6 flex flex-wrap items-center justify-between gap-2 text-xs text-[#737373]">
-          <span>© 2026 AgentCorp · agentscorp.xyz</span>
+          <span>© 2026 AgentsCorp · agentscorp.xyz</span>
           <span className="font-mono-index uppercase">Pre-mainnet · target Q1 2027</span>
         </div>
 
         <div
           aria-hidden
-          className="pointer-events-none mt-8 -mb-[0.18em] select-none text-center text-[19vw] font-semibold leading-none tracking-tighter text-white/[0.04] md:text-[11.5rem]"
+          className="pointer-events-none mt-8 -mb-[0.2em] select-none text-center text-[17vw] font-semibold leading-none tracking-tighter text-white/[0.05] md:text-[10.5rem]"
         >
-          AGENTCORP
+          AgentsCorp
         </div>
       </div>
     </footer>

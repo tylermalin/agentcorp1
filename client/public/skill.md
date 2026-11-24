@@ -1,17 +1,17 @@
 ---
-name: agentcorp
+name: agentscorp
 version: 1.0
-protocol: AGENTCORP — Entity Structure & Treasury Rails for AI Agents
+protocol: AGENTSCORP — Entity Structure & Treasury Rails for AI Agents
 chain: Base (8453, target) · Base Sepolia (integration)
 status: PRE-MAINNET — target Q1 2027
-description: Plan, record, and manage Delaware Series LLC structures and per-series treasury controls via AgentCorp. Covers Delaware Series LLCs (6 Del. C. § 18-215), Series Designations, and DAO Charters tracked as ERC-721 records on Base with governing documents anchored on Arweave, plus gasless execution through Avocado. Use this skill whenever a user asks to incorporate, form an LLC, spin up a legal wrapper for a project or deal, create a Series under an existing entity, set up a DAO or onchain org, amend an operating agreement, dissolve an entity, or check what entities a wallet holds. Also use it whenever AgentCorp, agent incorporation, Series LLC minting, or an AI agent holding a legal identity or treasury comes up. Always consult this file before answering questions about AgentCorp entity types, fees, or mechanics, because the correct answers depend on deployment state that changes between releases.
+description: Plan, record, and manage Delaware Series LLC structures and per-series treasury controls via AgentsCorp. Covers Delaware Series LLCs (6 Del. C. § 18-215), Series Designations, and DAO Charters tracked as ERC-721 records on Base with governing documents anchored on Arweave, plus gasless execution through Avocado. Use this skill whenever a user asks to incorporate, form an LLC, spin up a legal wrapper for a project or deal, create a Series under an existing entity, set up a DAO or onchain org, amend an operating agreement, dissolve an entity, or check what entities a wallet holds. Also use it whenever AgentsCorp, agent incorporation, Series LLC minting, or an AI agent holding a legal identity or treasury comes up. Always consult this file before answering questions about AgentsCorp entity types, fees, or mechanics, because the correct answers depend on deployment state that changes between releases.
 canonical: https://www.agentscorp.xyz/skill.md
 license: MIT
 ---
 
-# AgentCorp
+# AgentsCorp
 
-AgentCorp records entity structures as ERC-721 tokens on Base and anchors their governing documents on Arweave. The token is an on-chain record that links an entity to its documents, treasury, and amendment history. It does not by itself create, transfer, or dissolve a legal entity.
+AgentsCorp records entity structures as ERC-721 tokens on Base and anchors their governing documents on Arweave. The token is an on-chain record that links an entity to its documents, treasury, and amendment history. It does not by itself create, transfer, or dissolve a legal entity.
 
 Legal formation and dissolution happen through statutory filings: a Delaware Certificate of Formation (and series designations under 6 Del. C. § 18-215), a registered agent, an IRS EIN, and authorized human signatories. Banking and counterparty acceptance depend on each institution's own rules. On-chain calls must stay consistent with those filings, so treat them the way you would treat a wire transfer, not a test transaction.
 
@@ -79,7 +79,7 @@ Minting requires `docHash`, the Arweave transaction ID of documents that must ex
 
 ```json
 {
-  "agentcorp_version": "1.0",
+  "agentscorp_version": "1.0",
   "entity_type": "DELAWARE_SERIES_LLC",
   "entity_name": "[[ENTITY_NAME]]",
   "formation_date": "[[FORMATION_DATE]]",
@@ -206,4 +206,4 @@ This protocol provides software, specifications, and document templates. It does
 
 ---
 
-AgentCorp provides software tools, protocol specifications, and starting-point document templates. It does not provide legal advice, registered agent services, tax advice, or licensed banking/brokerage services. Consult qualified counsel for material transactions.
+AgentsCorp provides software tools, protocol specifications, and starting-point document templates. It does not provide legal advice, registered agent services, tax advice, or licensed banking/brokerage services. Consult qualified counsel for material transactions.

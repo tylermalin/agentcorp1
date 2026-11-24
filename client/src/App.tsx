@@ -12,24 +12,24 @@ import Agent from "./pages/Agent";
 import Admin from "./pages/Admin";
 import { useEffect } from "react";
 
-const DEFAULT_TITLE = "AgentCorp — Entity Structure & Treasury Rails for AI Agents";
+const DEFAULT_TITLE = "AgentsCorp — Entity Structure & Treasury Rails for AI Agents";
 
 const PAGE_TITLES: Record<string, string> = {
   "/": DEFAULT_TITLE,
-  "/whitepaper": "Whitepaper — AgentCorp Architecture & Protocol Overview",
-  "/docs": "Developer Docs — AgentCorp",
-  "/mint": "Entity Setup Preview — AgentCorp (Target Q1 2027)",
-  "/agent": "For Agents — /skill.md & SDK Integration | AgentCorp",
-  "/admin": "Admin Dashboard — AgentCorp",
+  "/whitepaper": "Whitepaper — AgentsCorp Architecture & Protocol Overview",
+  "/docs": "Developer Docs — AgentsCorp",
+  "/mint": "Entity Setup Preview — AgentsCorp (Target Q1 2027)",
+  "/agent": "For Agents — /skill.md & SDK Integration | AgentsCorp",
+  "/admin": "Admin Dashboard — AgentsCorp",
 };
 
 const PAGE_DESCRIPTIONS: Record<string, string> = {
-  "/": "AgentCorp helps agent platforms, operators, and enterprises structure Delaware Series LLCs (6 Del. C. § 18-215), anchor governing documents on Arweave, and connect treasury controls with per-series liability isolation. Pre-mainnet; target Q1 2027.",
-  "/whitepaper": "AgentCorp Architecture & Protocol Overview (v1.0): Delaware Series LLC structure, Arweave document anchoring, treasury and policy controls, and the 2027 roadmap.",
-  "/docs": "Developer documentation for AgentCorp: /skill.md, SDK preview, planned contract interface, document schema, and current deployment status.",
+  "/": "AgentsCorp helps agent platforms, operators, and enterprises structure Delaware Series LLCs (6 Del. C. § 18-215), anchor governing documents on Arweave, and connect treasury controls with per-series liability isolation. Pre-mainnet; target Q1 2027.",
+  "/whitepaper": "AgentsCorp Architecture & Protocol Overview (v1.0): Delaware Series LLC structure, Arweave document anchoring, treasury and policy controls, and the 2027 roadmap.",
+  "/docs": "Developer documentation for AgentsCorp: /skill.md, SDK preview, planned contract interface, document schema, and current deployment status.",
   "/mint": "Entity setup is in development. Preview the planned Delaware Series LLC setup flow and join the Q1 2027 design-partner cohort.",
   "/agent": "Wire AI agents into entity and treasury workflows with /skill.md, the TypeScript SDK, and Base Sepolia examples. Pre-mainnet; target Q1 2027.",
-  "/admin": "Owner-only admin dashboard for AgentCorp waitlist management.",
+  "/admin": "Owner-only admin dashboard for AgentsCorp waitlist management.",
 };
 
 function TitleManager() {

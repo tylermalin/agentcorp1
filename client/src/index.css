@@ -4,7 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ============================================================
-   AGENTCORP DESIGN SYSTEM
+   AGENTSCORP DESIGN SYSTEM
    Philosophy: Industrial Legal Modernism
    - Monochrome editorial: obsidian canvas, hairline rules (legacy brass tokens remapped)
    - Monospace + serif type pairing
@@ -42,7 +42,7 @@
 }
 
 :root {
-  /* AgentCorp editorial tokens (monochrome, hairline) */
+  /* AgentsCorp editorial tokens (monochrome, hairline) */
   --bg-primary: #000000;
   --bg-elevated: #181818;
   --border-hairline: rgba(255, 255, 255, 0.10);
@@ -197,7 +197,7 @@
     }
   }
 
-  /* ── AgentCorp Typography ── */
+  /* ── AgentsCorp Typography ── */
   .font-display {
     font-family: 'Syne', sans-serif;
     font-weight: 800;

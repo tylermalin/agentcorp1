@@ -192,7 +192,7 @@ await window.ethereum.request({
 });`;
 
 const EXAMPLE_MINT = `// Factory address: NOT PUBLISHED (Sepolia) / NOT DEPLOYED (mainnet)
-IAgentCorpFactory factory = IAgentCorpFactory(FACTORY_ADDRESS);
+IAgentsCorpFactory factory = IAgentsCorpFactory(FACTORY_ADDRESS);
 
 // Registers an on-chain record that points at the governing documents.
 // It does not file a Certificate of Formation with Delaware.
@@ -228,7 +228,7 @@ factory.amendEntity(
 // Prior documents remain retrievable on Arweave.`;
 
 const MANIFEST = `{
-  "agentcorp_version": "1.0",
+  "agentscorp_version": "1.0",
   "entity_type": "DELAWARE_SERIES_LLC",
   "entity_name": "[[ENTITY_NAME]]",
   "formation_date": "[[FORMATION_DATE]]",
@@ -292,9 +292,9 @@ async function verifyDocument(tokenId, documentType) {
   return hashHex === entry.sha256.replace(/^0x/, "").toLowerCase();
 }`;
 
-const GOVERNANCE_INTERFACE = `// IAgentCorpGovernance (draft): implement to use a custom
+const GOVERNANCE_INTERFACE = `// IAgentsCorpGovernance (draft): implement to use a custom
 // governance system as the designated controller of a treasury.
-interface IAgentCorpGovernance {
+interface IAgentsCorpGovernance {
     function propose(
         address[] memory targets,
         uint256[] memory values,
@@ -315,7 +315,7 @@ interface IAgentCorpGovernance {
 }`;
 
 const ATTESTATION = `{
-  "schema": "agentcorp-kyc-v1",
+  "schema": "agentscorp-kyc-v1",
   "provider": "[[PROVIDER]]",
   "level": "[[LEVEL]]",
   "attestation_hash": "0x...",
@@ -338,7 +338,7 @@ export default function Docs() {
           <PageHeader
             index={`Docs · ${STATUS_LABEL}`}
             title="Protocol documentation."
-            lede="Contract interface, entity types, document manifest, verification, and gasless execution for the AgentCorp protocol. This reference matches the agent specification published at /skill.md."
+            lede="Contract interface, entity types, document manifest, verification, and gasless execution for the AgentsCorp protocol. This reference matches the agent specification published at /skill.md."
           >
             <div className="mt-10 flex flex-wrap gap-3">
               <a href={SKILL_URL} className={btnPrimary}>
@@ -409,7 +409,7 @@ export default function Docs() {
                 title="Overview"
                 intro={
                   <>
-                    AgentCorp is a protocol for linking legal-entity records to on-chain state. Each
+                    AgentsCorp is a protocol for linking legal-entity records to on-chain state. Each
                     entity record is an ERC-721 token on Base that points at a manifest of governing
                     documents stored on Arweave, with sha256 hashes for verification and an ordered
                     amendment history.
@@ -495,7 +495,7 @@ export default function Docs() {
               >
                 <CodeFrame title="quickstart.ts" meta="SDK preview · Base Sepolia" code={SDK_SAMPLE} />
                 <Note>
-                  <Code>@agentcorp/sdk</Code> is not yet published. API keys are issued to design
+                  <Code>@agentscorp/sdk</Code> is not yet published. API keys are issued to design
                   partners; join the waitlist on the{" "}
                   <Link href="/mint" className={linkCls}>
                     entity setup page
@@ -509,7 +509,7 @@ export default function Docs() {
                 title="Contract interface"
                 intro="The factory interface as specified in /skill.md. Function signatures and enums are stable for integration work; addresses are not yet published."
               >
-                <CodeFrame title="IAgentCorpFactory.sol" meta="functions" code={CONTRACT_FUNCTIONS} />
+                <CodeFrame title="IAgentsCorpFactory.sol" meta="functions" code={CONTRACT_FUNCTIONS} />
                 <div className="grid gap-6 lg:grid-cols-2">
                   <CodeFrame title="EntityType" meta="enum" code={ENTITY_ENUM} />
                   <CodeFrame title="EntityState" meta="struct" code={ENTITY_STATE} />
@@ -702,7 +702,7 @@ export default function Docs() {
                     </p>
                   </div>
                 </div>
-                <CodeFrame title="manifest.json" meta="agentcorp_version 1.0" code={MANIFEST} />
+                <CodeFrame title="manifest.json" meta="agentscorp_version 1.0" code={MANIFEST} />
                 <Note>
                   <Code>chain_id</Code> is 8453 for mainnet records. Use 84532 for Base Sepolia test
                   manifests.
@@ -765,7 +765,7 @@ export default function Docs() {
                     ]}
                   />
                   <Note className="mt-4">
-                    These are Avocado and Circle contracts, not AgentCorp deployments. Reference:{" "}
+                    These are Avocado and Circle contracts, not AgentsCorp deployments. Reference:{" "}
                     <a href="https://avcd.io/skill.md" target="_blank" rel="noopener noreferrer" className={linkCls}>
                       avcd.io/skill.md
                     </a>
@@ -797,7 +797,7 @@ export default function Docs() {
                     },
                   ]}
                 />
-                <CodeFrame title="IAgentCorpGovernance.sol" meta="draft" code={GOVERNANCE_INTERFACE} />
+                <CodeFrame title="IAgentsCorpGovernance.sol" meta="draft" code={GOVERNANCE_INTERFACE} />
               </DocSection>
 
               <DocSection

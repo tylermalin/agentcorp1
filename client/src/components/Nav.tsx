@@ -1,11 +1,12 @@
 /**
- * AGENTCORP NAV: floating translucent bar. Mark + wordmark left,
+ * AGENTSCORP NAV: floating translucent bar. Mark + wordmark left,
  * numbered links center, CTA right. Full-height mobile panel.
  */
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "wouter";
 import { ArrowUpRight } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
+import { Logo } from "@/components/brand/Logo";
 
 const NAV_LINKS = [
   { n: "01", label: "Protocol", href: "/#protocol" },
@@ -18,18 +19,6 @@ const NAV_LINKS = [
 ];
 
 const EASE = "ease-[cubic-bezier(0.22,1,0.36,1)]";
-
-/** Brand mark: a parent slab over three series cells. */
-export function Mark({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden className={cn("h-6 w-6", className)}>
-      <rect x="2" y="2" width="20" height="8" rx="2.5" fill="#6ee7b7" />
-      <rect x="2" y="13" width="5.5" height="9" rx="2" fill="currentColor" />
-      <rect x="9.25" y="13" width="5.5" height="9" rx="2" fill="currentColor" />
-      <rect x="16.5" y="13" width="5.5" height="9" rx="2" fill="currentColor" opacity="0.45" />
-    </svg>
-  );
-}
 
 function NavItem({
   link,
@@ -96,9 +85,8 @@ export default function Nav() {
       </a>
       <header className="sticky top-0 z-40 px-3 pt-3">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-6 rounded-2xl border border-white/10 bg-black/60 pr-2 pl-4 backdrop-blur-xl">
-          <Link href="/" className="flex shrink-0 items-center gap-2.5 text-white">
-            <Mark />
-            <span className="text-sm font-semibold uppercase tracking-[0.14em]">AgentCorp</span>
+          <Link href="/" aria-label="AgentsCorp home" className="shrink-0">
+            <Logo />
           </Link>
 
           <nav aria-label="Primary" className="hidden items-center gap-5 text-[13px] xl:flex">

@@ -1,5 +1,5 @@
 /**
- * AgentCorp whitepaper — Architecture & Protocol Overview (v1.0).
+ * AgentsCorp whitepaper — Architecture & Protocol Overview (v1.0).
  * Editorial layout: PageHeader + MetaStrip, then a sticky table of
  * contents in the left rail (desktop) and long-form body on the right.
  */
@@ -71,9 +71,9 @@ L4  Gas abstraction       Avocado (api.avcd.io)
       Gas paid in USDC, EIP-712 signed, relayed to Base`;
 
 const FORMATION_CODE = `// Illustrative only. Contracts are pre-mainnet; examples target Base Sepolia.
-import { AgentCorpClient } from "@agentcorp/sdk";
+import { AgentsCorpClient } from "@agentscorp/sdk";
 
-const corp = new AgentCorpClient({
+const corp = new AgentsCorpClient({
   avocadoWallet,
   network: "base-sepolia",
 });
@@ -106,7 +106,7 @@ const record = await corp.mintEntity({
 //    EIN, and bank onboarding are completed separately.
 console.log(record.id, record.status); // e.g. "pending-filing"`;
 
-const ENUM_CODE = `// IAgentCorp.sol — EntityType (draft, subject to audit)
+const ENUM_CODE = `// IAgentsCorp.sol — EntityType (draft, subject to audit)
 enum EntityType {
   DELAWARE_LLC,           // 0  Standard Delaware LLC
   DELAWARE_SERIES_LLC,    // 1  Series LLC (parent)
@@ -144,8 +144,8 @@ export default function Whitepaper() {
         <Container>
           <PageHeader
             index="Whitepaper / v1.0"
-            title="AgentCorp Architecture & Protocol Overview (v1.0)"
-            lede="AgentCorp is a protocol and toolkit for giving agent-operated work a defined legal and financial structure. It combines Delaware Series LLC templates, Arweave-anchored governing documents, multisig treasury controls, and entity records on Base. On-chain records track and verify an entity's documents and state; statutory formation, banking, and enforceability depend on real-world filings and the rules of the institutions involved."
+            title="AgentsCorp Architecture & Protocol Overview (v1.0)"
+            lede="AgentsCorp is a protocol and toolkit for giving agent-operated work a defined legal and financial structure. It combines Delaware Series LLC templates, Arweave-anchored governing documents, multisig treasury controls, and entity records on Base. On-chain records track and verify an entity's documents and state; statutory formation, banking, and enforceability depend on real-world filings and the rules of the institutions involved."
           />
 
           <MetaStrip
@@ -202,7 +202,7 @@ export default function Whitepaper() {
                   ]}
                 />
                 <P>
-                  AgentCorp addresses this with a per-task or per-project series structure, standardized
+                  AgentsCorp addresses this with a per-task or per-project series structure, standardized
                   governing documents, and verifiable records that make each entity legible to the people who
                   must review it.
                 </P>
@@ -238,7 +238,7 @@ export default function Whitepaper() {
 
               <DocSection id="architecture">
                 <P>
-                  AgentCorp has four layers. The spec coordinates them; each can be audited and replaced
+                  AgentsCorp has four layers. The spec coordinates them; each can be audited and replaced
                   independently.
                 </P>
                 <IndexedRows
@@ -271,15 +271,15 @@ export default function Whitepaper() {
                   headers={["Contract", "Role"]}
                   rows={[
                     [
-                      "AgentCorpFactory.sol",
+                      "AgentsCorpFactory.sol",
                       "Records parent entities and child series, tracks parent–child relationships, collects planned protocol fees.",
                     ],
                     [
-                      "AgentCorpRegistry.sol",
+                      "AgentsCorpRegistry.sol",
                       "Enforces name uniqueness within the protocol (case-insensitive). This does not reserve a name with the Delaware Division of Corporations.",
                     ],
                     [
-                      "IAgentCorp.sol",
+                      "IAgentsCorp.sol",
                       "Shared interfaces: EntityType, EntityStatus, EntityState, Amendment, MintParams, events.",
                     ],
                   ]}
@@ -310,7 +310,7 @@ export default function Whitepaper() {
                 <P>
                   Liability isolation is statutory, not automatic. It depends on the parent's Certificate of
                   Formation giving notice of the limitation, an operating agreement that provides for series,
-                  and separate records and accounting for each series' assets. AgentCorp's templates and
+                  and separate records and accounting for each series' assets. AgentsCorp's templates and
                   per-series records are designed to support that separation. They are paired with the
                   real-world steps that make the structure valid: state filings, a registered agent, EINs where
                   needed, and named authorized signatories.
@@ -437,7 +437,7 @@ export default function Whitepaper() {
                 <P>
                   Governing documents need to remain available and unaltered for the life of the entity. IPFS
                   content can disappear when nodes stop pinning it, and a centralized server depends on one
-                  operator. AgentCorp stores documents on Arweave, which charges a one-time fee funded by a
+                  operator. AgentsCorp stores documents on Arweave, which charges a one-time fee funded by a
                   storage endowment. An uploaded document cannot be modified or removed, and its transaction ID
                   resolves globally.
                 </P>
@@ -476,7 +476,7 @@ export default function Whitepaper() {
               <DocSection id="avocado">
                 <P>
                   Most agents hold stablecoins, not ETH. Requiring ETH for gas adds a bridging step, a custody
-                  question, and price volatility. AgentCorp uses{" "}
+                  question, and price volatility. AgentsCorp uses{" "}
                   <A href="https://avcd.io">Avocado</A>, a smart-wallet relayer that lets gas be paid in USDC.
                   The agent signs; Avocado relays to Base and deducts the cost from the agent's USD balance.
                 </P>
@@ -549,7 +549,7 @@ export default function Whitepaper() {
                 />
                 <P>
                   Under the planned parameters, protocol fees are split 80% to the entity's treasury and 20% to
-                  the AgentCorp protocol treasury. Gas is a small share of cost and is paid in USDC through
+                  the AgentsCorp protocol treasury. Gas is a small share of cost and is paid in USDC through
                   Avocado.
                 </P>
                 <P>
@@ -561,7 +561,7 @@ export default function Whitepaper() {
 
               <DocSection id="legal">
                 <P>
-                  AgentCorp provides software, protocol specifications, and document templates. It is not a law
+                  AgentsCorp provides software, protocol specifications, and document templates. It is not a law
                   firm, registered agent, tax adviser, or bank. The following remain required for a legally
                   valid entity and are the operator's responsibility:
                 </P>
@@ -590,7 +590,7 @@ export default function Whitepaper() {
                     {
                       idx: "12.5",
                       title: "Banking and counterparties",
-                      body: "Account opening and acceptance of the entity by counterparties depend on each institution's own KYB, AML, and risk rules. AgentCorp records can support that review but do not guarantee approval.",
+                      body: "Account opening and acceptance of the entity by counterparties depend on each institution's own KYB, AML, and risk rules. AgentsCorp records can support that review but do not guarantee approval.",
                     },
                   ]}
                 />
@@ -640,7 +640,7 @@ export default function Whitepaper() {
                   Sepolia.
                 </P>
                 <H3>Entity type enum</H3>
-                <CodeFrame className="my-6" title="IAgentCorp.sol" meta="draft" code={ENUM_CODE} />
+                <CodeFrame className="my-6" title="IAgentsCorp.sol" meta="draft" code={ENUM_CODE} />
                 <H3>Avocado integration parameters</H3>
                 <SpecList
                   className="my-6"

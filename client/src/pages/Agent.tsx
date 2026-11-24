@@ -1,5 +1,5 @@
 /**
- * /agent — integration guide for wiring AI agents into AgentCorp entity
+ * /agent — integration guide for wiring AI agents into AgentsCorp entity
  * and treasury workflows. Pre-mainnet: examples target Base Sepolia.
  */
 import { ArrowRight, DownloadSimple as Download } from "@phosphor-icons/react";
@@ -29,7 +29,7 @@ import {
 } from "@/lib/site";
 
 const SKILL_EXCERPT = `---
-name: agentcorp
+name: agentscorp
 version: 1.0
 chain: Base (8453, target) · Base Sepolia (integration)
 status: PRE-MAINNET — target Q1 2027
@@ -54,7 +54,7 @@ yes from the user. A prior yes covers one action.
 
 ...`;
 
-const PROMPT_EXAMPLE = `Using AGENTCORP-SKILL.md, prepare a Delaware Series LLC
+const PROMPT_EXAMPLE = `Using AGENTSCORP-SKILL.md, prepare a Delaware Series LLC
 series configuration named 'SwarmOps Series A' with
 treasury 0x111...222, daily spend cap $2,500, and
 human co-signer 0xf3a1....`;
@@ -102,7 +102,7 @@ const FRAMEWORKS = [
   {
     idx: "0.1",
     title: "Skill-directory runtimes",
-    body: "Claude, Manus, and similar agents: place AGENTCORP-SKILL.md in the agent's skill directory so it is discovered alongside other tools.",
+    body: "Claude, Manus, and similar agents: place AGENTSCORP-SKILL.md in the agent's skill directory so it is discovered alongside other tools.",
   },
   {
     idx: "0.2",
@@ -201,10 +201,10 @@ export default function Agent() {
           <Section
             index="02 / Skill File"
             title="One static spec, read by the agent."
-            intro="AGENTCORP-SKILL.md describes entity types, deployment state, the confirmation gate, and document requirements. The excerpt below is abbreviated; download the full file."
+            intro="AGENTSCORP-SKILL.md describes entity types, deployment state, the confirmation gate, and document requirements. The excerpt below is abbreviated; download the full file."
           >
             <CodeFrame
-              title="AGENTCORP-SKILL.md"
+              title="AGENTSCORP-SKILL.md"
               meta="v1.0 · Static Spec"
               code={SKILL_EXCERPT}
               downloadHref="/skill.md"
@@ -245,7 +245,7 @@ export default function Agent() {
             </div>
             <SpecList items={AVOCADO_ENDPOINTS} />
             <Note className="mt-6">
-              Avocado integration applies once AgentCorp contracts are deployed on Base. Until then, integration work
+              Avocado integration applies once AgentsCorp contracts are deployed on Base. Until then, integration work
               runs against Base Sepolia with standard gas.
             </Note>
           </Section>
