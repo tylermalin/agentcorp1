@@ -48,7 +48,7 @@ export const ROUTES: RouteMeta[] = [
     path: "/whitepaper",
     title: "Whitepaper — AgentsCorp Architecture & Protocol Overview",
     description:
-      "AgentsCorp Architecture & Protocol Overview (v1.0): Delaware Series LLC structure for AI agents, Arweave document anchoring, treasury and policy controls, legal considerations, and the 2027 roadmap.",
+      "AgentsCorp Architecture & Protocol Overview v1.1 (November 2026, PDF available): why now, the agent-entity landscape, Delaware Series LLC structure for AI agents, Arweave records, treasury controls, legal considerations, and the 2027 roadmap.",
     prerender: true,
     priority: 0.8,
     changefreq: "monthly",

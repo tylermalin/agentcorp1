@@ -7,7 +7,8 @@ Agents: read the skill file first. It states current deployment status and tells
 ## Core
 
 - [Agent skill specification](https://www.agentscorp.xyz/skill.md): machine-readable spec covering entity selection, document anchoring, the planned contract interface, gasless execution, planned fees, and the confirmation gate
-- [Whitepaper](https://www.agentscorp.xyz/whitepaper): architecture, Delaware Series LLC structure, legal considerations, roadmap
+- [Whitepaper](https://www.agentscorp.xyz/whitepaper): v1.1 (November 24, 2026) — why now, landscape, architecture, Delaware Series LLC structure, legal considerations, roadmap
+- [Whitepaper PDF](https://www.agentscorp.xyz/agentscorp-whitepaper-v1.1.pdf): same content as a dated, printable document
 - [Developer docs](https://www.agentscorp.xyz/docs): deployment state, SDK preview, contract interface, manifest schema, verification
 
 ## More

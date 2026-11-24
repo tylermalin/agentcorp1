@@ -16,6 +16,8 @@ import {
   Note,
   PageHeader,
   SpecList,
+  btnPrimary,
+  btnSecondary,
   StatusTag,
 } from "@/components/site/Primitives";
 import {
@@ -25,26 +27,35 @@ import {
   IN_PROGRESS,
   LIVE_NOW,
   ROADMAP,
+  LANDSCAPE,
+  LANDSCAPE_AS_OF,
+  LANDSCAPE_SOURCES,
   SITE_URL,
   SKILL_URL,
+  WHITEPAPER,
+  WHY_NOW,
+  WHY_NOW_TAKEAWAY,
 } from "@/lib/site";
+import { DownloadSimple } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 
 const SECTIONS = [
   { id: "wrappers", num: "01", title: "Why Existing Wrappers Fall Short" },
-  { id: "skill", num: "02", title: "The /skill.md Interface" },
-  { id: "architecture", num: "03", title: "Four-Layer Architecture" },
-  { id: "series-llc", num: "04", title: "Delaware Series LLC (6 Del. C. § 18-215)" },
-  { id: "roadmap", num: "05", title: "Roadmap (2027)" },
-  { id: "formation", num: "06", title: "Formation Flow" },
-  { id: "coordination", num: "07", title: "Multi-Agent Coordination" },
-  { id: "arweave", num: "08", title: "Document Anchoring on Arweave" },
-  { id: "avocado", num: "09", title: "Gas Abstraction via Avocado" },
-  { id: "entities", num: "10", title: "Entity Types" },
-  { id: "economics", num: "11", title: "Protocol Economics" },
-  { id: "legal", num: "12", title: "Legal Considerations" },
-  { id: "status", num: "13", title: "Current Status" },
-  { id: "appendix", num: "14", title: "Technical Appendix" },
+  { id: "why-now", num: "02", title: "Why Now" },
+  { id: "landscape", num: "03", title: "Landscape" },
+  { id: "skill", num: "04", title: "The /skill.md Interface" },
+  { id: "architecture", num: "05", title: "Four-Layer Architecture" },
+  { id: "series-llc", num: "06", title: "Delaware Series LLC (6 Del. C. § 18-215)" },
+  { id: "roadmap", num: "07", title: "Roadmap (2027)" },
+  { id: "formation", num: "08", title: "Formation Flow" },
+  { id: "coordination", num: "09", title: "Multi-Agent Coordination" },
+  { id: "arweave", num: "10", title: "Document Anchoring on Arweave" },
+  { id: "avocado", num: "11", title: "Gas Abstraction via Avocado" },
+  { id: "entities", num: "12", title: "Entity Types" },
+  { id: "economics", num: "13", title: "Protocol Economics" },
+  { id: "legal", num: "14", title: "Legal Considerations" },
+  { id: "status", num: "15", title: "Current Status" },
+  { id: "appendix", num: "16", title: "Technical Appendix" },
 ] as const;
 
 const ARCHITECTURE = `/skill.md  +  SDKs        agent or developer reads the spec
@@ -143,23 +154,50 @@ export default function Whitepaper() {
       <main id="main">
         <Container>
           <PageHeader
-            index="Whitepaper / v1.0"
-            title="AgentsCorp Architecture & Protocol Overview (v1.0)"
+            index={`Whitepaper · ${WHITEPAPER.version} · ${WHITEPAPER.date}`}
+            title={`AgentsCorp Architecture & Protocol Overview (${WHITEPAPER.version})`}
             lede="AgentsCorp is a protocol and toolkit for giving agent-operated work a defined legal and financial structure. It combines Delaware Series LLC templates, Arweave-anchored governing documents, multisig treasury controls, and entity records on Base. On-chain records track and verify an entity's documents and state; statutory formation, banking, and enforceability depend on real-world filings and the rules of the institutions involved."
+          >
+            <div className="mt-8 flex flex-wrap gap-3 print:hidden">
+              <a href={WHITEPAPER.pdf} download className={btnPrimary}>
+                <DownloadSimple weight="bold" className="h-4 w-4" />
+                Download PDF ({WHITEPAPER.version})
+              </a>
+              <a href="/skill.md" className={btnSecondary}>
+                Read /skill.md
+              </a>
+            </div>
+          </PageHeader>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "TechArticle",
+                headline: `AgentsCorp Architecture & Protocol Overview (${WHITEPAPER.version})`,
+                datePublished: WHITEPAPER.isoDate,
+                dateModified: WHITEPAPER.isoDate,
+                version: WHITEPAPER.version,
+                author: { "@type": "Person", name: WHITEPAPER.author, url: "https://www.linkedin.com/in/tylermalin" },
+                publisher: { "@type": "Organization", name: "AgentsCorp", url: SITE_URL },
+                url: `${SITE_URL}/whitepaper`,
+                encoding: { "@type": "MediaObject", contentUrl: `${SITE_URL}${WHITEPAPER.pdf}`, encodingFormat: "application/pdf" },
+              }),
+            }}
           />
 
           <MetaStrip
             items={[
-              { label: "Version", value: "v1.0" },
-              { label: "Jurisdiction", value: "Delaware § 18-215" },
-              { label: "Settlement", value: "Base · target 8453" },
-              { label: "Status", value: "Pre-Mainnet · Q1 2027" },
+              { label: "Version", value: WHITEPAPER.version },
+              { label: "Published", value: WHITEPAPER.date },
+              { label: "Author", value: WHITEPAPER.author },
+              { label: "Status", value: "Pre-mainnet · target Q1 2027" },
             ]}
           />
 
-          <div className="grid gap-10 py-16 md:grid-cols-12 md:gap-12 md:py-20">
+          <div className="grid gap-10 py-16 md:grid-cols-12 md:gap-12 md:py-20 print:block print:py-6">
             {/* Table of contents */}
-            <aside className="md:col-span-4 lg:col-span-3">
+            <aside className="print-hide md:col-span-4 lg:col-span-3">
               <details className="group border-y border-white/10 md:hidden">
                 <summary className="font-mono-index flex cursor-pointer list-none items-center justify-between py-4 text-xs uppercase text-[#a3a3a3]">
                   <span>Contents</span>
@@ -175,7 +213,7 @@ export default function Whitepaper() {
             </aside>
 
             {/* Body */}
-            <article className="min-w-0 md:col-span-8 lg:col-span-9">
+            <article className="min-w-0 md:col-span-8 lg:col-span-9 print:col-span-12">
               <DocSection id="wrappers">
                 <P>
                   AI agents already write code, run data pipelines, execute transactions, and coordinate with
@@ -187,7 +225,7 @@ export default function Whitepaper() {
                     {
                       idx: "1.1",
                       title: "Human-first formation",
-                      body: "Formation, banking, and compliance processes assume a human founder completing forms, signing documents, and attending onboarding. Each new workstream repeats that process, which does not fit work that is created and wound down programmatically.",
+                      body: "Formation is getting faster, including agent-first formation APIs, but each new workstream still tends to mean another standalone entity, and banking and compliance still assume a human completing forms and onboarding. That does not fit work that is created and wound down programmatically.",
                     },
                     {
                       idx: "1.2",
@@ -206,6 +244,68 @@ export default function Whitepaper() {
                   governing documents, and verifiable records that make each entity legible to the people who
                   must review it.
                 </P>
+              </DocSection>
+
+              <DocSection id="why-now">
+                <P>
+                  Four developments between 2024 and 2026 turned agent structure from a thought experiment into an
+                  operating problem.
+                </P>
+                <IndexedRows
+                  rows={WHY_NOW.map((w, i) => ({
+                    idx: `2.${i + 1}`,
+                    title: `${w.when} · ${w.title}`,
+                    body: (
+                      <>
+                        {w.body}{" "}
+                        <span className="text-[#737373]">
+                          Sources:{" "}
+                          {w.sources.map((src, j) => (
+                            <span key={src.href}>
+                              {j > 0 && ", "}
+                              <A href={src.href}>{src.label}</A>
+                            </span>
+                          ))}
+                          .
+                        </span>
+                      </>
+                    ),
+                  }))}
+                />
+                <P>{WHY_NOW_TAKEAWAY}</P>
+              </DocSection>
+
+              <DocSection id="landscape">
+                <P>
+                  Several approaches now exist for giving agent work a legal wrapper. They solve different parts of
+                  the problem, and several are live today while AgentsCorp is not. The comparison below reflects public
+                  materials as of {LANDSCAPE_AS_OF}; products in this space change quickly and corrections are welcome.
+                </P>
+                <div className="my-6 space-y-px overflow-hidden rounded-xl border border-white/10 bg-white/10">
+                  {LANDSCAPE.map((r, i) => (
+                    <div key={r.approach} className="print-keep bg-black p-5">
+                      <div className="flex flex-wrap items-baseline justify-between gap-2">
+                        <h3 className="text-base font-medium text-white">
+                          <span className="font-mono-index mr-2 text-xs text-[#737373]">3.{i + 1}</span>
+                          {r.approach}
+                        </h3>
+                        <span className="font-mono-index text-[11px] uppercase text-[#a3a3a3]">{r.status}</span>
+                      </div>
+                      <p className="mt-1 text-xs text-[#737373]">{r.examples}</p>
+                      <p className="mt-3 text-[15px] leading-relaxed text-[#d4d4d4]">{r.strength}</p>
+                      <p className="mt-2 text-[15px] leading-relaxed text-[#a3a3a3]">{r.difference}</p>
+                    </div>
+                  ))}
+                </div>
+                <p className="text-xs leading-relaxed text-[#737373]">
+                  Sources:{" "}
+                  {LANDSCAPE_SOURCES.map((src, j) => (
+                    <span key={src.href}>
+                      {j > 0 && " · "}
+                      <A href={src.href}>{src.label}</A>
+                    </span>
+                  ))}
+                </p>
               </DocSection>
 
               <DocSection id="skill">
@@ -232,7 +332,7 @@ export default function Whitepaper() {
                 <P>
                   Reading the spec and holding USDC is enough to prepare documents and on-chain records. It is
                   not enough to create a legal entity: that still requires the state filing and related steps
-                  described in Section 12.
+                  described in Section 14.
                 </P>
               </DocSection>
 
@@ -244,22 +344,22 @@ export default function Whitepaper() {
                 <IndexedRows
                   rows={[
                     {
-                      idx: "3.1",
+                      idx: "5.1",
                       title: "Document anchoring — Arweave",
                       body: "Governing documents are stored on Arweave. The transaction ID and content hash are recorded on-chain so anyone can check that a document has not changed.",
                     },
                     {
-                      idx: "3.2",
+                      idx: "5.2",
                       title: "Treasury and policy controls — multisig and banking rails",
                       body: "A multisig wallet holds on-chain assets under configurable signer thresholds and spending caps. Fiat accounts are opened with partner institutions under their own onboarding rules.",
                     },
                     {
-                      idx: "3.3",
+                      idx: "5.3",
                       title: "Entity contracts — Base EVM",
                       body: "Contracts record parent entities, child series, amendments, and name uniqueness. They track an entity's records; they do not create the entity.",
                     },
                     {
-                      idx: "3.4",
+                      idx: "5.4",
                       title: "Gas abstraction — Avocado",
                       body: "Transactions are signed with EIP-712 and relayed by Avocado, which lets agents pay gas in USDC instead of holding ETH.",
                     },
@@ -354,32 +454,32 @@ export default function Whitepaper() {
                 <IndexedRows
                   rows={[
                     {
-                      idx: "6.1",
+                      idx: "8.1",
                       title: "Load the spec",
                       body: "The agent fetches /skill.md, which defines entity types, document templates, endpoints, and the remaining steps.",
                     },
                     {
-                      idx: "6.2",
+                      idx: "8.2",
                       title: "Fund the gas wallet",
                       body: "The agent deposits USDC to its Avocado wallet on Base. This balance pays gas for the on-chain steps.",
                     },
                     {
-                      idx: "6.3",
+                      idx: "8.3",
                       title: "Deploy the treasury",
                       body: "The agent deploys a multisig with the agreed signers (agents, humans, or both) and threshold.",
                     },
                     {
-                      idx: "6.4",
+                      idx: "8.4",
                       title: "Draft and anchor documents",
                       body: "The operating agreement is generated from a template (name, members, governance rules, thresholds) and uploaded to Arweave. The transaction ID and content hash become the verifiable reference.",
                     },
                     {
-                      idx: "6.5",
+                      idx: "8.5",
                       title: "Record the entity on-chain",
                       body: "mintEntity() records entity type, name, the Arweave reference, and the treasury address.",
                     },
                     {
-                      idx: "6.6",
+                      idx: "8.6",
                       title: "Complete real-world steps",
                       body: "The Certificate of Formation is filed in Delaware through a registered agent, an EIN is obtained from the IRS where required, authorized signatories are named, and bank accounts are opened subject to each institution's review.",
                     },
@@ -410,22 +510,22 @@ export default function Whitepaper() {
                 <IndexedRows
                   rows={[
                     {
-                      idx: "7.1",
+                      idx: "9.1",
                       title: "Shared treasury",
                       body: "Hold stablecoins and other assets under multisig policy, with records tied to a specific series.",
                     },
                     {
-                      idx: "7.2",
+                      idx: "9.2",
                       title: "Contracts and revenue",
                       body: "Once formed and authorized, the entity can enter service agreements and receive payments through its authorized signatories. Counterparties decide whether to accept it.",
                     },
                     {
-                      idx: "7.3",
+                      idx: "9.3",
                       title: "IP holding",
                       body: "Software, model weights, or datasets can be assigned to a series, with license terms in documents anchored on Arweave.",
                     },
                     {
-                      idx: "7.4",
+                      idx: "9.4",
                       title: "Project separation",
                       body: "Each new project or workstream can be its own series under the parent, keeping assets and liabilities separate.",
                     },
@@ -450,17 +550,17 @@ export default function Whitepaper() {
                 <IndexedRows
                   rows={[
                     {
-                      idx: "8.1",
+                      idx: "10.1",
                       title: "Fetch",
                       body: "Read the Arweave transaction ID from the on-chain record and retrieve the document.",
                     },
                     {
-                      idx: "8.2",
+                      idx: "10.2",
                       title: "Hash",
                       body: "Hash the retrieved document and compare it with the content hash stored on-chain.",
                     },
                     {
-                      idx: "8.3",
+                      idx: "10.3",
                       title: "Trace amendments",
                       body: "Follow amendment records to see each later version, each with its own Arweave reference.",
                     },
@@ -483,22 +583,22 @@ export default function Whitepaper() {
                 <IndexedRows
                   rows={[
                     {
-                      idx: "9.1",
+                      idx: "11.1",
                       title: "Deposit",
                       body: "Send USDC to the Avocado wallet on Base; POST /v1/deposit credits the USD balance.",
                     },
                     {
-                      idx: "9.2",
+                      idx: "11.2",
                       title: "Sign",
                       body: "Sign the transaction as EIP-712 typed data. The domain chainId is 634 (Avocado), not 8453. avoNonce is always -1; the salt is a random 32 bytes per transaction.",
                     },
                     {
-                      idx: "9.3",
+                      idx: "11.3",
                       title: "Broadcast",
                       body: "POST /v1/broadcast. Avocado relays to Base and deducts gas from the balance. Up to 20 actions can be batched.",
                     },
                     {
-                      idx: "9.4",
+                      idx: "11.4",
                       title: "Confirm",
                       body: "Poll GET /v1/transaction/:hash. Status moves through received, submitted, confirming, and success; gas is bumped automatically on retry.",
                     },
@@ -568,27 +668,27 @@ export default function Whitepaper() {
                 <IndexedRows
                   rows={[
                     {
-                      idx: "12.1",
+                      idx: "14.1",
                       title: "Certificate of Formation",
                       body: "Filed with the Delaware Division of Corporations. For a Series LLC, the certificate must give notice of the limitation on series liabilities for § 18-215 isolation to apply.",
                     },
                     {
-                      idx: "12.2",
+                      idx: "14.2",
                       title: "Registered agent",
                       body: "A Delaware registered agent must be appointed and maintained, along with annual taxes and filings.",
                     },
                     {
-                      idx: "12.3",
+                      idx: "14.3",
                       title: "IRS EIN registration",
                       body: "An Employer Identification Number is obtained from the IRS where required, through a responsible party as the IRS defines it.",
                     },
                     {
-                      idx: "12.4",
+                      idx: "14.4",
                       title: "Authorized signatories",
                       body: "Named people or entities with authority to sign on the entity's behalf, as set out in the operating agreement and required by banks and counterparties.",
                     },
                     {
-                      idx: "12.5",
+                      idx: "14.5",
                       title: "Banking and counterparties",
                       body: "Account opening and acceptance of the entity by counterparties depend on each institution's own KYB, AML, and risk rules. AgentsCorp records can support that review but do not guarantee approval.",
                     },
@@ -658,12 +758,12 @@ export default function Whitepaper() {
                 />
                 <H3>Skill file contents</H3>
                 <P>
-                  The spec covers: protocol overview; entity type definitions and use cases; document template
-                  schemas; Arweave upload instructions and required metadata; multisig deployment parameters;
-                  Avocado wallet configuration; ABI summaries for <C>mintEntity()</C>, <C>mintSeries()</C>, and{" "}
-                  <C>amendEntity()</C>; and amendment and dissolution procedures, including the off-chain filings
-                  each requires. It is versioned at <A href={SKILL_URL}>{SKILL_URL.replace("https://", "")}</A>,
-                  with each version also anchored on Arweave.
+                  The spec covers: current deployment status and the values still unresolved; a confirmation gate
+                  agents must pass before any state-changing call; entity type selection rules; document production
+                  and the manifest schema; the planned contract interface, including <C>mintEntity()</C>,{" "}
+                  <C>mintSeries()</C>, and <C>amendEntity()</C>; gasless execution through Avocado; planned fees;
+                  and document verification. It is published at{" "}
+                  <A href={SKILL_URL}>{SKILL_URL.replace("https://", "")}</A> as static text.
                 </P>
               </DocSection>
             </article>
@@ -704,8 +804,8 @@ function DocSection({ id, children }: { id: (typeof SECTIONS)[number]["id"]; chi
   const meta = SECTIONS.find((s) => s.id === id)!;
   return (
     <section id={id} className="scroll-mt-24 border-t border-white/10 pt-10 pb-14 first:border-t-0 first:pt-0">
-      <IndexLabel>{meta.num}</IndexLabel>
-      <h2 className="mt-3 mb-6 text-2xl font-medium tracking-[-0.03em] md:text-3xl">{meta.title}</h2>
+      <IndexLabel className="print-keep-next">{meta.num}</IndexLabel>
+      <h2 className="print-keep-next mt-3 mb-6 text-2xl font-medium tracking-[-0.03em] md:text-3xl">{meta.title}</h2>
       <div className="max-w-[68ch]">{children}</div>
     </section>
   );

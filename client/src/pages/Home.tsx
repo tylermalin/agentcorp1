@@ -12,7 +12,19 @@ import Footer from "@/components/Footer";
 import YouformEmbed from "@/components/YouformEmbed";
 import { CodeFrame, Container, IndexLabel, btnPrimary, btnSecondary } from "@/components/site/Primitives";
 import { DotIcon, HalftoneField, Reveal, useInView, type DotIconKind } from "@/components/site/Motion";
-import { COMPANY, ENTITY_ROWS, FAQ, FEE_NOTE, IN_PROGRESS, LIVE_NOW, SDK_SAMPLE } from "@/lib/site";
+import {
+  COMPANY,
+  ENTITY_ROWS,
+  FAQ,
+  FEE_NOTE,
+  IN_PROGRESS,
+  LANDSCAPE,
+  LANDSCAPE_AS_OF,
+  LIVE_NOW,
+  SDK_SAMPLE,
+  WHY_NOW,
+  WHY_NOW_TAKEAWAY,
+} from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 const EASE = "ease-[cubic-bezier(0.22,1,0.36,1)]";
@@ -206,6 +218,108 @@ function Framework() {
           </Reveal>
         ))}
       </div>
+    </section>
+  );
+}
+
+function WhyNow() {
+  return (
+    <section id="why-now" className="py-20 md:py-24">
+      <Reveal className="max-w-2xl">
+        <IndexLabel>Why now</IndexLabel>
+        <h2 className="mt-4 text-3xl font-medium tracking-tight text-balance md:text-4xl">
+          Agents can pay. Now they need structure that holds up.
+        </h2>
+      </Reveal>
+      <ol className="relative mt-12 grid gap-4 md:grid-cols-4">
+        <span aria-hidden className="absolute top-[11px] right-0 left-0 hidden h-px bg-white/10 md:block" />
+        {WHY_NOW.map((w, i) => (
+          <Reveal as="li" key={w.title} delay={i * 90} className="relative">
+            <span className="relative z-10 flex items-center gap-3">
+              <span className="h-[22px] w-[22px] rounded-full border border-[#6ee7b7]/50 bg-black p-[6px]">
+                <span className="block h-full w-full rounded-full bg-[#6ee7b7]" />
+              </span>
+              <span className="font-mono-index text-xs text-[#6ee7b7]">{w.when}</span>
+            </span>
+            <div className="mt-5 h-[calc(100%-42px)] rounded-2xl border border-white/10 bg-[#0b0b0b] p-5">
+              <h3 className="text-base font-medium text-white">{w.title}</h3>
+              <p className="mt-2 text-sm text-pretty text-[#a3a3a3]">{w.body}</p>
+              <p className="mt-3 text-xs text-[#737373]">
+                {w.sources.map((src, j) => (
+                  <span key={src.href}>
+                    {j > 0 && " · "}
+                    <a href={src.href} target="_blank" rel="noopener noreferrer" className="underline decoration-white/20 underline-offset-2 hover:text-white">
+                      {src.label}
+                    </a>
+                  </span>
+                ))}
+              </p>
+            </div>
+          </Reveal>
+        ))}
+      </ol>
+      <Reveal className="mt-8 max-w-3xl">
+        <p className="text-lg text-pretty text-[#e5e5e5]">{WHY_NOW_TAKEAWAY}</p>
+      </Reveal>
+    </section>
+  );
+}
+
+function Landscape() {
+  return (
+    <section id="landscape" className="py-20 md:py-24">
+      <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
+        <Reveal className="max-w-xl">
+          <IndexLabel>Landscape</IndexLabel>
+          <h2 className="mt-4 text-3xl font-medium tracking-tight text-balance md:text-4xl">
+            Others form entities. AgentsCorp operates them.
+          </h2>
+        </Reveal>
+        <p className="max-w-sm text-sm text-[#a3a3a3]">
+          Public materials as of {LANDSCAPE_AS_OF}. This space moves fast;{" "}
+          <Link href="/whitepaper" className="text-[#6ee7b7] hover:text-[#a7f3d0]">
+            sources in the whitepaper
+          </Link>
+          .
+        </p>
+      </div>
+      <Reveal className="mt-10 overflow-x-auto rounded-2xl border border-white/10 bg-[#0b0b0b]">
+        <table className="w-full min-w-[860px] text-left text-sm">
+          <thead>
+            <tr className="border-b border-white/10 text-xs text-[#737373]">
+              <th className="px-5 py-4 font-normal">Approach</th>
+              <th className="px-5 py-4 font-normal">What it does well</th>
+              <th className="px-5 py-4 font-normal">How AgentsCorp differs</th>
+              <th className="px-5 py-4 font-normal">Status</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-white/10">
+            {LANDSCAPE.map((r) => {
+              const us = r.approach === "AgentsCorp";
+              return (
+                <tr key={r.approach} className={cn("align-top", us && "bg-[#6ee7b7]/[0.05]")}>
+                  <td className="px-5 py-4">
+                    <div className={cn("font-medium", us ? "text-[#6ee7b7]" : "text-white")}>{r.approach}</div>
+                    <div className="mt-1 text-xs text-[#737373]">{r.examples}</div>
+                  </td>
+                  <td className="px-5 py-4 text-[#a3a3a3]">{r.strength}</td>
+                  <td className="px-5 py-4 text-[#d4d4d4]">{r.difference}</td>
+                  <td className="px-5 py-4">
+                    <span
+                      className={cn(
+                        "font-mono-index whitespace-nowrap rounded-md px-2 py-1 text-[11px]",
+                        r.status === "Live" ? "bg-white/10 text-white" : us ? "bg-[#6ee7b7]/10 text-[#6ee7b7]" : "bg-white/5 text-[#a3a3a3]",
+                      )}
+                    >
+                      {r.status}
+                    </span>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </Reveal>
     </section>
   );
 }
@@ -763,11 +877,13 @@ export default function Home() {
         <StackMarquee />
         <Container>
           <Framework />
+          <WhyNow />
           <Pillars />
           <Manifesto />
           <UseCases />
           <PlannerBand />
           <Integration />
+          <Landscape />
           <Entities />
           <Company />
           <FaqSection />

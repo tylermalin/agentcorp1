@@ -569,3 +569,58 @@
     background: var(--brass);
   }
 }
+
+/* ── Print (used to produce the whitepaper PDF) ─────────────────────── */
+@media print {
+  @page {
+    size: Letter;
+    margin: 16mm 16mm 18mm;
+  }
+  html,
+  body {
+    background: #ffffff !important;
+  }
+  body > #root header,
+  body > #root footer,
+  #mobile-nav,
+  canvas,
+  .print-hide {
+    display: none !important;
+  }
+  * {
+    color: #141414 !important;
+    background: transparent !important;
+    border-color: #d4d4d4 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    backdrop-filter: none !important;
+  }
+  .text-hero-gradient {
+    -webkit-text-fill-color: #141414;
+  }
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  pre {
+    white-space: pre-wrap !important;
+    word-break: break-word;
+    font-size: 10px !important;
+  }
+  a {
+    text-decoration: underline;
+  }
+  h1,
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+  tr,
+  pre,
+  .print-keep {
+    break-inside: avoid;
+  }
+  .print-keep-next {
+    break-after: avoid;
+  }
+}

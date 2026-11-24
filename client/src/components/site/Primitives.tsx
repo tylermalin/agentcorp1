@@ -101,7 +101,7 @@ export function IndexedRows({ rows, className }: { rows: Row[]; className?: stri
       {rows.map((r) => (
         <div
           key={r.idx}
-          className="group grid gap-3 py-7 transition-colors duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-white/[0.02] sm:grid-cols-12 sm:gap-4 sm:px-2"
+          className="print-keep group grid gap-3 py-7 transition-colors duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-white/[0.02] sm:grid-cols-12 sm:gap-4 sm:px-2"
         >
           <div className="font-mono-index text-xs text-[#737373] transition-colors duration-300 group-hover:text-[#6ee7b7] sm:col-span-2">
             {r.idx}
@@ -147,7 +147,7 @@ export function CodeFrame({
           {title}
           {meta && <span className="text-[#737373]"> · {meta}</span>}
         </span>
-        <div className="flex shrink-0 items-center gap-4">
+        <div className="flex shrink-0 items-center gap-4 print:hidden">
           {downloadHref && (
             <a
               href={downloadHref}
