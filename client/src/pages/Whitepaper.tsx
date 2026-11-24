@@ -627,7 +627,7 @@ export default function Whitepaper() {
                 </div>
                 <P>
                   Contracts are in audit and on testnet ahead of the Q1 2027 target. The{" "}
-                  <A href={GITHUB_URL}>tylermalin/agentcorp1</A> repository contains the protocol website and
+                  <A href={GITHUB_URL}>tylermalin/agentscorp</A> repository contains the protocol website and
                   documentation, not deployed contracts.
                 </P>
               </DocSection>

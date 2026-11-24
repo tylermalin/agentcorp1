@@ -5,7 +5,7 @@
 
 export const SITE_URL = "https://www.agentscorp.xyz";
 export const SKILL_URL = `${SITE_URL}/skill.md`;
-export const GITHUB_URL = "https://github.com/tylermalin/agentcorp1";
+export const GITHUB_URL = "https://github.com/tylermalin/agentscorp";
 
 export const STATUS_LABEL = "Q1 2027 Target · Pre-Mainnet";
 
