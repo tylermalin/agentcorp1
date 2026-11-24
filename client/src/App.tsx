@@ -12,21 +12,23 @@ import Agent from "./pages/Agent";
 import Admin from "./pages/Admin";
 import { useEffect } from "react";
 
+const DEFAULT_TITLE = "AgentCorp — Entity Structure & Treasury Rails for AI Agents";
+
 const PAGE_TITLES: Record<string, string> = {
-  "/": "AgentCorp — On-Chain Legal Infrastructure",
-  "/whitepaper": "AgentCorp Whitepaper — On-Chain Legal Protocol",
-  "/docs": "AgentCorp Developer Docs — Smart Contract API",
-  "/mint": "Mint a Delaware LLC on Base — Coming Q1 2027",
-  "/agent": "Agent Minting — Autonomous Incorporation | AgentCorp",
+  "/": DEFAULT_TITLE,
+  "/whitepaper": "Whitepaper — AgentCorp Architecture & Protocol Overview",
+  "/docs": "Developer Docs — AgentCorp",
+  "/mint": "Entity Setup Preview — AgentCorp (Target Q1 2027)",
+  "/agent": "For Agents — /skill.md & SDK Integration | AgentCorp",
   "/admin": "Admin Dashboard — AgentCorp",
 };
 
 const PAGE_DESCRIPTIONS: Record<string, string> = {
-  "/": "Mint a Delaware Series LLC as an NFT on Base. Legal infrastructure for autonomous agents, founders, and DAOs. No lawyer. No waiting.",
-  "/whitepaper": "The AgentCorp Protocol Whitepaper v1.0 — on-chain legal infrastructure, gas abstraction via Avocado, and the future of autonomous entity formation.",
-  "/docs": "Developer documentation for the AgentCorp Protocol — smart contract interface, entity types, document schema, and SDK integration.",
-  "/mint": "Form a Delaware Series LLC, DAO Charter, or Series Designation on Base in under 5 minutes. The NFT IS the entity.",
-  "/agent": "Let your AI agent mint a legal entity autonomously. One SKILL.md file, USDC via Avocado, any LLM framework.",
+  "/": "AgentCorp helps agent platforms, operators, and enterprises structure Delaware Series LLCs (6 Del. C. § 18-215), anchor governing documents on Arweave, and connect treasury controls with per-series liability isolation. Pre-mainnet; target Q1 2027.",
+  "/whitepaper": "AgentCorp Architecture & Protocol Overview (v1.0): Delaware Series LLC structure, Arweave document anchoring, treasury and policy controls, and the 2027 roadmap.",
+  "/docs": "Developer documentation for AgentCorp: /skill.md, SDK preview, planned contract interface, document schema, and current deployment status.",
+  "/mint": "Entity setup is in development. Preview the planned Delaware Series LLC setup flow and join the Q1 2027 design-partner cohort.",
+  "/agent": "Wire AI agents into entity and treasury workflows with /skill.md, the TypeScript SDK, and Base Sepolia examples. Pre-mainnet; target Q1 2027.",
   "/admin": "Owner-only admin dashboard for AgentCorp waitlist management.",
 };
 
@@ -34,7 +36,7 @@ function TitleManager() {
   const [location] = useLocation();
 
   useEffect(() => {
-    const title = PAGE_TITLES[location] || "AgentCorp — On-Chain Legal Infrastructure";
+    const title = PAGE_TITLES[location] || DEFAULT_TITLE;
     const description = PAGE_DESCRIPTIONS[location] || PAGE_DESCRIPTIONS["/"];
 
     document.title = title;
@@ -95,12 +97,12 @@ function App() {
             position="bottom-right"
             toastOptions={{
               style: {
-                background: "#0d0d0d",
-                border: "1px solid rgba(201,168,76,0.25)",
-                color: "#f2efe8",
-                fontFamily: "'DM Mono', monospace",
-                fontSize: "12px",
-                borderRadius: "0",
+                background: "#181818",
+                border: "1px solid rgba(255,255,255,0.10)",
+                color: "#fafafa",
+                fontFamily: "Inter, sans-serif",
+                fontSize: "13px",
+                borderRadius: "12px",
               },
             }}
           />

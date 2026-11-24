@@ -1,19 +1,19 @@
 ---
 name: agentcorp
 version: 1.0
-protocol: AGENTCORP — On-Chain Legal Infrastructure
-chain: Base (8453)
-status: PRE-DEPLOYMENT
-description: Form, amend, transfer, and dissolve legal entities onchain via AgentCorp on Base. Covers Delaware Series LLCs, Series Designations, and DAO Charters minted as ERC-721 tokens with governing documents stored on Arweave, plus gasless execution through Avocado. Use this skill whenever a user asks to incorporate, form an LLC, spin up a legal wrapper for a project or deal, create a Series under an existing entity, set up a DAO or onchain org, amend an operating agreement, dissolve an entity, or check what entities a wallet holds. Also use it whenever AgentCorp, agent incorporation, Series LLC minting, or an AI agent holding a legal identity or treasury comes up. Always consult this file before answering questions about AgentCorp entity types, fees, or mechanics, because the correct answers depend on deployment state that changes between releases.
+protocol: AGENTCORP — Entity Structure & Treasury Rails for AI Agents
+chain: Base (8453, target) · Base Sepolia (integration)
+status: PRE-MAINNET — target Q1 2027
+description: Plan, record, and manage Delaware Series LLC structures and per-series treasury controls via AgentCorp. Covers Delaware Series LLCs (6 Del. C. § 18-215), Series Designations, and DAO Charters tracked as ERC-721 records on Base with governing documents anchored on Arweave, plus gasless execution through Avocado. Use this skill whenever a user asks to incorporate, form an LLC, spin up a legal wrapper for a project or deal, create a Series under an existing entity, set up a DAO or onchain org, amend an operating agreement, dissolve an entity, or check what entities a wallet holds. Also use it whenever AgentCorp, agent incorporation, Series LLC minting, or an AI agent holding a legal identity or treasury comes up. Always consult this file before answering questions about AgentCorp entity types, fees, or mechanics, because the correct answers depend on deployment state that changes between releases.
 canonical: https://www.agentscorp.xyz/skill.md
 license: MIT
 ---
 
 # AgentCorp
 
-AgentCorp mints legal entities as ERC-721 tokens on Base. The token is the entity. Minting incorporates, transferring assigns, burning dissolves, and amending updates the governing documents of record.
+AgentCorp records entity structures as ERC-721 tokens on Base and anchors their governing documents on Arweave. The token is an on-chain record that links an entity to its documents, treasury, and amendment history. It does not by itself create, transfer, or dissolve a legal entity.
 
-Every state-changing call has legal effect in Delaware. Treat these operations the way you would treat a wire transfer, not the way you would treat a test transaction.
+Legal formation and dissolution happen through statutory filings: a Delaware Certificate of Formation (and series designations under 6 Del. C. § 18-215), a registered agent, an IRS EIN, and authorized human signatories. Banking and counterparty acceptance depend on each institution's own rules. On-chain calls must stay consistent with those filings, so treat them the way you would treat a wire transfer, not a test transaction.
 
 ## Step 0: deployment check
 
@@ -49,7 +49,7 @@ FEE:           [ETH amount] + gas
 IRREVERSIBLE:  [what cannot be undone]
 ```
 
-A prior yes covers one action. It does not carry forward to a second mint or a follow-on amendment. Do not batch a mint with other actions. If the entity will hold assets of material value, say once that these templates are starting points and counsel should review before execution.
+A prior yes covers one action. It does not carry forward to a second mint or a follow-on amendment. Do not batch a mint with other actions. If the entity will hold assets of material value, say once that these templates are starting points and counsel should review before execution. Remind the user that the statutory filing, registered agent, and EIN steps are separate and still required.
 
 ## Step 2: choose the entity type
 
@@ -175,9 +175,11 @@ Sequence: deposit USDC to the Avocado wallet on Base, `POST /v1/deposit` at `api
 
 Reference: https://avcd.io/skill.md
 
-## Fees
+## Fees (planned)
 
-| Action | ETH |
+These are planned protocol parameters, subject to change before mainnet deployment. They do not include state filing fees, registered agent fees, or counsel.
+
+| Action | ETH (planned) |
 |---|---|
 | Mint Delaware LLC | 0.05 |
 | Mint Series LLC (parent) | 0.05 |
@@ -187,7 +189,7 @@ Reference: https://avcd.io/skill.md
 | Transfer | gas only |
 | Dissolution | 0.005 |
 
-20% of fees route to the protocol treasury for legal template maintenance. Quote in ETH. If asked to convert, state the ETH price used.
+A planned share of fees (currently proposed at 20%) would route to the protocol treasury for legal template maintenance. Quote in ETH, label figures as planned, and if asked to convert, state the ETH price used.
 
 ## Document verification
 
@@ -200,8 +202,8 @@ A mismatch means a document was replaced after minting and no longer matches the
 
 ## Out of scope
 
-This protocol forms entities. It does not give legal advice, does not opine on tax treatment or securities characterization, and does not decide whether an arrangement should be an entity at all. When the question is whether rather than how, say so and route the user to counsel.
+This protocol provides software, specifications, and document templates. It does not file with any state, act as a registered agent, obtain EINs, give legal advice, does not opine on tax treatment or securities characterization, and does not decide whether an arrangement should be an entity at all. When the question is whether rather than how, say so and route the user to counsel.
 
 ---
 
-AgentCorp is infrastructure, not legal advice. Consult qualified counsel for material transactions.
+AgentCorp provides software tools, protocol specifications, and starting-point document templates. It does not provide legal advice, registered agent services, tax advice, or licensed banking/brokerage services. Consult qualified counsel for material transactions.

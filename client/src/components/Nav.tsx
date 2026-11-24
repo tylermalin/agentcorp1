@@ -1,299 +1,178 @@
 /**
- * AGENTCORP SHARED NAV — Persistent across all pages
- * Design: Industrial Legal Modernism
- * - Near-black (#080808) with brass (#c9a84c) accent
- * - DM Mono for nav links, Syne 800 for logo
- * - Fixed top, backdrop blur, active-page highlighting
+ * AGENTCORP NAV: floating translucent bar. Mark + wordmark left,
+ * numbered links center, CTA right. Full-height mobile panel.
  */
-
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "wouter";
-
-const BRASS = "#c9a84c";
-const WHITE = "#f2efe8";
-const MUTED = "rgba(242,239,232,0.45)";
-const BLACK = "#080808";
+import { ArrowUpRight } from "@phosphor-icons/react";
+import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
-  { label: "Protocol", href: "/#protocol" },
-  { label: "Integration", href: "/#integration" },
-  { label: "Use Cases", href: "/#usecases" },
-  { label: "Entities", href: "/#entities" },
-  { label: "For Agents", href: "/agent" },
-  { label: "Whitepaper", href: "/whitepaper" },
-  { label: "Dev Docs", href: "/docs" },
+  { n: "01", label: "Protocol", href: "/#protocol" },
+  { n: "02", label: "Use cases", href: "/#use-cases" },
+  { n: "03", label: "Integration", href: "/#integration" },
+  { n: "04", label: "Entities", href: "/#entities" },
+  { n: "05", label: "For agents", href: "/agent" },
+  { n: "06", label: "Whitepaper", href: "/whitepaper" },
+  { n: "07", label: "Docs", href: "/docs" },
 ];
+
+const EASE = "ease-[cubic-bezier(0.22,1,0.36,1)]";
+
+/** Brand mark: a parent slab over three series cells. */
+export function Mark({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden className={cn("h-6 w-6", className)}>
+      <rect x="2" y="2" width="20" height="8" rx="2.5" fill="#6ee7b7" />
+      <rect x="2" y="13" width="5.5" height="9" rx="2" fill="currentColor" />
+      <rect x="9.25" y="13" width="5.5" height="9" rx="2" fill="currentColor" />
+      <rect x="16.5" y="13" width="5.5" height="9" rx="2" fill="currentColor" opacity="0.45" />
+    </svg>
+  );
+}
+
+function NavItem({
+  link,
+  active,
+  onClick,
+  className,
+  style,
+}: {
+  link: (typeof NAV_LINKS)[number];
+  active: boolean;
+  onClick?: () => void;
+  className?: string;
+  style?: React.CSSProperties;
+}) {
+  const inner = (
+    <>
+      <span className={cn("font-mono-index mr-1.5 text-[10px]", active ? "text-[#6ee7b7]" : "text-[#737373]")}>
+        {link.n}
+      </span>
+      {link.label}
+    </>
+  );
+  const cls = cn(
+    `whitespace-nowrap transition-colors duration-300 ${EASE} hover:text-white`,
+    active ? "text-white" : "text-[#a3a3a3]",
+    className,
+  );
+  if (link.href.startsWith("/#")) {
+    return (
+      <a href={link.href} className={cls} onClick={onClick} style={style}>
+        {inner}
+      </a>
+    );
+  }
+  return (
+    <Link href={link.href} className={cls} onClick={onClick} style={style} aria-current={active ? "page" : undefined}>
+      {inner}
+    </Link>
+  );
+}
 
 export default function Nav() {
   const [location] = useLocation();
-  const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
+  useEffect(() => setOpen(false), [location]);
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
 
-  const isActive = (href: string) => {
-    if (href.startsWith("/#")) return location === "/";
-    return location === href || location.startsWith(href + "/");
-  };
+  const isActive = (href: string) =>
+    !href.startsWith("/#") && (location === href || location.startsWith(href + "/"));
 
   return (
     <>
-      <nav
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 200,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "0 clamp(16px, 4vw, 48px)",
-          height: "64px",
-          borderBottom: "1px solid rgba(201,168,76,0.12)",
-          background: scrolled
-            ? "rgba(8,8,8,0.97)"
-            : "rgba(8,8,8,0.88)",
-          backdropFilter: "blur(16px)",
-          WebkitBackdropFilter: "blur(16px)",
-          transition: "background 0.3s",
-        }}
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-lg focus:bg-white focus:px-3 focus:py-2 focus:text-sm focus:text-black"
       >
-        {/* Logo */}
-        <Link href="/">
-          <span
-            style={{
-              fontFamily: "'Syne', sans-serif",
-              fontWeight: 800,
-              fontSize: "16px",
-              letterSpacing: "0.06em",
-              color: WHITE,
-              cursor: "pointer",
-              textDecoration: "none",
-              flexShrink: 0,
-            }}
-          >
-            AGENT<span style={{ color: BRASS }}>CORP</span>
-          </span>
-        </Link>
-
-        {/* Desktop links */}
-        <div
-          className="nav-desktop"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "24px",
-          }}
-        >
-          {NAV_LINKS.map((link) => {
-            const active = isActive(link.href);
-            const isAnchor = link.href.startsWith("/#");
-            const linkStyle: React.CSSProperties = {
-              fontSize: "10px",
-              letterSpacing: "0.12em",
-              color: active ? BRASS : MUTED,
-              textDecoration: "none",
-              textTransform: "uppercase",
-              transition: "color 0.2s",
-              fontFamily: "'DM Mono', monospace",
-              whiteSpace: "nowrap",
-              paddingBottom: "2px",
-              borderBottom: active ? `1px solid ${BRASS}` : "1px solid transparent",
-              cursor: "pointer",
-            };
-
-            if (isAnchor) {
-              return (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  style={linkStyle}
-                  onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLElement).style.color = WHITE;
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLElement).style.color = active ? BRASS : MUTED;
-                  }}
-                >
-                  {link.label}
-                </a>
-              );
-            }
-            return (
-              <Link key={link.label} href={link.href}>
-                <span
-                  style={linkStyle}
-                  onMouseEnter={(e) => {
-                    (e.target as HTMLElement).style.color = active ? BRASS : WHITE;
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.target as HTMLElement).style.color = active ? BRASS : MUTED;
-                  }}
-                >
-                  {link.label}
-                </span>
-              </Link>
-            );
-          })}
-        </div>
-
-        {/* Right: Mint CTA + hamburger */}
-        <div style={{ display: "flex", alignItems: "center", gap: "14px", flexShrink: 0 }}>
-          <Link href="/mint">
-            <span
-              className="nav-mint-cta"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "7px",
-                border: `1px solid rgba(201,168,76,0.35)`,
-                color: BRASS,
-                fontFamily: "'Syne', sans-serif",
-                fontWeight: 700,
-                fontSize: "11px",
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
-                padding: "9px 18px",
-                cursor: "pointer",
-                transition: "border-color 0.2s, background 0.2s",
-                whiteSpace: "nowrap",
-                background: "transparent",
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.borderColor = BRASS;
-                (e.currentTarget as HTMLElement).style.background = "rgba(201,168,76,0.06)";
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.borderColor = "rgba(201,168,76,0.35)";
-                (e.currentTarget as HTMLElement).style.background = "transparent";
-              }}
-            >
-              <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#f59e0b", boxShadow: "0 0 6px #f59e0b", display: "inline-block", flexShrink: 0 }} />
-              Mint — Q1 2027
-            </span>
+        Skip to content
+      </a>
+      <header className="sticky top-0 z-40 px-3 pt-3">
+        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-6 rounded-2xl border border-white/10 bg-black/60 pr-2 pl-4 backdrop-blur-xl">
+          <Link href="/" className="flex shrink-0 items-center gap-2.5 text-white">
+            <Mark />
+            <span className="text-sm font-semibold uppercase tracking-[0.14em]">AgentCorp</span>
           </Link>
 
-          {/* Hamburger — shown only on mobile via CSS */}
-          <button
-            className="nav-hamburger"
-            onClick={() => setMenuOpen(!menuOpen)}
-            style={{
-              display: "none",
-              background: "none",
-              border: `1px solid rgba(201,168,76,0.3)`,
-              color: BRASS,
-              padding: "7px 12px",
-              cursor: "pointer",
-              fontSize: "10px",
-              letterSpacing: "0.12em",
-              fontFamily: "'DM Mono', monospace",
-              textTransform: "uppercase",
-            }}
-            aria-label="Toggle menu"
-          >
-            {menuOpen ? "CLOSE" : "MENU"}
-          </button>
-        </div>
-      </nav>
+          <nav aria-label="Primary" className="hidden items-center gap-5 text-[13px] xl:flex">
+            {NAV_LINKS.map((l) => (
+              <NavItem key={l.href} link={l} active={isActive(l.href)} />
+            ))}
+          </nav>
 
-      {/* Mobile dropdown */}
-      {menuOpen && (
-        <div
-          style={{
-            position: "fixed",
-            top: "64px",
-            left: 0,
-            right: 0,
-            zIndex: 199,
-            background: "rgba(8,8,8,0.99)",
-            borderBottom: "1px solid rgba(201,168,76,0.12)",
-            padding: "16px 32px 24px",
-          }}
-        >
-          {NAV_LINKS.map((link) => {
-            const isAnchor = link.href.startsWith("/#");
-            const active = isActive(link.href);
-            const mobileStyle: React.CSSProperties = {
-              display: "block",
-              fontSize: "12px",
-              letterSpacing: "0.12em",
-              color: active ? BRASS : MUTED,
-              textDecoration: "none",
-              textTransform: "uppercase",
-              fontFamily: "'DM Mono', monospace",
-              padding: "13px 0",
-              borderBottom: "1px solid rgba(201,168,76,0.07)",
-              cursor: "pointer",
-            };
-            if (isAnchor) {
-              return (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  style={mobileStyle}
-                  onClick={() => setMenuOpen(false)}
-                >
-                  {link.label}
-                </a>
-              );
-            }
-            return (
-              <Link key={link.label} href={link.href}>
-                <span
-                  style={mobileStyle}
-                  onClick={() => setMenuOpen(false)}
-                >
-                  {link.label}
-                </span>
-              </Link>
-            );
-          })}
-          <Link href="/mint">
-            <span
-              onClick={() => setMenuOpen(false)}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "8px",
-                border: "1px solid rgba(201,168,76,0.3)",
-                color: BRASS,
-                fontFamily: "'Syne', sans-serif",
-                fontWeight: 700,
-                fontSize: "12px",
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
-                padding: "14px",
-                cursor: "pointer",
-                textAlign: "center",
-                marginTop: "12px",
-                background: "transparent",
-              }}
+          <div className="flex shrink-0 items-center gap-2">
+            <a
+              href="/#access"
+              className={`hidden items-center gap-1.5 rounded-lg bg-white px-3 py-2 text-sm font-semibold text-black transition duration-300 ${EASE} hover:bg-[#6ee7b7] active:scale-[0.98] sm:inline-flex`}
             >
-              <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#f59e0b", boxShadow: "0 0 6px #f59e0b", display: "inline-block" }} />
-              Mint — Coming Q1 2027
-            </span>
-          </Link>
+              Get early access
+              <ArrowUpRight weight="bold" className="h-3.5 w-3.5" />
+            </a>
+            <button
+              type="button"
+              onClick={() => setOpen((v) => !v)}
+              aria-expanded={open}
+              aria-controls="mobile-nav"
+              aria-label={open ? "Close menu" : "Open menu"}
+              className="relative h-9 w-9 rounded-lg border border-white/15 xl:hidden"
+            >
+              <span
+                className={cn(
+                  `absolute left-1/2 top-1/2 h-px w-4 -translate-x-1/2 bg-white transition-transform duration-500 ${EASE}`,
+                  open ? "rotate-45" : "-translate-y-[4px]",
+                )}
+              />
+              <span
+                className={cn(
+                  `absolute left-1/2 top-1/2 h-px w-4 -translate-x-1/2 bg-white transition-transform duration-500 ${EASE}`,
+                  open ? "-rotate-45" : "translate-y-[4px]",
+                )}
+              />
+            </button>
+          </div>
         </div>
-      )}
+      </header>
 
-      {/* Spacer so content starts below the fixed nav */}
-      <div style={{ height: "64px" }} />
-
-      <style>{`
-        @media (max-width: 1100px) {
-          .nav-desktop { display: none !important; }
-          .nav-hamburger { display: block !important; }
-        }
-        @media (max-width: 600px) {
-          .nav-mint-cta { display: none !important; }
-        }
-      `}</style>
+      <div
+        id="mobile-nav"
+        aria-hidden={!open}
+        inert={!open}
+        className={cn(
+          `fixed inset-0 z-30 bg-black/95 px-4 pt-24 backdrop-blur-xl transition-opacity duration-300 ${EASE} xl:hidden`,
+          open ? "opacity-100" : "pointer-events-none opacity-0",
+        )}
+      >
+        <nav aria-label="Mobile" className="mx-auto flex max-w-6xl flex-col">
+          {NAV_LINKS.map((l, i) => (
+            <NavItem
+              key={l.href}
+              link={l}
+              active={isActive(l.href)}
+              onClick={() => setOpen(false)}
+              className={cn(
+                `border-b border-white/10 py-4 text-2xl transition-[opacity,transform] duration-500 ${EASE}`,
+                open ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0",
+              )}
+              style={{ transitionDelay: open ? `${i * 50}ms` : "0ms" }}
+            />
+          ))}
+          <a
+            href="/#access"
+            onClick={() => setOpen(false)}
+            className="mt-8 rounded-lg bg-[#6ee7b7] px-4 py-3 text-center text-base font-semibold text-black"
+          >
+            Get early access
+          </a>
+          <p className="font-mono-index mt-4 text-[11px] uppercase text-[#737373]">Pre-mainnet · target Q1 2027</p>
+        </nav>
+      </div>
     </>
   );
 }
