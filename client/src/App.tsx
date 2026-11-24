@@ -14,6 +14,7 @@ const Setup = lazy(() => import("./pages/Setup"));
 const Agent = lazy(() => import("./pages/Agent"));
 const Admin = lazy(() => import("./pages/Admin"));
 const Legal = lazy(() => import("./pages/Legal"));
+const Planner = lazy(() => import("./pages/Planner"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 /** Keeps head tags in sync on client-side navigation (static HTML already has them). */
@@ -54,6 +55,7 @@ function Routes() {
           <Route path="/agent" component={Agent} />
           <Route path="/admin" component={Admin} />
           <Route path="/legal" component={Legal} />
+          <Route path="/planner" component={Planner} />
           <Route component={NotFound} />
         </Switch>
       </Suspense>

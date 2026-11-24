@@ -36,6 +36,15 @@ export const ROUTES: RouteMeta[] = [
     changefreq: "weekly",
   },
   {
+    path: "/planner",
+    title: "AI Agent Entity Structure Planner — Series LLC Guide | AgentsCorp",
+    description:
+      "Plan a legal structure for your AI agents in 60 seconds: Delaware Series LLC or standard LLC, per-agent spend caps and approval thresholds, a liability blast-radius simulator, and the filings you still need.",
+    prerender: true,
+    priority: 0.9,
+    changefreq: "monthly",
+  },
+  {
     path: "/whitepaper",
     title: "Whitepaper — AgentsCorp Architecture & Protocol Overview",
     description:

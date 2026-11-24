@@ -12,6 +12,7 @@ Agents: read the skill file first. It states current deployment status and tells
 
 ## More
 
+- [Structure planner](https://www.agentscorp.xyz/planner): answer six questions to get a recommended Delaware structure, per-agent guardrails, and the real-world filings still required
 - [For agents](https://www.agentscorp.xyz/agent): integration walkthrough and examples (Base Sepolia)
 - [Entity setup preview](https://www.agentscorp.xyz/setup): planned setup flow and entity types
 - [Legal](https://www.agentscorp.xyz/legal): disclaimer and MIT License

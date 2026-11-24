@@ -4,15 +4,44 @@
   "outputDirectory": "dist/public",
   "framework": null,
   "redirects": [
-    { "source": "/mint", "destination": "/setup", "permanent": true }
+    {
+      "source": "/mint",
+      "destination": "/setup",
+      "permanent": true
+    }
   ],
   "rewrites": [
-    { "source": "/api/:path*", "destination": "/api/index" },
-    { "source": "/agent", "destination": "/agent/index.html" },
-    { "source": "/whitepaper", "destination": "/whitepaper/index.html" },
-    { "source": "/docs", "destination": "/docs/index.html" },
-    { "source": "/setup", "destination": "/setup/index.html" },
-    { "source": "/legal", "destination": "/legal/index.html" },
-    { "source": "/:path*", "destination": "/spa.html" }
+    {
+      "source": "/api/:path*",
+      "destination": "/api/index"
+    },
+    {
+      "source": "/agent",
+      "destination": "/agent/index.html"
+    },
+    {
+      "source": "/whitepaper",
+      "destination": "/whitepaper/index.html"
+    },
+    {
+      "source": "/docs",
+      "destination": "/docs/index.html"
+    },
+    {
+      "source": "/setup",
+      "destination": "/setup/index.html"
+    },
+    {
+      "source": "/legal",
+      "destination": "/legal/index.html"
+    },
+    {
+      "source": "/planner",
+      "destination": "/planner/index.html"
+    },
+    {
+      "source": "/:path*",
+      "destination": "/spa.html"
+    }
   ]
 }

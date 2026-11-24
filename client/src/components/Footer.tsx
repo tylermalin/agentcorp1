@@ -28,6 +28,7 @@ export default function Footer() {
                 <li><a href="/#protocol" className={linkCls}>Protocol</a></li>
                 <li><a href="/#use-cases" className={linkCls}>Use cases</a></li>
                 <li><a href="/#entities" className={linkCls}>Entities</a></li>
+                <li><Link href="/planner" className={linkCls}>Structure planner</Link></li>
                 <li><Link href="/agent" className={linkCls}>For agents</Link></li>
               </ul>
             </div>

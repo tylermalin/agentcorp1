@@ -12,7 +12,7 @@ const NAV_LINKS = [
   { n: "01", label: "Protocol", href: "/#protocol" },
   { n: "02", label: "Use cases", href: "/#use-cases" },
   { n: "03", label: "Integration", href: "/#integration" },
-  { n: "04", label: "Entities", href: "/#entities" },
+  { n: "04", label: "Planner", href: "/planner" },
   { n: "05", label: "For agents", href: "/agent" },
   { n: "06", label: "Whitepaper", href: "/whitepaper" },
   { n: "07", label: "Docs", href: "/docs" },

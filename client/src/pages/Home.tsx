@@ -471,6 +471,29 @@ function SimulatedRun() {
   );
 }
 
+function PlannerBand() {
+  return (
+    <section className="py-10">
+      <Reveal className="flex flex-col gap-6 rounded-3xl border border-[#6ee7b7]/25 bg-[#6ee7b7]/[0.06] p-6 sm:p-10 md:flex-row md:items-center md:justify-between">
+        <div className="max-w-xl">
+          <IndexLabel>Structure planner</IndexLabel>
+          <h2 className="mt-3 text-2xl font-medium tracking-tight text-balance md:text-3xl">
+            How should your agents be structured? Find out in 60 seconds.
+          </h2>
+          <p className="mt-2 text-sm text-pretty text-[#a3a3a3]">
+            Six questions. A recommended Delaware structure, starting guardrails per agent, a liability blast-radius
+            simulator, and the filings you still need.
+          </p>
+        </div>
+        <Link href="/planner" className={cn(btnPrimary, "shrink-0")}>
+          Plan my structure
+          <ArrowRight weight="bold" className="h-4 w-4" />
+        </Link>
+      </Reveal>
+    </section>
+  );
+}
+
 function Integration() {
   return (
     <section id="integration" className="py-20 md:py-24">
@@ -743,6 +766,7 @@ export default function Home() {
           <Pillars />
           <Manifesto />
           <UseCases />
+          <PlannerBand />
           <Integration />
           <Entities />
           <Company />
