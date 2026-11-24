@@ -266,7 +266,7 @@ export default function Whitepaper() {
                   ]}
                 />
                 <CodeFrame className="my-8" title="architecture.txt" meta="four layers" code={ARCHITECTURE} />
-                <H3>Contracts (in audit)</H3>
+                <H3>Contracts (in audit, not deployed to mainnet)</H3>
                 <DataTable
                   headers={["Contract", "Role"]}
                   rows={[
@@ -626,7 +626,7 @@ export default function Whitepaper() {
                   </div>
                 </div>
                 <P>
-                  Contracts are in audit and on testnet ahead of the Q1 2027 target. The{" "}
+                  Contracts are in audit ahead of the Q1 2027 target; testnet deployments will be shared privately with design partners. The{" "}
                   <A href={GITHUB_URL}>tylermalin/agentscorp</A> repository contains the protocol website and
                   documentation, not deployed contracts.
                 </P>

@@ -475,9 +475,9 @@ export default function Docs() {
                   className="text-sm"
                   items={[
                     { k: "Factory address, mainnet", v: "NOT DEPLOYED" },
-                    { k: "Factory address, Base Sepolia", v: "NOT PUBLISHED" },
+                    { k: "Factory address, Base Sepolia", v: "NOT PUBLIC · to be shared with design partners" },
                     { k: "kycAttestation wire encoding", v: "NOT SPECIFIED" },
-                    { k: "Document templates", v: "NOT PUBLISHED" },
+                    { k: "Document templates", v: "IN DRAFT · to be shared with design partners" },
                     { k: "Fee mechanism for non-payable calls", v: "UNRESOLVED" },
                   ]}
                 />
@@ -496,11 +496,11 @@ export default function Docs() {
                 <CodeFrame title="quickstart.ts" meta="SDK preview · Base Sepolia" code={SDK_SAMPLE} />
                 <Note>
                   <Code>@agentscorp/sdk</Code> is not yet published. API keys are issued to design
-                  partners; join the waitlist on the{" "}
-                  <Link href="/mint" className={linkCls}>
-                    entity setup page
-                  </Link>{" "}
-                  for access.
+                  partners;{" "}
+                  <a href="/#access" className={linkCls}>
+                    apply for early access
+                  </a>
+                  .
                 </Note>
               </DocSection>
 
@@ -862,7 +862,7 @@ export default function Docs() {
                   <a href={SKILL_URL} className={btnPrimary}>
                     Read skill.md
                   </a>
-                  <Link href="/mint" className={btnSecondary}>
+                  <Link href="/setup" className={btnSecondary}>
                     Entity setup preview
                   </Link>
                 </div>

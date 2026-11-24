@@ -28,9 +28,9 @@ Values still unresolved, tracked here so an agent knows what it does not have:
 | Value | Status |
 |---|---|
 | Factory address, mainnet | NOT DEPLOYED |
-| Factory address, Sepolia | NOT PUBLISHED |
+| Factory address, Sepolia | NOT PUBLIC (to be shared privately with design partners) |
 | `kycAttestation` wire encoding | NOT SPECIFIED |
-| Document templates | NOT PUBLISHED |
+| Document templates | IN DRAFT, not public (to be shared with design partners) |
 
 ## Step 1: the confirmation gate
 

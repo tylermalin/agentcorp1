@@ -292,7 +292,7 @@ export default function Agent() {
             id="early-access"
             index="08 / Early Access"
             title="Integrate before mainnet."
-            intro="Design partners get testnet addresses, document templates, and direct support as contracts move through audit."
+            intro="Design partners will get private testnet access, draft document templates, and direct support as contracts move through audit."
           >
             <WaitlistForm entityType="AGENT_SDK" source="agent-page" variant="hero" />
             <div className="mt-6">

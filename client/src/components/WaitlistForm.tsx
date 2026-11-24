@@ -81,7 +81,7 @@ export default function WaitlistForm({
             isHero ? "px-5 py-3" : "px-4 py-2",
           )}
         >
-          {subscribe.isPending ? "Sending…" : isHero ? "Request access" : "Subscribe"}
+          {subscribe.isPending ? "Sending…" : isHero ? "Get early access" : "Subscribe"}
         </button>
       </div>
       {subscribe.isError && (

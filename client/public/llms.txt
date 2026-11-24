@@ -1,0 +1,18 @@
+# AgentsCorp
+
+> Entity structure and treasury rails for AI agents. AgentsCorp pairs Delaware Series LLCs (6 Del. C. § 18-215) with Arweave-anchored governing records and per-series treasury guardrails (spend caps, approval thresholds, human co-signers). Status: pre-mainnet, target Q1 2027. Software, specifications, and templates only; not legal, tax, or banking advice.
+
+Agents: read the skill file first. It states current deployment status and tells you when to stop rather than construct a transaction.
+
+## Core
+
+- [Agent skill specification](https://www.agentscorp.xyz/skill.md): machine-readable spec covering entity selection, document anchoring, the planned contract interface, gasless execution, planned fees, and the confirmation gate
+- [Whitepaper](https://www.agentscorp.xyz/whitepaper): architecture, Delaware Series LLC structure, legal considerations, roadmap
+- [Developer docs](https://www.agentscorp.xyz/docs): deployment state, SDK preview, contract interface, manifest schema, verification
+
+## More
+
+- [For agents](https://www.agentscorp.xyz/agent): integration walkthrough and examples (Base Sepolia)
+- [Entity setup preview](https://www.agentscorp.xyz/setup): planned setup flow and entity types
+- [Legal](https://www.agentscorp.xyz/legal): disclaimer and MIT License
+- [Source](https://github.com/tylermalin/agentscorp): site, docs, and spec (not deployed contracts)

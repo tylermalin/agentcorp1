@@ -12,7 +12,7 @@ import Footer from "@/components/Footer";
 import YouformEmbed from "@/components/YouformEmbed";
 import { CodeFrame, Container, IndexLabel, btnPrimary, btnSecondary } from "@/components/site/Primitives";
 import { DotIcon, HalftoneField, Reveal, useInView, type DotIconKind } from "@/components/site/Motion";
-import { ENTITY_ROWS, FEE_NOTE, IN_PROGRESS, LIVE_NOW, SDK_SAMPLE } from "@/lib/site";
+import { COMPANY, ENTITY_ROWS, FAQ, FEE_NOTE, IN_PROGRESS, LIVE_NOW, SDK_SAMPLE } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 const EASE = "ease-[cubic-bezier(0.22,1,0.36,1)]";
@@ -118,18 +118,19 @@ function Hero() {
               Pre-mainnet · target Q1 2027
             </div>
             <h1 className="text-hero-gradient mt-8 max-w-[680px] text-5xl font-medium uppercase tracking-tight text-balance sm:text-6xl md:text-7xl">
-              Entity structure for AI agents
+              Give every AI agent its own LLC series
             </h1>
           </div>
 
           <div className="mt-16 max-w-[520px]">
             <p className="text-base text-pretty text-[#d4d4d4] md:text-lg">
-              Delaware Series LLCs under <span className="text-white">6 Del. C. § 18-215</span>, governing records
-              anchored on Arweave, and treasury rails with liability isolated per agent.
+              A budget, an audit trail, and liability that stops at the series. Delaware Series LLCs under{" "}
+              <span className="text-white">6 Del. C. § 18-215</span>, records anchored on Arweave, and treasury
+              guardrails per agent.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <a href="#access" className={btnPrimary}>
-                Request early access
+                Get early access
                 <ArrowUpRight weight="bold" className="h-4 w-4" />
               </a>
               <a href="/skill.md" target="_blank" rel="noreferrer" className={btnSecondary}>
@@ -489,6 +490,10 @@ function Integration() {
         </Reveal>
         <Reveal delay={120} className="min-w-0 md:col-span-7">
           <CodeFrame title="agentscorp_series.ts" meta="SDK preview" code={SDK_SAMPLE} />
+          <p className="mt-3 text-xs text-[#737373]">
+            Preview of the planned interface. <code className="font-code">@agentscorp/sdk</code> is not yet published;
+            API keys go to design partners.
+          </p>
           <dl className="mt-4 grid gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 sm:grid-cols-2">
             {[
               ["Agent spec", "agentscorp.xyz/skill.md"],
@@ -574,7 +579,7 @@ function Access() {
         <HalftoneField className="absolute inset-0 opacity-20 md:opacity-40" cell={9} />
         <div className="relative grid gap-10 p-6 sm:p-10 md:grid-cols-12 md:p-14">
           <div className="md:col-span-5">
-            <IndexLabel>05 / Early access</IndexLabel>
+            <IndexLabel>07 / Early access</IndexLabel>
             <h2 className="mt-4 text-3xl font-medium tracking-tight text-balance md:text-5xl">
               Join the Q1 2027 design partner cohort
             </h2>
@@ -624,6 +629,106 @@ function Access() {
   );
 }
 
+function Company() {
+  return (
+    <section id="company" className="py-20 md:py-24">
+      <div className="grid gap-12 md:grid-cols-12">
+        <Reveal className="md:col-span-5">
+          <IndexLabel>05 / Company</IndexLabel>
+          <h2 className="mt-4 text-3xl font-medium tracking-tight text-balance md:text-4xl">Early, and honest about it</h2>
+          <p className="mt-4 text-base text-pretty text-[#a3a3a3]">
+            AgentsCorp is a solo-founder project built by a legal engineer and attorney. No revenue yet, no deployed
+            mainnet contracts yet. The roadmap is public and every claim on this site is scoped to what exists today.
+          </p>
+        </Reveal>
+        <Reveal delay={100} className="md:col-span-7">
+          <article className="rounded-2xl border border-white/10 bg-[#181818] p-6">
+            <div className="font-mono-index text-[11px] uppercase text-[#737373]">Founder</div>
+            <h3 className="mt-2 text-xl font-medium text-white">{COMPANY.founder}</h3>
+            <p className="mt-2 text-sm text-pretty text-[#d4d4d4]">{COMPANY.founderBio}</p>
+            <div className="mt-4 flex gap-4 text-sm">
+              {COMPANY.links.map((l) => (
+                <a
+                  key={l.href}
+                  href={l.href}
+                  target="_blank"
+                  rel="noopener noreferrer me"
+                  className="inline-flex items-center gap-1 font-semibold text-[#6ee7b7] hover:text-[#a7f3d0]"
+                >
+                  {l.label}
+                  <ArrowUpRight weight="bold" className="h-3.5 w-3.5" />
+                </a>
+              ))}
+            </div>
+          </article>
+          <dl className="mt-4 grid gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 sm:grid-cols-3">
+            {[
+              ["Stage", COMPANY.stage],
+              ["Business model", COMPANY.model],
+              ["Mainnet target", "Q1 2027, after contract audit"],
+            ].map(([k, v]) => (
+              <div key={k} className="bg-[#0b0b0b] p-6">
+                <dt className="font-mono-index text-[11px] uppercase text-[#737373]">{k}</dt>
+                <dd className="mt-2 text-sm text-pretty text-[#e5e5e5]">{v}</dd>
+              </div>
+            ))}
+          </dl>
+          <p className="mt-4 text-sm text-[#a3a3a3]">
+            Investors, counsel, and agent platforms: message Tyler on{" "}
+            <a href="https://x.com/tylermalin" target="_blank" rel="noopener noreferrer" className="text-[#6ee7b7] hover:text-[#a7f3d0]">
+              X
+            </a>{" "}
+            or{" "}
+            <a href="https://www.linkedin.com/in/tylermalin" target="_blank" rel="noopener noreferrer" className="text-[#6ee7b7] hover:text-[#a7f3d0]">
+              LinkedIn
+            </a>
+            , or use the{" "}
+            <a href="#access" className="text-[#6ee7b7] hover:text-[#a7f3d0]">
+              early access form
+            </a>
+            .
+          </p>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+function FaqSection() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: FAQ.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  };
+  return (
+    <section id="faq" className="py-20 md:py-24">
+      <div className="grid gap-12 md:grid-cols-12">
+        <Reveal className="md:col-span-4">
+          <IndexLabel>06 / FAQ</IndexLabel>
+          <h2 className="mt-4 text-3xl font-medium tracking-tight text-balance md:text-4xl">
+            Questions lawyers, banks, and builders ask
+          </h2>
+        </Reveal>
+        <div className="md:col-span-8">
+          <dl className="grid gap-x-10 gap-y-10 sm:grid-cols-2">
+            {FAQ.map((f, i) => (
+              <Reveal key={f.q} delay={(i % 2) * 80}>
+                <dt className="text-base font-medium text-white text-balance">{f.q}</dt>
+                <dd className="mt-2 text-sm text-pretty text-[#a3a3a3]">{f.a}</dd>
+              </Reveal>
+            ))}
+          </dl>
+        </div>
+      </div>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+    </section>
+  );
+}
+
 export default function Home() {
   return (
     <div className="min-h-screen bg-black text-[#fafafa]">
@@ -640,6 +745,8 @@ export default function Home() {
           <UseCases />
           <Integration />
           <Entities />
+          <Company />
+          <FaqSection />
           <Access />
         </Container>
       </main>

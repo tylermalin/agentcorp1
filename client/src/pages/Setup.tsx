@@ -36,7 +36,7 @@ const STEPS = [
   },
 ];
 
-export default function Mint() {
+export default function Setup() {
   return (
     <div className="min-h-screen bg-[#000000] text-[#fafafa]">
       <Nav />
